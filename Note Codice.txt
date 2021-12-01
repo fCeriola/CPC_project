@@ -48,7 +48,6 @@ Ableton?? Drone, ambient, sample reali.
 stella puntata -> osc con parametri(size stella, color stella, mass stella, distanza stella-centro cerchio torcia, posizione sullo 'Screen') -> suono da ableton -> evento sullo schermo sulla base di esso (incremento velocità movimento stelle? ne cambio la traiettoria? cambio colore del cielo? aumenta/diminuisce porzione di cielo pulita dalla torcia?)
 
 
-
 --------------- SOLE -----------------
 questa è una bomba.
 il sole porta il giorno (-> agisco sul layer 'cielo sporco' modificandone i colori, opacity al massimo, non vedo più le stelle)
