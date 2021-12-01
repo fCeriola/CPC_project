@@ -18,7 +18,7 @@ L’Italia è tra i paesi del G20 con il più alto livello di inquinamento lumin
 https://www.darksky.org/5-appalling-facts-about-light-pollution/
 
 1-Exposure to artificial light at night puts your health at risk.
-2-Light pollution kills millions of birds a year.
-3-Light Pollution unnecessarily contributes to climate change.
-4-Artificial light at night disrupts the seasonal cycle of trees.
+2-x Light pollution kills millions of birds a year.
+3-x Light Pollution unnecessarily contributes to climate change.
+4-x Artificial light at night disrupts the seasonal cycle of trees.
 5-The sky glow of Los Angeles is visible from an airplane 200 miles away.
