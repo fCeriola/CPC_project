@@ -1,0 +1,67 @@
+Scena: siamo in camera, un palazzo alto in grande città con forte inquinamento luminoso. in cielo non vediamo una stella per via della troppa luce proiettata dai palazzi. spegnamo la luce, ci mettiamo alla finestra con la torcia in mano e la puntiamo al cielo. il nostro palazzo è il più alto nei dintorni, dunque vediamo solo una bassa skyline e il cielo.
+
+
+---------------- SKYLINE ------------------
+classe Building -> una istanza per edificio:
+disegnato randomico sul basso schermo, occupa poco, un 5-10%, molto minimal, rettangolo nero con 4/6/10 rettangolini per finestre gialle o grigie (luce accesa o spenta). al diavolo la prospettiva, facciamo i palazzi 2d.
+
+
+------------------ CIELO -------------------
+4 layers: Utente, Cielo sporco, Stelle, Cielo pulito.
+
+-Utente:
+l'immagine catturata dalla webcam viene sparata sopra ad ogni cosa con opacità bassissima in modo che sembri il nostro riflesso sulla finestra. inseriamo anche gli infissi della finestra proprio a rendere l'idea di noi dentro casa con la luce spenta che osserviamo cosa c'è fuori dalla finestra.
+
+-Cielo sporco:
+sfumato, deve essere oppressivo, nebbioso, arancione sporco al livello degli edifici e andare via via lentamente verso il blu notte proprio del cielo.
+https://processing.org/examples/lineargradient.html
+
+-Stelle, classe StarSystem -> unica istanza ArrayList<Star>:
+attributi: numero stelle;
+metodi:
+	draw() -> disegna tutte le stelle contenute nell'ArrayList, curare la distribuzione;
+	add() -> aggiunge una stella al sistema;
+	remove() -> rimuove la stella dal sistema;
+abbiamo uno spazio grande 'Space' con molte stelle disseminate su di esso (lo StarSystem deve occuparsi di posizionarle in modo che siano ben distruite), lo schermo cattura solo una porzione centrale di questo spazio 'Screen'.
+
+-Stella, classe Star -> una istanza per stella:
+attributi: massa, colore, distanza terra-stella;
+metodi:
+	draw() -> disegna la singola stella (chiamata nella draw() dello StarSystem);
+	move() -> ogni stella segue la stessa traiettoria ellittica parametrizzata sulla base della sua posizione iniziale;
+	effect() -> cosa succede quando ci interagisco???
+sono distribuite sullo 'Space', solo quelle inquadrate nello 'Screen' sono disegnate.
+
+	note: le stelle nascono a sinistra, si muovo verso destra e muoiono a destra, nascono e muoiono dentro a 'Space', ma fuori da 'Screen'. il layer Stelle ha un'alta densità di stelle, ma è un parametro 'Brilliance' a determinare quante di essere sono mostrate, scala da nero a bianco che determina la percentuale minima che deve avere l'opacity del colore della singola stella affinchè essa sia mostrata.
+
+Cielo pulito:
+deve essere un insieme di molti blocchi di sfumature dei colori tipici dell'universo. (processing o immagine caricata???)
+
+
+--------------- TORCIA ---------------
+color tracking:
+un cilindro con una faccia colorata. Image processing sull'immagine catturata dalla webcam -> trovo il colore del cilindro e un cerchio sullo schermo centrato su di esso. Questo sarà la porzione di cielo in cui il layer 'cielo sporco' viene eliminato (->opacity) e si vedono i due layer sottostanti.
+
+
+--------------- SUONO ----------------
+Ableton?? Drone, ambient, sample reali.
+stella puntata -> osc con parametri(size stella, color stella, mass stella, distanza stella-centro cerchio torcia, posizione sullo 'Screen') -> suono da ableton -> evento sullo schermo sulla base di esso (incremento velocità movimento stelle? ne cambio la traiettoria? cambio colore del cielo? aumenta/diminuisce porzione di cielo pulita dalla torcia?)
+
+
+
+--------------- SOLE -----------------
+questa è una bomba.
+il sole porta il giorno (-> agisco sul layer 'cielo sporco' modificandone i colori, opacity al massimo, non vedo più le stelle)
+classe Sun -> una unica istanza:
+palla gialla con attorno la criniera di raggi. il sole è opprimente, voglio che se ne vada -> 60/90 secondi in time lapse in cui il sole si muove dall'alba al tramonto con questo suono fastidioso. la criniera di raggi è lo spettro sonoro e sulla base di dove punto la torcia enfatizzo le varie frequenze.
+nel mentre abbiamo nuvole che passano veloci, che coprono il sole (variazione colori e volume suono sulla base di quanto siamo esposti al sole?)
+Deve dare l'idea del tempo che scorre, ma non un tempo piacevole, un tempo in cui voglio tornare a vedere le stelle
+
+
+------------- EFFETTO STELLA ---------
+quando interagisco con una stella aggiungiamo un effetto che potrebbe essere a sua volta particellare.
+Crearlo come sistema particellare ci permette di parametrizzarlo e renderlo proprio per ogni stella.
+
+
+---------- INTERAZIONE UTENTE --------
+avviene tramite la torcia, il bambino scopre in maniera sonora e visica il cielo che ha sempre avuto sopra la testa e che non ha mai avuto la possibilità di osservare.
