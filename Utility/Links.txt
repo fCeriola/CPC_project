@@ -1,5 +1,18 @@
 Useful Link
+==============================================================
 
+Nasa:
 https://astronomy.stackexchange.com/questions/22802/where-can-i-find-a-visible-star-dataset
+_________________________________________________________
+
+Yale Bright Star Catalogue:
 
 http://tdc-www.harvard.edu/catalogs/bsc5.html
+_________________________________________________________
+
+Processing positions from B1950 to J2000:
+
+http://www.stargazing.net/kepler/b1950.html
+_________________________________________________________
+
+
