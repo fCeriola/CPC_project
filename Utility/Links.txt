@@ -15,4 +15,10 @@ Processing positions from B1950 to J2000:
 http://www.stargazing.net/kepler/b1950.html
 _________________________________________________________
 
+Conversion from equatorial (J2000) to horizontal coordinates:
+
+https://sibosummerprojects.wordpress.com/2016/07/04/m-converting-between-equatorial-coordinates-and-horizontal-coordinates/
+_________________________________________________________
+
+
 
