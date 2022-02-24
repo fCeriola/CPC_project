@@ -20,7 +20,16 @@ https://en.wikipedia.org/wiki/Equinox_(celestial_coordinates)
 
 Coordinates calculator:
 https://ned.ipac.caltech.edu/coordinate_calculator
+_________________________________________________________
 
+spiegazione coordinate equatoriali e orizzontali
+
+molto sintetico:
+https://online.scuola.zanichelli.it/lupia-osservare-capire-terra-azzurra-files/approfondimenti/Zanichelli_Lupia_Terra_azzurra_1_stelle.pdf
+
+completo:
+https://oberon.roma1.infn.it/alessandro/Astronomia%20MDP%2017nov2011%20AA1112.pdf
+>>>>>>> e15600a5757844f6222fd30abd46093ac2e497cf
 _________________________________________________________
 
 Project already existing:
