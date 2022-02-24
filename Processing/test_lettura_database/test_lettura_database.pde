@@ -1,7 +1,11 @@
 
-Table starsCoord; 
+//Table starsCoord;
 
 void setup() {
+  
+  
+  /*
+  
   
   String[] lines = loadStrings("bsc5.dat");
   
@@ -38,9 +42,9 @@ void setup() {
     newRow.setFloat("RAm", RAm);
     newRow.setFloat("RAs", RAs);
     
-    newRow.setFloat("DCh", RAh);
-    newRow.setFloat("DCm", RAm);
-    newRow.setFloat("DCs", RAs);
+    newRow.setFloat("DCh", DCh);
+    newRow.setFloat("DCm", DCm);
+    newRow.setFloat("DCs", DCs);
   }
   
   
@@ -48,6 +52,11 @@ void setup() {
   //char b1 = lines[1].charAt(81);
   
   //println(binary(b1));
+  
+  
+  */
+  
+  
 }
 
 

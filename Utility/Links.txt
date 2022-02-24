@@ -29,6 +29,17 @@ completo:
 https://oberon.roma1.infn.it/alessandro/Astronomia%20MDP%2017nov2011%20AA1112.pdf
 _________________________________________________________
 
+spiegazione di alcuni parametri delle stelle trovati nel database
+
+UBV color system:
+https://en.wikipedia.org/wiki/Color_index
+
+visual magnitude:
+https://earthsky.org/astronomy-essentials/what-is-stellar-magnitude/#:~:text=According%20to%20this%20ancient%20scale,than%20a%206th%2Dmagnitude%20star.
+
+
+_________________________________________________________
+
 Project already existing:
 
 https://sibosummerprojects.wordpress.com/mounting/
