@@ -17,6 +17,10 @@ http://www.stargazing.net/kepler/b1950.html
 Note: questo link non è utilissimo, fa riferimento alla posizione delle stelle con le coordinate fatte da Bessel piuttosto che da Julian in de momenti diversi. A quanto pare il dataset è già provvisto di coordinate Julian J2000 ma non è troppo chiaro.
 Spiegazioni sulle due tipologie  di coordinate qui:
 https://en.wikipedia.org/wiki/Equinox_(celestial_coordinates)
+
+Coordinates calculator:
+https://ned.ipac.caltech.edu/coordinate_calculator
+
 _________________________________________________________
 
 Project already existing:
