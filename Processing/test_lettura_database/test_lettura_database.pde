@@ -32,9 +32,9 @@ void setup() {
     float RAm = float(line.substring(77,79));
     float RAs = float(line.substring(79,83));
     
-    float DCh = float(line.substring(75,77));
-    float DCm = float(line.substring(77,79));
-    float DCs = float(line.substring(79,83));
+    float DCh = float(line.substring(83,86));
+    float DCm = float(line.substring(86,88));
+    float DCs = float(line.substring(88,90));
     
     TableRow newRow = starsCoord.addRow();
     
@@ -45,18 +45,11 @@ void setup() {
     newRow.setFloat("DCh", DCh);
     newRow.setFloat("DCm", DCm);
     newRow.setFloat("DCs", DCs);
+    
+    println(starsCoord.getRow(i).getString("DCh"));
   }
   
-  
-  
-  //char b1 = lines[1].charAt(81);
-  
-  //println(binary(b1));
-  
-  
-  */
-  
-  
+ 
 }
 
 
