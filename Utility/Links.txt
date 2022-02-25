@@ -24,12 +24,22 @@ _________________________________________________________
 
 spiegazione coordinate equatoriali e orizzontali
 
-molto sintetico:
-https://online.scuola.zanichelli.it/lupia-osservare-capire-terra-azzurra-files/approfondimenti/Zanichelli_Lupia_Terra_azzurra_1_stelle.pdf
+-equatoriali:
 
-completo:
+https://lco.global/spacebook/sky/equatorial-coordinate-system/#:~:text=The%20Equatorial%20Coordinate%20System%20uses,is%20equal%20to%2024%20hours.
+
+https://skyandtelescope.org/astronomy-resources/right-ascension-declination-celestial-coordinates/
+
+-orizzontali:
+
+https://www.timeanddate.com/astronomy/horizontal-coordinate-system.html
+
+
+-altri sistemi di riferimento + alcune coordinate derivate importanti:
 https://oberon.roma1.infn.it/alessandro/Astronomia%20MDP%2017nov2011%20AA1112.pdf
->>>>>>> e15600a5757844f6222fd30abd46093ac2e497cf
+
+-conversione tra equatoriali e orizzontali:
+http://www.stargazing.net/kepler/altaz.html
 _________________________________________________________
 
 spiegazione di alcuni parametri delle stelle trovati nel database
@@ -39,8 +49,6 @@ https://en.wikipedia.org/wiki/Color_index
 
 visual magnitude:
 https://earthsky.org/astronomy-essentials/what-is-stellar-magnitude/#:~:text=According%20to%20this%20ancient%20scale,than%20a%206th%2Dmagnitude%20star.
-
-
 _________________________________________________________
 
 Project already existing:

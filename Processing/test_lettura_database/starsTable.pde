@@ -11,7 +11,6 @@ public class starsTable{
   private float maxBV;
   private float minBV;
   private float maxUB;
-  private float minUB;
   //extreme colors
   private color redStar;
   private color blueStar;
@@ -37,9 +36,9 @@ public class starsTable{
     //angle with respect to the celestial equator
     //measured along the meridian passing through the star
     //d (-90;+90) -> degrees; m [0;60) -> arcminutes; s [0;60) -> arcseconds
-    starsAttributes.addColumn("DCd");
-    starsAttributes.addColumn("DCm");
-    starsAttributes.addColumn("DCs");
+    starsAttributes.addColumn("DECd");
+    starsAttributes.addColumn("DECm");
+    starsAttributes.addColumn("DECs");
     
     //visual magnitude
     //index representing brightness and distance
@@ -69,9 +68,9 @@ public class starsTable{
       float RAm = float(line.substring(77,79));
       float RAs = float(line.substring(79,83));
       
-      float DCd = float(line.substring(75,77));
-      float DCm = float(line.substring(77,79));
-      float DCs = float(line.substring(79,83));
+      float DECd = float(line.substring(75,77));
+      float DECm = float(line.substring(77,79));
+      float DECs = float(line.substring(79,83));
       
       float VM = float(line.substring(102,107));
       
@@ -87,9 +86,9 @@ public class starsTable{
       newRow.setFloat("RAm", RAm);
       newRow.setFloat("RAs", RAs);
       
-      newRow.setFloat("DCd", DCd);
-      newRow.setFloat("DCm", DCm);
-      newRow.setFloat("DCs", DCs);
+      newRow.setFloat("DECd", DECd);
+      newRow.setFloat("DECm", DECm);
+      newRow.setFloat("DECs", DECs);
       
       newRow.setFloat("VM", VM);
       
@@ -104,7 +103,6 @@ public class starsTable{
     maxBV = findMax("B-V");
     minBV = findMin("B-V");
     maxUB = findMax("U-B");
-    minUB = findMin("U-B");
     
     colorMode(HSB, 360, 100, 100);
     redStar = color(14, 27, 100);
@@ -114,28 +112,63 @@ public class starsTable{
   }
   
   //methods
-  public float getRA(int index) {
+  private float getRA(int index) {
     //converts right ascension from hour-minute-second to a single value in degrees
     TableRow row = starsAttributes.getRow(index);
     float hour = row.getFloat("RAh");
     float min = row.getFloat("RAm");
     float sec = row.getFloat("RAs");
     
-    // ...............
+    float secFraction = sec/60;
+    float minFraction = min/60 + secFraction;
+    float hourTot = hour + minFraction;
     
-    return 0;
+    float RA = hourTot * 15;  // 24 hour -> 360/24 = 15 degrees each
+    
+    return RA;
   }
   
-  public float getDC(int index) {
+  private float getDEC(int index) {
     //converts declination degree-arcminute-arcseconds to a single value in degrees
     TableRow row = starsAttributes.getRow(index);
-    float deg = row.getFloat("DCd");
-    float min = row.getFloat("DCm");
-    float sec = row.getFloat("DCs");
+    float deg = row.getFloat("DECd");
+    float min = row.getFloat("DECm");
+    float sec = row.getFloat("DECs");
     
-    // ................
+    float secFraction = sec/60;
+    float minFraction = min/60 + secFraction;
+    float DEC = deg + minFraction;
     
-    return 0; 
+    return DEC; 
+  }
+  
+  public float[] getHorizCoord(int index) {
+    //converts equatorial coordinates into horizontal coordinates
+    float[] horizCoord = new float[2];
+    
+    float RA = getRA(index);
+    float DEC = getDEC(index);
+    
+    float daysToday = daysSinceJ2000();
+    float currentHour = localHourFraction();
+    
+    // ricavare coordinate latitudine e longitudine di utente da gps
+    // float userLatitude = latitudine
+    // float userLongitude = longitudine
+    
+    //find local siderial time with given formula
+    float LST = (100.46 + 0.985647 * daysToday + userLongitude + 15 * currentHour) % 360;
+    
+    //Hour angle
+    float HA = LST - RA;
+    
+    float starAltitude = asin(sin(DEC)*sin(userLatitude) + cos(DEC)*cos(userLatitude)*cos(HA));
+    float starAzimuth = (sin(DEC) - pow(sin(starAltitude),2)) / pow(cos(starAltitude),2);
+    
+    horizCoord[0] = starAzimuth;
+    horizCoord[1] = starAltitude;
+    
+    return horizCoord;
   }
   
   public float getMagnitude(int index) {
@@ -154,11 +187,13 @@ public class starsTable{
     float BV = row.getFloat("B-V");
     float percentage = map(BV, minBV, maxBV, -1, 1);
     
+    color colore = color(0,0,0);
+    
     if (percentage < 0) {
-      color colore = lerpColor(whiteStar, blueStar, abs(percentage));
+      colore = lerpColor(whiteStar, blueStar, abs(percentage));
     }
     else if (percentage >= 0) {
-      color colore = lerpColor(whiteStar, redStar, percentage);
+      colore = lerpColor(whiteStar, redStar, percentage);
     }
     
     return colore;
@@ -169,7 +204,10 @@ public class starsTable{
     TableRow row = starsAttributes.getRow(index);
     float UB = row.getFloat("U-B");
     
-    float T = 4600 * ( 1/(0.92*UB+1.7) + 1/(0.92*UB+0.62));
+    float Tkelvin = 4600 * ( 1/(0.92*UB+1.7) + 1/(0.92*UB+0.62));
+    float Tmax = 4600 * ( 1/(0.92*maxUB+1.7) + 1/(0.92*maxUB+0.62));
+    
+    float T = map(Tkelvin, 0, Tmax, 0, 100);
     
     return T;
   }
