@@ -1,7 +1,24 @@
 
 //Table starsCoord;
+StarsTable database;
+
 
 void setup() {
+  
+  //good for MacbookPro 2021
+  //size(1512,850);
+  
+  //size(1080,720);
+  //frameRate(60);
+  //background(255);
+  database = new StarsTable();
+  print("ciao");
+  
+   //<>//
+  
+  //for (int ii=0; ii<database.getRowCount(); ii++){
+  //  print(database.RAh);
+  //}
   
   /*
   
@@ -55,6 +72,8 @@ void setup() {
 }
 
 
-void draw() {
-
-}
+//void draw() {
+  
+  
+  
+//}

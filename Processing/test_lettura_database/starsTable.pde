@@ -1,7 +1,7 @@
 //class containing all the coordinates and parameters of the stars
 //reads from file with reference J2000 in equatorial coordinates
 
-public class starsTable{
+public class StarsTable{
   
   //attributes
   private Table starsAttributes; //containes data
@@ -16,8 +16,11 @@ public class starsTable{
   private color blueStar;
   private color whiteStar;
   
+  private float userLatitude = 41.902782;
+  private float userLongitude = 12.496366;
+  
   //constructor
-  starsTable() {
+  StarsTable() {
     
     //load file
     String[] lines = loadStrings("bsc5.dat");
@@ -57,62 +60,94 @@ public class starsTable{
     //the higher the value, the lower the temperature
     starsAttributes.addColumn("U-B");
     
+    //Horizontal Coordinates
+    //converted horizontal coordinates in deg through the 
+    //private method convHorizCoord(int index)
+    starsAttributes.addColumn("HC1");
+    starsAttributes.addColumn("HC2");
     
-    for (int i=0; i<lines.length; i++) {
+    //M Magnitude
+    //converted values (0-100) for the magnitude with the 
+    //private method convMagnitude(int index)
+    starsAttributes.addColumn("M");
+     
+    //T Temperature
+    //converted values (0-100) for the temperature with the 
+    //private method convTemperature(int index)
+    starsAttributes.addColumn("T");
+    //<>//
+      for (int i=0; i<lines.length; i++) {
       
-      //grab the single read line
-      String line = lines[i];
-      
-      //substring(beginIndex(inclusive), endIndex(exclusive))
-      float RAh = float(line.substring(75,77));
-      float RAm = float(line.substring(77,79));
-      float RAs = float(line.substring(79,83));
-      
-      float DECd = float(line.substring(75,77));
-      float DECm = float(line.substring(77,79));
-      float DECs = float(line.substring(79,83));
-      
-      float VM = float(line.substring(102,107));
-      
-      float BV = float(line.substring(109,114));
-      
-      float UB = float(line.substring(115,120));      
-      
-      
-      //add new row to table for the each star
-      TableRow newRow = starsAttributes.addRow();
-      
-      newRow.setFloat("RAh", RAh);
-      newRow.setFloat("RAm", RAm);
-      newRow.setFloat("RAs", RAs);
-      
-      newRow.setFloat("DECd", DECd);
-      newRow.setFloat("DECm", DECm);
-      newRow.setFloat("DECs", DECs);
-      
-      newRow.setFloat("VM", VM);
-      
-      newRow.setFloat("B-V", BV);
-      
-      newRow.setFloat("U-B", UB);
-      
-    }
+        //grab the single read line
+        String line = lines[i];
+        
+        //substring(beginIndex(inclusive), endIndex(exclusive))
+        float RAh = float(line.substring(75,77));
+        float RAm = float(line.substring(77,79));
+        float RAs = float(line.substring(79,83));
+        
+        float DECd = float(line.substring(75,77));
+        float DECm = float(line.substring(77,79));
+        float DECs = float(line.substring(79,83));
+        
+        float VM = float(line.substring(102,107));
+        
+        float BV = float(line.substring(109,114));
+        
+        float UB = float(line.substring(115,120));     
+        
+        //add new row to table for the each star
+        TableRow newRow = starsAttributes.addRow();
+        
+        newRow.setFloat("RAh", RAh);
+        newRow.setFloat("RAm", RAm);
+        newRow.setFloat("RAs", RAs);
+        
+        newRow.setFloat("DECd", DECd);
+        newRow.setFloat("DECm", DECm);
+        newRow.setFloat("DECs", DECs);
+        
+        newRow.setFloat("VM", VM);
+        
+        newRow.setFloat("B-V", BV);
+        
+        newRow.setFloat("U-B", UB);
+        
+        float[] HC = convHorizCoord(i);
+        float HC1 = HC[0];
+        float HC2 = HC[1];
+        newRow.setFloat("HC1", HC1);
+        newRow.setFloat("HC2", HC2);
+         //<>//
+      //  maxVM = findMax("VM");
+      //  minVM = findMin("VM");
+      //  maxBV = findMax("B-V");
+      //  minBV = findMin("B-V");
+      //  maxUB = findMax("U-B");
+        
+      //  float M = convMagnitude(i);
+      //  newRow.setFloat("M", M);
+        
+      //  float T = convTemperature(i);
+      //  newRow.setFloat("T", T);
+      }
     
-    maxVM = findMax("VM");
-    minVM = findMin("VM");
-    maxBV = findMax("B-V");
-    minBV = findMin("B-V");
-    maxUB = findMax("U-B");
+    
     
     colorMode(HSB, 360, 100, 100);
     redStar = color(14, 27, 100);
     blueStar = color(235, 21, 98);
     whiteStar = color(0, 0, 100);
-    
   }
   
-  //methods
-  private float getRA(int index) {
+  
+  
+  //PRIVATE METHODS
+  //=====================================================
+  
+  //CONVERSIONS
+  //-----------------------------------------------------
+  private float convRA(int index) {
     //converts right ascension from hour-minute-second to a single value in degrees
     TableRow row = starsAttributes.getRow(index);
     float hour = row.getFloat("RAh");
@@ -128,7 +163,7 @@ public class starsTable{
     return RA;
   }
   
-  private float getDEC(int index) {
+  private float convDEC(int index) {
     //converts declination degree-arcminute-arcseconds to a single value in degrees
     TableRow row = starsAttributes.getRow(index);
     float deg = row.getFloat("DECd");
@@ -142,12 +177,12 @@ public class starsTable{
     return DEC; 
   }
   
-  public float[] getHorizCoord(int index) {
+  private float[] convHorizCoord(int index) {
     //converts equatorial coordinates into horizontal coordinates
     float[] horizCoord = new float[2];
     
-    float RA = getRA(index);
-    float DEC = getDEC(index);
+    float RA = convRA(index);
+    float DEC = convDEC(index);
     
     float daysToday = daysSinceJ2000();
     float currentHour = localHourFraction();
@@ -171,7 +206,7 @@ public class starsTable{
     return horizCoord;
   }
   
-  public float getMagnitude(int index) {
+  private float convMagnitude(int index) {
     //converts VM index value into a scale 0-100
     TableRow row = starsAttributes.getRow(index);
     float VM = row.getFloat("VM");
@@ -181,25 +216,8 @@ public class starsTable{
     return brightness;
   }
   
-  public color getColor(int index) {
-    //converts B-V index value into color
-    TableRow row = starsAttributes.getRow(index);
-    float BV = row.getFloat("B-V");
-    float percentage = map(BV, minBV, maxBV, -1, 1);
-    
-    color colore = color(0,0,0);
-    
-    if (percentage < 0) {
-      colore = lerpColor(whiteStar, blueStar, abs(percentage));
-    }
-    else if (percentage >= 0) {
-      colore = lerpColor(whiteStar, redStar, percentage);
-    }
-    
-    return colore;
-  }
   
-  public float getTemperature(int index) {
+  private float convTemperature(int index) {
     //converts U-B index value into temperature in Kelvin
     TableRow row = starsAttributes.getRow(index);
     float UB = row.getFloat("U-B");
@@ -212,10 +230,16 @@ public class starsTable{
     return T;
   }
   
+  
+  
+  //MAXIMA
+  //-----------------------------------------------------
+  
   private float findMax(String attribute) {
     //finds the maximum value inside the table of a given attribute
-    float[] column = new float[starsAttributes.getRowCount()];
-    for (int i=0; i<column.length; i++) {
+    float[] column = new float[starsAttributes.getRowCount()]; //<>//
+    print(column.length);
+    for (int i=0; i<column.length; i++) { //<>//
       column[i] = starsAttributes.getRow(i).getFloat(attribute);
     }
     column = sort(column);
@@ -231,5 +255,43 @@ public class starsTable{
     column = sort(column);
     return column[0];
   }
-
+  
+  
+  
+  //PUBLIC METHODS
+ //=====================================================
+ 
+ //The table cannot store color type data: setting the color has to be 
+ //in another rendering function
+ 
+  public color convColor(int index) {
+    //converts B-V index value into color
+    TableRow row = starsAttributes.getRow(index);
+    float BV = row.getFloat("B-V");
+    float percentage = map(BV, minBV, maxBV, -1, 1);
+    
+    color colore = color(0,0,0);
+    
+    if (percentage < 0) {
+      colore = lerpColor(whiteStar, blueStar, abs(percentage));
+    }
+    else if (percentage >= 0) {
+      colore = lerpColor(whiteStar, redStar, percentage);
+    }
+    return colore;
+  }
+  
+  
+  //Overloading
+  public int getRowCount(){
+    return starsAttributes.getRowCount();
+  }
+  
+  //get params from the new object StarsTable 
+  
+ // public float getRA(int index){
+  //  return
+  //}
+  
+  
 }
