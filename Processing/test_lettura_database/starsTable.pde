@@ -95,10 +95,10 @@ public class StarsTable{
     starsAttributes.addColumn("X");
     starsAttributes.addColumn("Y");
     
-    //M Magnitude
+    //Apparent Magnitude
     //converted values (0-100) for the magnitude with the 
     //private method convMagnitude(int index)
-    starsAttributes.addColumn("M");
+    starsAttributes.addColumn("AM");
      
     //T Temperature
     //converted values (0-100) for the temperature with the 
@@ -186,16 +186,16 @@ public class StarsTable{
         float T = convTemperature(newRow);
         newRow.setFloat("T", T);
         
-        //float M = convMagnitude(newRow);
-        //newRow.setFloat("M", M);
+        float AM = convApparentMagnitude(newRow);
+        newRow.setFloat("AM", AM);
         
       } else {
-        println("NaN number found at element: " + starIndex + " at the column at index: " + columnIndex); //debug
+        //println("NaN number found at element: " + starIndex + " at the column at index: " + columnIndex); //debug
         starNumb++;
       } //<>//
        //<>//
     }
-    println("Number of neglected lines: " + starNumb); //debug
+    //println("Number of neglected lines: " + starNumb); //debug
     
     colorMode(RGB, 255);
     redStar = color(255,156,60,255);
@@ -237,12 +237,11 @@ public class StarsTable{
     float minFraction = min/60 + secFraction;
     float DEC = deg + minFraction;
     
-    return DEC; 
+    return DEC;
   }
   
   private float[] convHorizCoord(TableRow row) {
     //converts equatorial coordinates into horizontal coordinates
-    float[] horizCoord = new float[2];
     
     float RA = convRA(row);
     float DEC = convDEC(row);
@@ -264,8 +263,7 @@ public class StarsTable{
     float starAltitude = asin(sin(DEC)*sin(userLat) + cos(DEC)*cos(userLat)*cos(HA));
     float starAzimuth = acos((sin(DEC) - sin(starAltitude)*sin(userLat)) / (cos(starAltitude)*cos(userLat)));
     
-    horizCoord[0] = degrees(starAzimuth);
-    horizCoord[1] = degrees(starAltitude);
+    float[] horizCoord = {degrees(starAzimuth), degrees(starAltitude)};
     
     return horizCoord;
   }
@@ -277,23 +275,22 @@ public class StarsTable{
     
     float x = cos(HC1)*sin(HC2);
     float y = sin(HC1)*sin(HC2);
-    //float[] XY = new float[2];
-    //XY[0] = x; XY[1] = y;
+
     float [] XY = {x, y};
     return XY;
   }
   
-  /*
-  private float convMagnitude(TableRow row) {
-    //converts VM index value into a scale 0-100
+  
+  private float convApparentMagnitude(TableRow row) {
+    //converts VM index value into a scale 0-100 
     float VM = row.getFloat("VM");
     
-    float brightness = map(VM, minVM, maxVM, 0, 100);
+    // CHECK FOR EXTREMES
+    float AM = map(VM, 0, 7, 0, 255);
     
-    return brightness;
+    return AM;
   }
   
-  */
   
   private float convTemperature(TableRow row) {
     
@@ -332,7 +329,6 @@ public class StarsTable{
         Tmin = 2000;
         break;
       default:
-        println("error", sClass, starIndex);
         break;
     }
     
@@ -371,10 +367,11 @@ public class StarsTable{
   */
   
   //----------------------------------------------------
-  //EXISTANCE CHECK
+  //EXISTENCE CHECK
   
   private boolean isAStar(float[] values) {
     //used to check if for a certain star all the values we need are given and correctly read
+    //starts from false, if the class is correct, sets it to true, than checks the rest
     boolean answer = false;
     
     char sClass = char(int(values[0]));
@@ -399,20 +396,30 @@ public class StarsTable{
   //The table cannot store color type data: setting the color has to be 
   //in another rendering function
  
-  public color convColor(int index) {
-    //converts B-V index value into color
-    TableRow row = starsAttributes.getRow(index);
+  public color convColor(TableRow row) {
+    //from temperature computes the color based on star classification chart
     float T = row.getFloat("T");
     
     color colore = color(0,0,0);
+    float percentage = 0;
     
-    if (T < 6000) {
-      float percentage = map(T, 6000, 50000, 0, 1);
+    if (T > 6750) {
+      percentage = map(T, 6750, 50000, 0, 1);
       colore = lerpColor(whiteStar, blueStar, percentage);
-    } else if (T >= 6000) {
-      float percentage = map(T, 6000, 2000, 0,1);
-      colore = lerpColor(whiteStar, redStar, percentage);
+    } else {
+      percentage = map(T, 2000, 6750, 0, 1);
+      colore = lerpColor(redStar, whiteStar, percentage);
     }
+    
+    float cRed = red(colore);
+    float cGreen = green(colore);
+    float cBlue = blue(colore);
+    
+    float AM = row.getFloat("AM");
+    
+    colore = color(cRed, cGreen, cBlue, AM);
+    
+    println(AM);
     
     return colore;
   }
@@ -492,8 +499,6 @@ public class StarsTable{
     }
     
   */
-  
-  
   
   
 }

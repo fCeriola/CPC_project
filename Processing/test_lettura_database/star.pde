@@ -13,7 +13,7 @@ public class Star{
   
   Star(float xCoord, float yCoord, color colore) {
     this.location = new PVector(xCoord, yCoord);
-    this.radius = 2;
+    this.radius = map(alpha(colore), 0, 255, 1, 5);
     this.colore = colore;
   }
   

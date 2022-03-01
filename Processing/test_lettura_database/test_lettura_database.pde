@@ -32,17 +32,21 @@ void setup() {
   }
   //----------------------------------------------
   
- 
   float x=0;
   float y=0;
-  color colore;
+  color colore = color(250);
   
   for (int i=0;i<database.starsAttributes.getRowCount();i++) {
-    x = database.starsAttributes.getFloat(i, "X");
-    y = database.starsAttributes.getFloat(i, "Y");
+    TableRow row = database.starsAttributes.getRow(i);
+    x = row.getFloat("X");
+    y = row.getFloat("Y");
+    //if (str(x) == "NaN" || str(y) == "NaN")
+      //println("problem with star number: " + row.getInt("index"));
+      //println("RA -> " + row.getFloat("RA") + "    DEC -> " + row.getFloat("DEC"));
+      //println("cartesian coord: x -> " + row.getFloat("X") + "    and y -> " + row.getFloat("Y"));
     x = map(x, -1, 1, 0, width);
     y = map(y, -1, 1, height, 0);
-    colore = database.convColor(i);
+    colore = database.convColor(row);
     star = new Star(x, y, colore);
     star.plot();
   }
