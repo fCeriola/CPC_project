@@ -1,6 +1,7 @@
 
 //Table starsCoord;
 StarsTable database;
+PrintWriter output;
 
 
 void setup() {
@@ -12,7 +13,20 @@ void setup() {
   //frameRate(60);
   //background(255);
   database = new StarsTable();
-  print("ciao");
+  
+  float[] column1 = new float[database.getRowCount()];
+  float[] column2 = new float[database.getRowCount()];
+  
+ 
+ 
+  output = createWriter("debug_out.txt");
+  for (int i=0;i<database.getRowCount();i++){
+   output.println(database.starsAttributes.getInt(i,"index")+" -  UB: "+ database.starsAttributes.getFloat(i,"U-B"));
+  }
+  
+  
+ 
+  
   
    //<>//
   
