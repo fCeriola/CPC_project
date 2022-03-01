@@ -1,6 +1,7 @@
 
 //Table starsCoord;
 StarsTable database;
+Star star;
 PrintWriter output;
 int xScreen = 1080;
 int yScreen = 720;
@@ -8,29 +9,42 @@ int yScreen = 720;
 void setup() {
   
   //good for MacbookPro 2021
-  //size(1512,850);
+  size(1512,850);
   
   //size(xScreen,yScreen);
   //frameRate(60);
-  //background(255);
+  
+  background(0);
+  
   database = new StarsTable();  
   
   
   //In order to acces to the database attribute:
   //databse.starsAttributes.getFloat(row,column)
   
-  //DEBUG
+  
   //----------------------------------------------
+  //DEBUG
+  
   output = createWriter("debug_out.txt");
-  for (int i=0;i<database.getRowCount();i++){
+  for (int i=0;i<database.starsAttributes.getRowCount();i++){
    output.println(database.starsAttributes.getInt(i,"index")+" -  X: "+ database.starsAttributes.getFloat(i,"X") + "   Y: "+ database.starsAttributes.getFloat(i,"Y"));
   }
   //----------------------------------------------
   
  
+  float x=0;
+  float y=0;
   
-  
-   //<>// //<>//
+  for (int i=0;i<database.starsAttributes.getRowCount();i++) {
+    x = database.starsAttributes.getFloat(i, "X");
+    y = database.starsAttributes.getFloat(i, "Y");
+    x = map(x, -1, 1, 0, width);
+    y = map(y, -1, 1, 0, height);
+    star = new Star(x, y);
+    star.plot();
+  }
+   //<>//
   
   //for (int ii=0; ii<database.getRowCount(); ii++){
   //  print(database.RAh);

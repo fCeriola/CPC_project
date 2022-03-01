@@ -18,8 +18,12 @@ public class StarsTable{
   private color whiteStar;
   
   //ROME coordinates (for testing)
-  private float userLatitude = 41.902782;
-  private float userLongitude = 12.496366;
+  private float userLatitude = 40.779897;//41.902782;
+  private float userLongitude = -73.968565;//12.496366;
+  
+  //DEBUG VARIABLE
+  int columnIndex;
+  int starNumb;
   
   //constructor
   StarsTable() {
@@ -68,6 +72,16 @@ public class StarsTable{
     //the higher the value, the lower the temperature
     starsAttributes.addColumn("U-B");
     
+    //Class
+    //character representing the class of the star
+    //it indicates the temperature interval into which the star resides
+    starsAttributes.addColumn("class");
+    
+    //SubClass
+    //integer value representing the subclass of the star
+    //it indicates the temperature percentage into the temperature interval given by the class
+    starsAttributes.addColumn("subclass");
+    
     //Horizontal Coordinates
     //converted horizontal coordinates in deg through the 
     //private method convHorizCoord(int index)
@@ -88,9 +102,7 @@ public class StarsTable{
     //T Temperature
     //converted values (0-100) for the temperature with the 
     //private method convTemperature(int index)
-    starsAttributes.addColumn("T");
-    //<>// //<>//
-      for (int i=0; i<lines.length; i++) {
+    starsAttributes.addColumn("T"); //<>//
     
     //<>//
     for (int i=0; i<lines.length; i++) {
@@ -105,9 +117,9 @@ public class StarsTable{
       float RAm = float(line.substring(77,79));
       float RAs = float(line.substring(79,83));
       
-      float DECd = float(line.substring(68,71));
-      float DECm = float(line.substring(71,73));
-      float DECs = float(line.substring(73,75));
+      float DECd = float(line.substring(83,86));
+      float DECm = float(line.substring(86,88));
+      float DECs = float(line.substring(88,90));
       
       float VM = float(line.substring(102,107));
       
@@ -117,7 +129,7 @@ public class StarsTable{
       float sClass = float(line.substring(129,130));
       float sSubClass = float(line.substring(130,131));
       
-      float[] values = {RAh, RAm, RAs, DECd, DECm, DECs, VM, BV, UB, sClass, sSubClass};
+      float[] values = {RAh, RAm, RAs, DECd, DECm, DECs};
       
       
       //add new row to table for the each star
@@ -146,86 +158,40 @@ public class StarsTable{
         float DEC = convDEC(newRow);
         newRow.setFloat("DEC", DEC);
         
-        float UB = float(line.substring(115,119));  
         float[] HC = convHorizCoord(newRow);
         float HC1 = HC[0];
         float HC2 = HC[1];
         newRow.setFloat("HC1", HC1);
         newRow.setFloat("HC2", HC2);
         
+        float [] XY = convCartCoord(newRow);
+        float X = XY[0];
+        float Y = XY[1];
+        newRow.setFloat("X", X);
+        newRow.setFloat("Y", Y);
         
-        //add new row to table for the each star
-        float T = convTemperature(newRow);
-        newRow.setFloat("T", T);
+        if (str(X) == "NaN" || str(Y) == "NaN") {
+          println(RAh, RAm, RAs, DECd, DECm, DECs);
+          println(RA, DEC);
+          println(HC1, HC2);
+          println(X, Y);
+        }
+        
+        //float T = convTemperature(newRow);
+        //newRow.setFloat("T", T);
         
         //float M = convMagnitude(newRow);
         //newRow.setFloat("M", M);
         
       } else {
-        println("NaN number found at element: " + i);
+        println("NaN number found at element: " + i + " at the column at index: " + columnIndex);
+        starNumb++;
       } //<>//
-      
-        if (str(RAh)!= "NaN"){
-          TableRow newRow = starsAttributes.addRow();
-          newRow.setInt("index", index);
-        
-          newRow.setFloat("RAh", RAh);
-          newRow.setFloat("RAm", RAm);
-          newRow.setFloat("RAs", RAs);
-          
-          newRow.setFloat("DECd", DECd);
-          newRow.setFloat("DECm", DECm);
-          newRow.setFloat("DECs", DECs);
-          
-          newRow.setFloat("VM", VM);
-          
-          newRow.setFloat("B-V", BV);
-          
-          newRow.setFloat("U-B", UB);
-          
-          float RA = convRA(newRow);
-          newRow.setFloat("RA", RA);
-          float DEC = convDEC(newRow);
-          newRow.setFloat("DEC", DEC);
-          
-          float[] HC = convHorizCoord(newRow);
-          float HC1 = HC[0];
-          float HC2 = HC[1];
-          newRow.setFloat("HC1", HC1);
-          newRow.setFloat("HC2", HC2);
-          
-          float [] XY = convCartCoord(newRow);
-          float X = XY[0];
-          float Y = XY[1];
-          newRow.setFloat("X", X);
-          newRow.setFloat("Y", Y);
-          
-          //float T = convTemperature(newRow);
-          //newRow.setFloat("T", T);
-         
-          
-          //maxVM = findMax("VM");
-          //minVM = findMin("VM");
-          //maxBV = findMax("B-V");
-          //minBV = findMin("B-V");
-          //maxUB = findMax("U-B");
-          
-          //float M = convMagnitude(newRow);
-          //newRow.setFloat("M", M);
-          
-        } //<>// //<>//
-      }
+       //<>//
     }
+    println("Number of neglected lines: " + starNumb); //debug
     
-    maxVM = findMax("VM");
-    minVM = findMin("VM");
-    maxBV = findMax("B-V");
-    minBV = findMin("B-V");
-    maxUB = findMax("U-B");
-    
-    
-    
-    colorMode(HSB, 360, 100, 100);
+    colorMode(HSB, 255);
     redStar = color(255,156,60,255);
     blueStar = color(143,182,255,73);
     whiteStar = color(240,240,253,255);
@@ -283,11 +249,16 @@ public class StarsTable{
     //Hour angle
     float HA = LST - RA;
     
-    float starAltitude = asin(sin(DEC)*sin(userLatitude) + cos(DEC)*cos(userLatitude)*cos(HA));
-    float starAzimuth = acos(sin(DEC) - pow(sin(starAltitude),2)) / pow(cos(starAltitude),2);
+    RA = radians(RA);
+    DEC = radians(DEC);
+    HA = radians(HA);
+    float userLat = radians(userLatitude);
     
-    horizCoord[0] = starAzimuth;
-    horizCoord[1] = starAltitude;
+    float starAltitude = asin(sin(DEC)*sin(userLat) + cos(DEC)*cos(userLat)*cos(HA));
+    float starAzimuth = acos((sin(DEC) - sin(starAltitude)*sin(userLat)) / (cos(starAltitude)*cos(userLat)));
+    
+    horizCoord[0] = degrees(starAzimuth);
+    horizCoord[1] = degrees(starAltitude);
     
     return horizCoord;
   }
@@ -299,8 +270,9 @@ public class StarsTable{
     
     float x = cos(HC1)*sin(HC2);
     float y = sin(HC1)*sin(HC2);
-    float[] XY = new float[2];
-    XY[0] = x; XY[1] = y;
+    //float[] XY = new float[2];
+    //XY[0] = x; XY[1] = y;
+    float [] XY = {x, y};
     return XY;
   }
   
@@ -317,10 +289,8 @@ public class StarsTable{
     
     String sClass = str(row.getFloat("sClass"));
     
-    return T;
-  }
-  
-   //<>// //<>// //<>//
+    return 0;
+  } //<>//
   
   
   //-----------------------------------------------------
@@ -354,12 +324,11 @@ public class StarsTable{
   private boolean isAStar(float[] values) {
     //used to check if for a certain star all the values we need are given and correctly read
     boolean answer = true;
-    int colonna = 0;
     
     for (int i=0; i < values.length; i++) {
-      if (str(values[i]) == "Nan")
+      if (str(values[i]) == "NaN")
         answer = false;
-        colonna = i;
+        columnIndex = i;
     }
     return answer;
   }
@@ -389,29 +358,7 @@ public class StarsTable{
     return colore;
   }
   
-  //MAXIMA
-  //-----------------------------------------------------
   
-  private float findMax(String attribute) {
-    //finds the maximum value inside the table of a given attribute
-    float[] column = new float[starsAttributes.getRowCount()];
-    print(column.length);
-    for (int i=0; i<column.length; i++) {
-      column[i] = starsAttributes.getRow(i).getFloat(attribute);
-    }
-    column = sort(column);
-    return column[column.length-1];
-  }
-  
-  private float findMin(String attribute) {
-    //finds the minimum value inside the table of a given attribute
-    float[] column = new float[starsAttributes.getRowCount()];
-    for (int i=0; i<column.length; i++) {
-      column[i] = starsAttributes.getRow(i).getFloat(attribute);
-    }
-    column = sort(column);
-    return column[0];
-  }
   
   //MAPPING CART COORD
   //----------------------------------------
