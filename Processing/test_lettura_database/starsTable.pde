@@ -23,6 +23,7 @@ public class StarsTable{
   
   //DEBUG VARIABLE
   int columnIndex;
+  int starIndex;
   int starNumb;
   
   //constructor
@@ -110,7 +111,7 @@ public class StarsTable{
       //grab the single read line
       String line = lines[i];
       
-      int index = i+1;
+      starIndex = i+1;
       
       //substring(beginIndex(inclusive), endIndex(exclusive))
       float RAh = float(line.substring(75,77));
@@ -126,16 +127,19 @@ public class StarsTable{
       float BV = float(line.substring(109,114));
       float UB = float(line.substring(115,119));     
       
-      float sClass = float(line.substring(129,130));
+      //class is given by a number, so take the char from the line,
+      //convert to int in order to save on table and it will be
+      //converted back to char when used
+      int sClass = int(line.charAt(129));
       float sSubClass = float(line.substring(130,131));
       
-      float[] values = {RAh, RAm, RAs, DECd, DECm, DECs};
+      float[] values = {sClass, RAh, RAm, RAs, DECd, DECm, DECs, sSubClass};
       
       
       //add new row to table for the each star
       if (isAStar(values)){
         TableRow newRow = starsAttributes.addRow();
-        newRow.setInt("index", index);
+        newRow.setInt("index", starIndex);
       
         newRow.setFloat("RAh", RAh);
         newRow.setFloat("RAm", RAm);
@@ -150,7 +154,7 @@ public class StarsTable{
         newRow.setFloat("B-V", BV);
         newRow.setFloat("U-B", UB);
         
-        newRow.setFloat("class", sClass);
+        newRow.setInt("class", sClass);
         newRow.setFloat("subclass", sSubClass);
         
         float RA = convRA(newRow);
@@ -169,32 +173,35 @@ public class StarsTable{
         float Y = XY[1];
         newRow.setFloat("X", X);
         newRow.setFloat("Y", Y);
-        
+       
+        /* //debug
         if (str(X) == "NaN" || str(Y) == "NaN") {
           println(RAh, RAm, RAs, DECd, DECm, DECs);
           println(RA, DEC);
           println(HC1, HC2);
           println(X, Y);
         }
+        */
         
-        //float T = convTemperature(newRow);
-        //newRow.setFloat("T", T);
+        float T = convTemperature(newRow);
+        newRow.setFloat("T", T);
         
         //float M = convMagnitude(newRow);
         //newRow.setFloat("M", M);
         
       } else {
-        println("NaN number found at element: " + i + " at the column at index: " + columnIndex);
+        println("NaN number found at element: " + starIndex + " at the column at index: " + columnIndex); //debug
         starNumb++;
       } //<>//
        //<>//
     }
     println("Number of neglected lines: " + starNumb); //debug
     
-    colorMode(HSB, 255);
+    colorMode(RGB, 255);
     redStar = color(255,156,60,255);
     blueStar = color(143,182,255,73);
     whiteStar = color(240,240,253,255);
+    
   }
   
   
@@ -276,6 +283,7 @@ public class StarsTable{
     return XY;
   }
   
+  /*
   private float convMagnitude(TableRow row) {
     //converts VM index value into a scale 0-100
     float VM = row.getFloat("VM");
@@ -285,14 +293,57 @@ public class StarsTable{
     return brightness;
   }
   
+  */
+  
   private float convTemperature(TableRow row) {
     
-    String sClass = str(row.getFloat("sClass"));
+    char sClass = char(row.getInt("class"));
     
-    return 0;
+    int Tmax = 0;
+    int Tmin = 0;
+    
+    switch(sClass) {
+      case 'O': 
+        Tmax = 50000;
+        Tmin = 28000;
+        break;
+      case 'B': 
+        Tmax = 28000;
+        Tmin = 10000;
+        break;
+      case 'A': 
+        Tmax = 10000;
+        Tmin = 7500;
+        break;
+      case 'F':
+        Tmax = 7500;
+        Tmin = 6000;
+        break;
+      case 'G':
+        Tmax = 6000;
+        Tmin = 4900;
+        break;
+      case 'K':
+        Tmax = 4900;
+        Tmin = 3500;
+        break;
+      case 'M':
+        Tmax = 3500;
+        Tmin = 2000;
+        break;
+      default:
+        println("error", sClass, starIndex);
+        break;
+    }
+    
+    float sSubClass = row.getFloat("subclass");
+    
+    float T = map(sSubClass, 0, 9, Tmin, Tmax);
+    return T;
   } //<>//
   
   
+  /*
   //-----------------------------------------------------
   //MAXIMA
   
@@ -317,15 +368,22 @@ public class StarsTable{
     return column[0];
   }
   
+  */
   
   //----------------------------------------------------
   //EXISTANCE CHECK
   
   private boolean isAStar(float[] values) {
     //used to check if for a certain star all the values we need are given and correctly read
-    boolean answer = true;
+    boolean answer = false;
     
-    for (int i=0; i < values.length; i++) {
+    char sClass = char(int(values[0]));
+    char[] possibleClasses = {'O', 'B', 'A', 'F', 'G', 'K', 'M'};
+    for (int i=0; i< possibleClasses.length; i++) {
+      if (sClass == possibleClasses[i])
+        answer = true;
+    }
+    for (int i=1; i < values.length; i++) {
       if (str(values[i]) == "NaN")
         answer = false;
         columnIndex = i;
@@ -336,25 +394,26 @@ public class StarsTable{
   
   
   //PUBLIC METHODS
- //=====================================================
+  //=====================================================
  
- //The table cannot store color type data: setting the color has to be 
- //in another rendering function
+  //The table cannot store color type data: setting the color has to be 
+  //in another rendering function
  
   public color convColor(int index) {
     //converts B-V index value into color
     TableRow row = starsAttributes.getRow(index);
-    float BV = row.getFloat("B-V");
-    float percentage = map(BV, minBV, maxBV, -1, 1);
+    float T = row.getFloat("T");
     
     color colore = color(0,0,0);
     
-    if (percentage < 0) {
-      colore = lerpColor(whiteStar, blueStar, abs(percentage));
-    }
-    else if (percentage >= 0) {
+    if (T < 6000) {
+      float percentage = map(T, 6000, 50000, 0, 1);
+      colore = lerpColor(whiteStar, blueStar, percentage);
+    } else if (T >= 6000) {
+      float percentage = map(T, 6000, 2000, 0,1);
       colore = lerpColor(whiteStar, redStar, percentage);
     }
+    
     return colore;
   }
   

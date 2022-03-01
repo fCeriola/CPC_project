@@ -6,14 +6,15 @@ public class Star{
   // ATTRIBUTES
   PVector location;
   float radius;
-  
+  color colore;
   
   //---------------------------------------
   // CONSTRUCTOR
   
-  Star(float xCoord, float yCoord) {
+  Star(float xCoord, float yCoord, color colore) {
     this.location = new PVector(xCoord, yCoord);
     this.radius = 2;
+    this.colore = colore;
   }
   
   //---------------------------------------
@@ -21,7 +22,7 @@ public class Star{
   
   public void plot() {
     noStroke();
-    fill(255);
+    fill(this.colore);
     ellipse(this.location.x, this.location.y, this.radius, this.radius);
   }
   

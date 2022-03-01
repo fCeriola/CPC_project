@@ -28,20 +28,22 @@ void setup() {
   
   output = createWriter("debug_out.txt");
   for (int i=0;i<database.starsAttributes.getRowCount();i++){
-   output.println(database.starsAttributes.getInt(i,"index")+" -  X: "+ database.starsAttributes.getFloat(i,"X") + "   Y: "+ database.starsAttributes.getFloat(i,"Y"));
+    output.println(database.starsAttributes.getInt(i,"index")+" -  class: "+ char(database.starsAttributes.getInt(i,"class")) + "    subclass: "+ database.starsAttributes.getFloat(i,"subclass") + "   T: " + database.starsAttributes.getFloat(i, "T"));
   }
   //----------------------------------------------
   
  
   float x=0;
   float y=0;
+  color colore;
   
   for (int i=0;i<database.starsAttributes.getRowCount();i++) {
     x = database.starsAttributes.getFloat(i, "X");
     y = database.starsAttributes.getFloat(i, "Y");
     x = map(x, -1, 1, 0, width);
-    y = map(y, -1, 1, 0, height);
-    star = new Star(x, y);
+    y = map(y, -1, 1, height, 0);
+    colore = database.convColor(i);
+    star = new Star(x, y, colore);
     star.plot();
   }
    //<>//
