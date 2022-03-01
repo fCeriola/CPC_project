@@ -2,33 +2,35 @@
 //Table starsCoord;
 StarsTable database;
 PrintWriter output;
-
+int xScreen = 1080;
+int yScreen = 720;
 
 void setup() {
   
   //good for MacbookPro 2021
   //size(1512,850);
   
-  //size(1080,720);
+  //size(xScreen,yScreen);
   //frameRate(60);
   //background(255);
-  database = new StarsTable();
+  database = new StarsTable();  
   
-  float[] column1 = new float[database.getRowCount()];
-  float[] column2 = new float[database.getRowCount()];
   
- 
- 
+  //In order to acces to the database attribute:
+  //databse.starsAttributes.getFloat(row,column)
+  
+  //DEBUG
+  //----------------------------------------------
   output = createWriter("debug_out.txt");
   for (int i=0;i<database.getRowCount();i++){
-   output.println(database.starsAttributes.getInt(i,"index")+" -  UB: "+ database.starsAttributes.getFloat(i,"U-B"));
+   output.println(database.starsAttributes.getInt(i,"index")+" -  X: "+ database.starsAttributes.getFloat(i,"X") + "   Y: "+ database.starsAttributes.getFloat(i,"Y"));
   }
-  
+  //----------------------------------------------
   
  
   
   
-   //<>//
+   //<>// //<>//
   
   //for (int ii=0; ii<database.getRowCount(); ii++){
   //  print(database.RAh);

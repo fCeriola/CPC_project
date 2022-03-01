@@ -73,6 +73,12 @@ public class StarsTable{
     starsAttributes.addColumn("HC1");
     starsAttributes.addColumn("HC2");
     
+    //Cartesian Coordinates
+    //converted cartesian coordinates through the private 
+    //method convCartCoord
+    starsAttributes.addColumn("X");
+    starsAttributes.addColumn("Y");
+    
     //M Magnitude
     //converted values (0-100) for the magnitude with the 
     //private method convMagnitude(int index)
@@ -82,7 +88,7 @@ public class StarsTable{
     //converted values (0-100) for the temperature with the 
     //private method convTemperature(int index)
     starsAttributes.addColumn("T");
-    //<>//
+    //<>// //<>//
       for (int i=0; i<lines.length; i++) {
       
         //grab the single read line
@@ -103,7 +109,8 @@ public class StarsTable{
         
         float BV = float(line.substring(109,114));
         
-        float UB = float(line.substring(115,119));     
+        float UB = float(line.substring(115,119));  
+        
         
         //add new row to table for the each star
       
@@ -136,8 +143,14 @@ public class StarsTable{
           newRow.setFloat("HC1", HC1);
           newRow.setFloat("HC2", HC2);
           
-          float T = convTemperature(newRow);
-          newRow.setFloat("T", T);
+          float [] XY = convCartCoord(newRow);
+          float X = XY[0];
+          float Y = XY[1];
+          newRow.setFloat("X", X);
+          newRow.setFloat("Y", Y);
+          
+          //float T = convTemperature(newRow);
+          //newRow.setFloat("T", T);
          
           
           //maxVM = findMax("VM");
@@ -148,12 +161,9 @@ public class StarsTable{
           
           //float M = convMagnitude(newRow);
           //newRow.setFloat("M", M);
-        }else{
-        println(" NaN number find at elemnt: "+i);
-        } //<>//
+          
+        } //<>// //<>//
       }
-    
-    
     
     colorMode(HSB, 360, 100, 100);
     redStar = color(14, 27, 100);
@@ -225,6 +235,18 @@ public class StarsTable{
     return horizCoord;
   }
   
+  private float[] convCartCoord(TableRow row){
+    //converts horizontal coordinates to cartesian coordinates
+    float HC1 = row.getFloat("HC1");
+    float HC2 = row.getFloat("HC2");
+    
+    float x = cos(HC1)*sin(HC2);
+    float y = sin(HC1)*sin(HC2);
+    float[] XY = new float[2];
+    XY[0] = x; XY[1] = y;
+    return XY;
+  }
+  
   private float convMagnitude(TableRow row) {
     //converts VM index value into a scale 0-100
     float VM = row.getFloat("VM");
@@ -247,31 +269,7 @@ public class StarsTable{
     return T;
   }
   
-  
-  
-  //MAXIMA
-  //-----------------------------------------------------
-  
-  private float findMax(String attribute) {
-    //finds the maximum value inside the table of a given attribute
-    float[] column = new float[starsAttributes.getRowCount()]; //<>//
-    print(column.length);
-    for (int i=0; i<column.length; i++) { //<>//
-      column[i] = starsAttributes.getRow(i).getFloat(attribute);
-    }
-    column = sort(column);
-    return column[column.length-1];
-  }
-  
-  private float findMin(String attribute) {
-    //finds the minimum value inside the table of a given attribute
-    float[] column = new float[starsAttributes.getRowCount()];
-    for (int i=0; i<column.length; i++) {
-      column[i] = starsAttributes.getRow(i).getFloat(attribute);
-    }
-    column = sort(column);
-    return column[0];
-  }
+   //<>// //<>// //<>//
   
   
   
@@ -298,6 +296,43 @@ public class StarsTable{
     return colore;
   }
   
+  //MAXIMA
+  //-----------------------------------------------------
+  
+  private float findMax(String attribute) {
+    //finds the maximum value inside the table of a given attribute
+    float[] column = new float[starsAttributes.getRowCount()];
+    print(column.length);
+    for (int i=0; i<column.length; i++) {
+      column[i] = starsAttributes.getRow(i).getFloat(attribute);
+    }
+    column = sort(column);
+    return column[column.length-1];
+  }
+  
+  private float findMin(String attribute) {
+    //finds the minimum value inside the table of a given attribute
+    float[] column = new float[starsAttributes.getRowCount()];
+    for (int i=0; i<column.length; i++) {
+      column[i] = starsAttributes.getRow(i).getFloat(attribute);
+    }
+    column = sort(column);
+    return column[0];
+  }
+  
+  //MAPPING CART COORD
+  //----------------------------------------
+  
+  //public float[][] cartCoordMap (int xScreen, int yScreen){
+  //      Xmax = findMax("X");
+  //      Xmin = findMin("X");
+  //      float [][] mapXY = new float[starsAttributes.getRowCount()][starsAttributes.getRowCount()];
+  //      float[] X = map(
+        
+       
+       
+  //  return 
+  //}
   
   //Overloading
   public int getRowCount(){
@@ -305,6 +340,7 @@ public class StarsTable{
   }
   
   //get params from the new object StarsTable 
+  //
   
    public float getRA(int index){
         return starsAttributes.getFloat(index, "RA");
