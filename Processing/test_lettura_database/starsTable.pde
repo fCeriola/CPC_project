@@ -7,24 +7,25 @@ public class StarsTable{
   
   private Table starsAttributes; //containes data
   //extremes used to map values from indexes to usable numbers
+  //these are initialized inside the contructor with values searched directly from the database
   private float maxVM;
   private float minVM;
   private float maxBV;
   private float minBV;
   private float maxUB;
+  private float minUB;
   //extreme colors
   private color redStar;
   private color blueStar;
   private color whiteStar;
   
   //ROME coordinates (for testing)
-  private float userLatitude = 40.779897;//41.902782;
-  private float userLongitude = -73.968565;//12.496366;
+  private float userLatitude = 41.902782;
+  private float userLongitude = 12.496366;
   
   //DEBUG VARIABLE
-  int columnIndex;
   int starIndex;
-  int starNumb;
+  int starsNeglected;
   
   //constructor
   StarsTable() {
@@ -60,18 +61,24 @@ public class StarsTable{
     //index representing brightness and distance
     //the higher the value, the lower the brightness
     starsAttributes.addColumn("VM");
+    maxVM = 7.96;
+    minVM = -1.46;
     
     //B-V
     //difference in magnitude between blue index and visual index
     //index representing the color
     //lower value -> blue, higher value -> red
     starsAttributes.addColumn("B-V");
+    maxBV = 2.35;
+    minBV = -0.28;
     
     //U-B
     //difference in magnitude between ultraviolet index and blue index
     //index representing the temperature
     //the higher the value, the lower the temperature
     starsAttributes.addColumn("U-B");
+    maxUB = 2.48;
+    minUB = -1.11;
     
     //Class
     //character representing the class of the star
@@ -125,7 +132,7 @@ public class StarsTable{
       float VM = float(line.substring(102,107));
       
       float BV = float(line.substring(109,114));
-      float UB = float(line.substring(115,119));     
+      float UB = float(line.substring(115,120));     
       
       //class is given by a number, so take the char from the line,
       //convert to int in order to save on table and it will be
@@ -154,6 +161,8 @@ public class StarsTable{
         newRow.setFloat("B-V", BV);
         newRow.setFloat("U-B", UB);
         
+        
+        
         newRow.setInt("class", sClass);
         newRow.setFloat("subclass", sSubClass);
         
@@ -173,15 +182,6 @@ public class StarsTable{
         float Y = XY[1];
         newRow.setFloat("X", X);
         newRow.setFloat("Y", Y);
-       
-        /* //debug
-        if (str(X) == "NaN" || str(Y) == "NaN") {
-          println(RAh, RAm, RAs, DECd, DECm, DECs);
-          println(RA, DEC);
-          println(HC1, HC2);
-          println(X, Y);
-        }
-        */
         
         float T = convTemperature(newRow);
         newRow.setFloat("T", T);
@@ -190,12 +190,11 @@ public class StarsTable{
         newRow.setFloat("AM", AM);
         
       } else {
-        //println("NaN number found at element: " + starIndex + " at the column at index: " + columnIndex); //debug
-        starNumb++;
+        println("Neglected star at index " + starIndex); //debug
       } //<>//
        //<>//
     }
-    //println("Number of neglected lines: " + starNumb); //debug
+    println("Number of neglected lines: " + starsNeglected); //debug
     
     colorMode(RGB, 255);
     redStar = color(255,156,60,255);
@@ -280,17 +279,15 @@ public class StarsTable{
     return XY;
   }
   
-  
   private float convApparentMagnitude(TableRow row) {
     //converts VM index value into a scale 0-100 
     float VM = row.getFloat("VM");
     
     // CHECK FOR EXTREMES
-    float AM = map(VM, 0, 7, 0, 255);
+    float AM = map(VM, minVM, maxVM, 0, 255);
     
     return AM;
   }
-  
   
   private float convTemperature(TableRow row) {
     
@@ -338,33 +335,26 @@ public class StarsTable{
     return T;
   } //<>//
   
-  
-  /*
-  //-----------------------------------------------------
-  //MAXIMA
-  
-  private float findMax(String attribute) {
-    //finds the maximum value inside the table of a given attribute
-    float[] column = new float[starsAttributes.getRowCount()]; //<>//
-    print(column.length);
-    for (int i=0; i<column.length; i++) { //<>//
-      column[i] = starsAttributes.getRow(i).getFloat(attribute);
-    }
-    column = sort(column);
-    return column[column.length-1];
+  private float convBV(TableRow row) {
+    //converts VM index value into a scale 0-100 
+    float BV = row.getFloat("B-V");
+    
+    // CHECK FOR EXTREMES
+    BV = map(BV, minBV, maxBV, 0, 100);
+    
+    return BV;
   }
   
-  private float findMin(String attribute) {
-    //finds the minimum value inside the table of a given attribute
-    float[] column = new float[starsAttributes.getRowCount()];
-    for (int i=0; i<column.length; i++) {
-      column[i] = starsAttributes.getRow(i).getFloat(attribute);
-    }
-    column = sort(column);
-    return column[0];
+  private float convUB(TableRow row) {
+    //converts VM index value into a scale 0-100 
+    float UB = row.getFloat("U-B");
+    
+    // CHECK FOR EXTREMES
+    UB = map(UB, minUB, maxUB, 0, 100);
+    
+    return UB;
   }
-  
-  */
+   //<>// //<>//
   
   //----------------------------------------------------
   //EXISTENCE CHECK
@@ -383,8 +373,9 @@ public class StarsTable{
     for (int i=1; i < values.length; i++) {
       if (str(values[i]) == "NaN")
         answer = false;
-        columnIndex = i;
     }
+    if (answer == false)
+      starsNeglected++;
     return answer;
   }
   
@@ -419,8 +410,6 @@ public class StarsTable{
     
     colore = color(cRed, cGreen, cBlue, AM);
     
-    println(AM);
-    
     return colore;
   }
   
@@ -442,63 +431,170 @@ public class StarsTable{
   
   
   
+  // -------------------------------------
+  //DEBUG
   
-  
-  
-  /*
-  
-  //Overloading
-  public int getRowCount(){
-    return starsAttributes.getRowCount();
+  public void debug(TableRow row, boolean printAllStars, boolean onlyUsefullValues) {
+    //all the columns inside the given row are considered
+    //if printAllStars is given true then prints the line even if the star does not present any NaN
+    //if onlyUsefullValues is given true then it doesn't consider the column just read and not processed
+    //remember that under columns "index" and "class" we have int values, all the other columns contain floats
+    
+    //HOW TO USE:
+    //give the row you want to analyse;
+    //set printAllStars only if you want to print the row even if no NaN is detected, in general it should be set to false
+    //set onlyUsefullValues if you don't want to see also stuff that is directly inserted inside the row as it is read from database, but
+    //only those values that are processed inside the constructor and then inserted
+    
+    int columnNumber = row.getColumnCount();
+    int index = row.getInt("index");
+    
+    if (onlyUsefullValues) {
+      if (printAllStars) {
+        String phraseToBePrinted = "star " + index + ":   ";
+        
+        String addToPhrase;
+        String column;
+        
+        for (int i=0; i<columnNumber; i++) {
+          column = row.getColumnTitle(i);
+          if (column=="index" || column=="RAh" || column=="RAm" || column=="RAs" || column=="DECd" || column=="DECm" || column=="DECs" || column=="VM" || column=="B-V" || column=="U-B")
+            continue;
+          else if (column == "class")
+            addToPhrase = str(row.getInt(column));
+          else 
+            addToPhrase = str(row.getFloat(column));
+          
+          if (addToPhrase == "NaN") {
+            println("\n Found NaN on star at index " + index + " and column " + column + "\n");
+            return;
+          }
+          phraseToBePrinted = phraseToBePrinted + column + ": " + addToPhrase + " ;   ";
+        }
+        println(phraseToBePrinted + "\n");
+        return;
+      }
+      else {
+        String valueToCheck;
+        String column;
+        
+        for (int i=0; i<columnNumber; i++) {
+          column = row.getColumnTitle(i);
+          if (column=="index" || column=="RAh" || column=="RAm" || column=="RAs" || column=="DECd" || column=="DECm" || column=="DECs" || column=="VM" || column=="B-V" || column=="U-B")
+            continue;
+          else if (column == "class")
+            valueToCheck = str(row.getInt(column));
+          else
+            valueToCheck = str(row.getFloat(column));
+            
+          if (valueToCheck == "NaN") {
+            println("\n Found NaN on star at index " + index + " and column " + column + "\n");
+            return;
+          }
+        }
+        return;
+      }
+    }
+    else {
+      if (printAllStars) {
+        String phraseToBePrinted = "star " + index + ":   ";
+        
+        String addToPhrase;
+        String column;
+        
+        for (int i=0; i<columnNumber; i++) {
+          column = row.getColumnTitle(i);
+          if (column == "index")
+            continue;
+          else if (column == "class")
+            addToPhrase = str(row.getInt(column));
+          else 
+            addToPhrase = str(row.getFloat(column));
+          
+          if (addToPhrase == "NaN") {
+            println("\n Found NaN on star at index " + index + " and column " + column + "\n");
+            return;
+          }
+          phraseToBePrinted = phraseToBePrinted + column + ": " + addToPhrase + " ;   ";
+        }
+        print(phraseToBePrinted + "\n");
+        return;
+      }
+      else {
+        String valueToCheck;
+        String column;
+        
+        for (int i=0; i<columnNumber; i++) {
+          column = row.getColumnTitle(i);
+          if (column == "index")
+            continue;
+          else if (column == "class")
+            valueToCheck = str(row.getInt(column));
+          else
+            valueToCheck = str(row.getFloat(column));
+            
+          if (valueToCheck == "NaN") {
+            println("\n Found NaN on star at index " + index + " and column " + column + "\n");
+            return;
+          }
+        }
+        return;
+      }
+    }
   }
   
   
-  //get params from the new object StarsTable 
-  //
-  
-  public float getRA(int index){
-        return starsAttributes.getFloat(index, "RA");
-      }
-      public float getRAh(int index){
-        return starsAttributes.getFloat(index, "RAh");
-      }
-      public float getRAm(int index){
-        return starsAttributes.getFloat(index, "RAm");
-      }
-      public float getRAs(int index){
-        return starsAttributes.getFloat(index, "RAs");
-      }
-      
-  public float getDEC(int index){
-        return starsAttributes.getFloat(index, "DEC");
-      }
-      public float getDECd(int index){
-        return starsAttributes.getFloat(index, "DECd");
-      }
-      public float getDECm(int index){
-        return starsAttributes.getFloat(index, "DECm");
-      }
-      public float getDECs(int index){
-        return starsAttributes.getFloat(index, "DECs");
-      }
-      
-  public float getVM(int index){
-        return starsAttributes.getFloat(index, "VM");
-      }
-  
-  public float getBV(int index){
-        return starsAttributes.getFloat(index, "B-V");
-      }
-      
-  public float getUB(int index){
-      return starsAttributes.getFloat(index, "U-B");
-    }
-  
-  public float getT(int index){
-      return starsAttributes.getFloat(index, "T");
-    }
+  public void debug(TableRow row, String[] values, boolean printAllStars) {
+    //values should contain the columnn names (strings) you want to print for the given row
+    //if printAllStars is true then the function prints the row even if the star does not present any NaN
+    //remember that under columns "index" and "class" we have int values, all the other columns contain floats
     
-  */
+    //HOW TO USE:
+    //give the row you want to analyse; give a String array with the name of the columns you want to print;
+    //set printAllStars only if you want to print the row even if no NaN is detected, in general it should be set to false
+    
+    int index = row.getInt("index");
+    
+    if (printAllStars) {
+      String phraseToBePrinted = "star " + index + ":   ";
+      String addToPhrase;
+      
+      for (int i=0; i<values.length; i++) {
+        if (values[i] == "index")
+          continue;
+        else if (values[i] == "class")
+          addToPhrase = str(row.getInt(values[i]));
+        else
+          addToPhrase = str(row.getFloat(values[i]));
+          
+        if (addToPhrase == "NaN") {
+          println("\n Found NaN on star at index " + index + " and column " + values[i] + "\n");
+          return;
+        }
+        phraseToBePrinted = phraseToBePrinted + values[i] + ": " + addToPhrase + " ;   ";
+      }
+      println(phraseToBePrinted + "\n");
+      return;
+    }
+    else {
+      String valueToCheck;
+      
+      for (int i=0; i<values.length; i++) {
+        if (values[i] == "index")
+          continue;
+        else if (values[i] == "class")
+          valueToCheck = str(row.getInt(values[i]));
+        else
+          valueToCheck = str(row.getFloat(values[i]));
+          
+        if (valueToCheck == "NaN") {
+          println("\n Found NaN on star at index " + index + " and column " + values[i] + "\n");
+          return;
+        }
+      }
+      return;
+    }
+  }
   
   
 }

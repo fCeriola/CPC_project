@@ -35,81 +35,28 @@ void setup() {
   float x=0;
   float y=0;
   color colore = color(250);
+  String[] columns = {"X", "Y"};
   
   for (int i=0;i<database.starsAttributes.getRowCount();i++) {
     TableRow row = database.starsAttributes.getRow(i);
+    
+    database.debug(row, columns, false);
+    
     x = row.getFloat("X");
     y = row.getFloat("Y");
-    //if (str(x) == "NaN" || str(y) == "NaN")
-      //println("problem with star number: " + row.getInt("index"));
-      //println("RA -> " + row.getFloat("RA") + "    DEC -> " + row.getFloat("DEC"));
-      //println("cartesian coord: x -> " + row.getFloat("X") + "    and y -> " + row.getFloat("Y"));
     x = map(x, -1, 1, 0, width);
     y = map(y, -1, 1, height, 0);
     colore = database.convColor(row);
     star = new Star(x, y, colore);
     star.plot();
-  }
-   //<>//
-  
-  //for (int ii=0; ii<database.getRowCount(); ii++){
-  //  print(database.RAh);
-  //}
-  
-  /*
-  
-  
-  String[] lines = loadStrings("bsc5.dat");
-  
-  starsCoord = new Table();
-  
-  //Given a Certain meridian, this is the angle 
-  //over the meridian 0-360 degrees (h,m,s) --> Right Asception
-  starsCoord.addColumn("RAh");
-  starsCoord.addColumn("RAm");
-  starsCoord.addColumn("RAs");
-  
-  //
-  //over the meridian -90 - +90 degrees (degrees,m,s)
-  starsCoord.addColumn("DCh");
-  starsCoord.addColumn("DCm");
-  starsCoord.addColumn("DCs");
-  
-  
-  
-  for (int i=0; i<lines.length; i++) {
-    String line = lines[i];
-    //substring(beginIndex(inclusive), endIndex(exclusive))
-    float RAh = float(line.substring(75,77));
-    float RAm = float(line.substring(77,79));
-    float RAs = float(line.substring(79,83));
-    
-    float DCh = float(line.substring(83,86));
-    float DCm = float(line.substring(86,88));
-    float DCs = float(line.substring(88,90));
-    
-    TableRow newRow = starsCoord.addRow();
-    
-    newRow.setFloat("RAh", RAh);
-    newRow.setFloat("RAm", RAm);
-    newRow.setFloat("RAs", RAs);
-    
-    newRow.setFloat("DCh", DCh);
-    newRow.setFloat("DCm", DCm);
-    newRow.setFloat("DCs", DCs);
-    
-    println(starsCoord.getRow(i).getString("DCh"));
-  }
-  
-  
- */
+  }   //<>//
  
  
 }
 
 
-//void draw() {
+void draw() {
   
   
   
-//}
+}
