@@ -103,9 +103,9 @@ public class StarsTable{
     starsAttributes.addColumn("Y");
     
     //Apparent Magnitude
-    //converted values (0-100) for the magnitude with the 
+    //converted values (0-100) for the magnitude with the  //<>//
     //private method convMagnitude(int index)
-    starsAttributes.addColumn("AM");
+    starsAttributes.addColumn("AM"); //<>//
      
     //T Temperature
     //converted values (0-100) for the temperature with the 
@@ -192,8 +192,8 @@ public class StarsTable{
       } else {
         println("Neglected star at index " + starIndex); //debug
       } //<>//
-       //<>//
-    }
+       //<>// //<>//
+    } //<>//
     println("Number of neglected lines: " + starsNeglected); //debug
     
     colorMode(RGB, 255);
@@ -336,7 +336,7 @@ public class StarsTable{
   } //<>//
   
   private float convBV(TableRow row) {
-    //converts VM index value into a scale 0-100 
+    //converts VM index value into a scale 0-100  //<>//
     float BV = row.getFloat("B-V");
     
     // CHECK FOR EXTREMES
@@ -345,9 +345,9 @@ public class StarsTable{
     return BV;
   }
   
-  private float convUB(TableRow row) {
+  private float convUB(TableRow row) { //<>//
     //converts VM index value into a scale 0-100 
-    float UB = row.getFloat("U-B");
+    float UB = row.getFloat("U-B"); //<>//
     
     // CHECK FOR EXTREMES
     UB = map(UB, minUB, maxUB, 0, 100);
@@ -413,21 +413,6 @@ public class StarsTable{
     return colore;
   }
   
-  
-  
-  //MAPPING CART COORD
-  //----------------------------------------
-  
-  //public float[][] cartCoordMap (int xScreen, int yScreen){
-  //      Xmax = findMax("X");
-  //      Xmin = findMin("X");
-  //      float [][] mapXY = new float[starsAttributes.getRowCount()][starsAttributes.getRowCount()];
-  //      float[] X = map(
-        
-       
-       
-  //  return 
-  //}
   
   
   
@@ -595,6 +580,42 @@ public class StarsTable{
       return;
     }
   }
+  public float[] minMaxHC(){
+      float[] coord1 = new float[starsAttributes.getRowCount()];
+      float[] coord2 = new float[starsAttributes.getRowCount()];
+    
+      for (int i=0;i<starsAttributes.getRowCount();i++){
+          coord1[i] = starsAttributes.getFloat(i, "HC1");
+          coord2[i] = starsAttributes.getFloat(i, "HC2");
+      }
+    
+      coord1 = sort(coord1);
+      coord2 = sort(coord2);
+      
+      float HC1max = coord1[coord1.length-1];
+      int a = 1;
+      while (str(HC1max)=="NaN"){
+        a++;
+        HC1max = coord1[coord1.length-a];
+      }
+      float HC1min = coord1[0];
+      float HC2max = coord2[coord2.length-1];
+      float HC2min = coord2[0];
+      float[] minMax = {HC1min,HC1max,HC2min,HC2max};
+      return minMax;
+  }
+  
+  
+  
+  public void updateDatabase(){
+  for (int i=0; i<starsAttributes.getRowCount(); i++){
+      TableRow row = starsAttributes.getRow(i);
+      float[] updatedHC = convHorizCoord(row);
+      row.setFloat("HC1",updatedHC[0]);
+      row.setFloat("HC2",updatedHC[1]);
+    }
+  }
+  
   
   
 }

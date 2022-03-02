@@ -1,62 +1,70 @@
-
-//Table starsCoord;
 StarsTable database;
 Star star;
+Star[] starSet;
 PrintWriter output;
-int xScreen = 1080;
-int yScreen = 720;
+float[] extremes;
 
 void setup() {
   
-  //good for MacbookPro 2021
   size(1512,850);
-  
-  //size(xScreen,yScreen);
-  //frameRate(60);
-  
+  frameRate(60);
   background(0);
   
   database = new StarsTable();  
   
-  
-  //In order to acces to the database attribute:
-  //databse.starsAttributes.getFloat(row,column)
-  
-  
   //----------------------------------------------
   //DEBUG
   
-  output = createWriter("debug_out.txt");
-  for (int i=0;i<database.starsAttributes.getRowCount();i++){
-    output.println(database.starsAttributes.getInt(i,"index")+" -  class: "+ char(database.starsAttributes.getInt(i,"class")) + "    subclass: "+ database.starsAttributes.getFloat(i,"subclass") + "   T: " + database.starsAttributes.getFloat(i, "T"));
-  }
-  //----------------------------------------------
-  
-  float x=0;
-  float y=0;
-  color colore = color(250);
   String[] columns = {"X", "Y"};
   
   for (int i=0;i<database.starsAttributes.getRowCount();i++) {
     TableRow row = database.starsAttributes.getRow(i);
+    database.debug(row, columns, false); 
+  }
+  //----------------------------------------------
+  
+  starSet = new Star[database.starsAttributes.getRowCount()];
+  extremes = database.minMaxHC();
+  
+  for (int i=0;i<database.starsAttributes.getRowCount();i++) {
+    TableRow row = database.starsAttributes.getRow(i);
     
-    database.debug(row, columns, false);
-    
-    x = row.getFloat("X");
-    y = row.getFloat("Y");
-    x = map(x, -1, 1, 0, width);
-    y = map(y, -1, 1, height, 0);
-    colore = database.convColor(row);
+    float x = row.getFloat("HC1");
+    float y = row.getFloat("HC2"); 
+    x = map(x, extremes[0], extremes[1], 0, width);
+    y = map(y, extremes[2], extremes[3], height, 0);
+    //float x = row.getFloat("X");
+    //float y = row.getFloat("Y");
+    //x = map(x, -1, 1, 0, width);
+    //y = map(y, -1, 1, height, 0);
+    color colore = database.convColor(row);
     star = new Star(x, y, colore);
-    star.plot();
-  }   //<>//
- 
- 
-}
+    starSet[i] = star;
+  }
+  
+} //<>//
+
+
+//<>//
+
 
 
 void draw() {
   
+  background(0);
+  for (int i=0;i<database.starsAttributes.getRowCount();i++){
+    TableRow row = database.starsAttributes.getRow(i);
+    float x = row.getFloat("HC1");
+    float y = row.getFloat("HC2");
+    x = map(x, extremes[0], extremes[1], 0, width);
+    y = map(y, extremes[2], extremes[3], height, 0);
+    starSet[i].updatePos(x,y);
+  }
   
+  for (int i=0;i<starSet.length;i++){
+    starSet[i].plot();
+  }
+   
+  database.updateDatabase();
   
 }
