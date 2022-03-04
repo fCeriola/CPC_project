@@ -190,11 +190,11 @@ public class StarsTable{
         newRow.setFloat("AM", AM);
         
       } else {
-        println("Neglected star at index " + starIndex); //debug
+        //println("Neglected star at index " + starIndex); //debug
       } //<>//
-       //<>// //<>//
+     //<>//
     } //<>//
-    println("Number of neglected lines: " + starsNeglected); //debug
+    //println("Number of neglected lines: " + starsNeglected); //debug
     
     colorMode(RGB, 255);
     redStar = color(255,156,60,255);
@@ -260,9 +260,17 @@ public class StarsTable{
     float userLat = radians(userLatitude);
     
     float starAltitude = asin(sin(DEC)*sin(userLat) + cos(DEC)*cos(userLat)*cos(HA));
-    float starAzimuth = acos((sin(DEC) - sin(starAltitude)*sin(userLat)) / (cos(starAltitude)*cos(userLat)));
+    float A = (sin(DEC) - sin(starAltitude)*sin(userLat)) / (cos(starAltitude)*cos(userLat));
+    A = constrain(A, -1, 1);
+    A = acos(A);
+
+    float starAzimuth = 0;
+    if (sin(HA) >= 0)
+      starAzimuth = 360 - degrees(A);
+    else
+      starAzimuth = degrees(A);
     
-    float[] horizCoord = {degrees(starAzimuth), degrees(starAltitude)};
+    float[] horizCoord = {starAzimuth, degrees(starAltitude)};
     
     return horizCoord;
   }
@@ -354,7 +362,7 @@ public class StarsTable{
     
     return UB;
   }
-   //<>// //<>//
+   //<>//
   
   //----------------------------------------------------
   //EXISTENCE CHECK
@@ -580,11 +588,13 @@ public class StarsTable{
       return;
     }
   }
-  public float[] minMaxHC(){
+  
+  
+  public float[] minMaxHC() {
       float[] coord1 = new float[starsAttributes.getRowCount()];
       float[] coord2 = new float[starsAttributes.getRowCount()];
     
-      for (int i=0;i<starsAttributes.getRowCount();i++){
+      for (int i=0; i<starsAttributes.getRowCount(); i++){
           coord1[i] = starsAttributes.getFloat(i, "HC1");
           coord2[i] = starsAttributes.getFloat(i, "HC2");
       }
@@ -593,18 +603,23 @@ public class StarsTable{
       coord2 = sort(coord2);
       
       float HC1max = coord1[coord1.length-1];
+      
+      /*
+      //no more needed
+      
       int a = 1;
       while (str(HC1max)=="NaN"){
         a++;
         HC1max = coord1[coord1.length-a];
       }
+      */
+      
       float HC1min = coord1[0];
       float HC2max = coord2[coord2.length-1];
       float HC2min = coord2[0];
       float[] minMax = {HC1min,HC1max,HC2min,HC2max};
       return minMax;
   }
-  
   
   
   public void updateDatabase(){
@@ -615,7 +630,5 @@ public class StarsTable{
       row.setFloat("HC2",updatedHC[1]);
     }
   }
-  
-  
   
 }

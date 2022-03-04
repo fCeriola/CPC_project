@@ -26,7 +26,7 @@ public class Star{
     ellipse(this.location.x, this.location.y, this.radius, this.radius);
   }
   
-  public void updatePos(float coord1, float coord2){
+  public void updatePosition(float coord1, float coord2){
     this.location.x = coord1;
     this.location.y = coord2;
   }

@@ -12,17 +12,6 @@ void setup() {
   
   database = new StarsTable();  
   
-  //----------------------------------------------
-  //DEBUG
-  
-  String[] columns = {"X", "Y"};
-  
-  for (int i=0;i<database.starsAttributes.getRowCount();i++) {
-    TableRow row = database.starsAttributes.getRow(i);
-    database.debug(row, columns, false); 
-  }
-  //----------------------------------------------
-  
   starSet = new Star[database.starsAttributes.getRowCount()];
   extremes = database.minMaxHC();
   
@@ -45,11 +34,21 @@ void setup() {
 } //<>//
 
 
-//<>//
-
-
 
 void draw() {
+  
+  //----------------------------------------------
+  //DEBUG
+  
+  //String[] columns = {"HC1","HC2"};
+  
+  for (int i=0;i<database.starsAttributes.getRowCount();i++) {
+    TableRow row = database.starsAttributes.getRow(i);
+    database.debug(row, false, true); 
+  }
+  
+  //----------------------------------------------
+  
   
   background(0);
   for (int i=0;i<database.starsAttributes.getRowCount();i++){
@@ -58,7 +57,7 @@ void draw() {
     float y = row.getFloat("HC2");
     x = map(x, extremes[0], extremes[1], 0, width);
     y = map(y, extremes[2], extremes[3], height, 0);
-    starSet[i].updatePos(x,y);
+    starSet[i].updatePosition(x,y);
   }
   
   for (int i=0;i<starSet.length;i++){
