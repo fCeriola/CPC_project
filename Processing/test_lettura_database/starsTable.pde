@@ -14,21 +14,18 @@ public class StarsTable{
   private float minBV;
   private float maxUB;
   private float minUB;
-  //extreme colors
-  private color redStar;
-  private color blueStar;
-  private color whiteStar;
   
   //ROME coordinates (for testing)
   private float userLatitude = 41.902782;
   private float userLongitude = 12.496366;
   
   //DEBUG VARIABLE
-  int starIndex;
-  int starsNeglected;
+  private int starIndex;
+  private int starsNeglected;
   
-  //constructor
-  StarsTable() {
+  
+  //CONSTRUCTOR
+  public StarsTable() {
     
     //load file
     String[] lines = loadStrings("bsc5.dat");
@@ -196,11 +193,6 @@ public class StarsTable{
     } //<>//
     //println("Number of neglected lines: " + starsNeglected); //debug
     
-    colorMode(RGB, 255);
-    redStar = color(255,156,60,255);
-    blueStar = color(143,182,255,73);
-    whiteStar = color(240,240,253,255);
-    
   }
   
   
@@ -246,7 +238,7 @@ public class StarsTable{
     float DEC = convDEC(row);
     
     float daysToday = daysSinceJ2000();
-    float currentHour = localHourFraction();
+    float currentHour = localHourFraction(currentMoment);
     
     //find local siderial time with given formula
     float LST = (100.46 + 0.985647 * daysToday + userLongitude + 15 * currentHour) % 360;
@@ -280,8 +272,16 @@ public class StarsTable{
     float HC1 = row.getFloat("HC1");
     float HC2 = row.getFloat("HC2");
     
-    float x = cos(HC1)*sin(HC2);
-    float y = sin(HC1)*sin(HC2);
+    //cos(altitude) projects the star onto the plane (x,y)
+    //north is at azimuth = 0 and lies on y axis from bottom left corner to top left corner
+    float x = sin(HC1)*cos(HC2);
+    float y = cos(HC1)*cos(HC2);
+    
+    // THIS WILL BE DELETED ONCE WE SET THE CONSTRAINT ON THE PLANE OF PROJECTION OF THE STARS
+    //x = map(x, -1, 1, -7*width+width, 7*width);
+    //y = map(y, -1, 1, -7*height+height, 7*height);
+    x = map(x, -1, 1, 0, width);
+    y = map(y, -1, 1, height, 0);
 
     float [] XY = {x, y};
     return XY;
@@ -391,37 +391,56 @@ public class StarsTable{
   
   //PUBLIC METHODS
   //=====================================================
- 
-  //The table cannot store color type data: setting the color has to be 
-  //in another rendering function
- 
-  public color convColor(TableRow row) {
-    //from temperature computes the color based on star classification chart
-    float T = row.getFloat("T");
     
-    color colore = color(0,0,0);
-    float percentage = 0;
+  
+  /*
+  
+  public float[] minMaxHC() {
+      float[] coord1 = new float[starsAttributes.getRowCount()];
+      float[] coord2 = new float[starsAttributes.getRowCount()];
     
-    if (T > 6750) {
-      percentage = map(T, 6750, 50000, 0, 1);
-      colore = lerpColor(whiteStar, blueStar, percentage);
-    } else {
-      percentage = map(T, 2000, 6750, 0, 1);
-      colore = lerpColor(redStar, whiteStar, percentage);
-    }
+      for (int i=0; i<starsAttributes.getRowCount(); i++){
+          coord1[i] = starsAttributes.getFloat(i, "HC1");
+          coord2[i] = starsAttributes.getFloat(i, "HC2");
+      }
     
-    float cRed = red(colore);
-    float cGreen = green(colore);
-    float cBlue = blue(colore);
-    
-    float AM = row.getFloat("AM");
-    
-    colore = color(cRed, cGreen, cBlue, AM);
-    
-    return colore;
+      coord1 = sort(coord1);
+      coord2 = sort(coord2);
+      
+      float HC1max = coord1[coord1.length-1];
+      
+      
+      //no more needed
+      
+      //int a = 1;
+      //while (str(HC1max)=="NaN"){
+      //  a++;
+      //  HC1max = coord1[coord1.length-a];
+      //}
+      
+      
+      float HC1min = coord1[0];
+      float HC2max = coord2[coord2.length-1];
+      float HC2min = coord2[0];
+      float[] minMax = {HC1min,HC1max,HC2min,HC2max};
+      return minMax;
   }
   
+  */
   
+  public void update(){
+  for (int i=0; i<starsAttributes.getRowCount(); i++){
+      TableRow row = starsAttributes.getRow(i);
+      
+      float[] updatedHC = convHorizCoord(row);
+      row.setFloat("HC1", updatedHC[0]);
+      row.setFloat("HC2", updatedHC[1]);
+      
+      float[] updatedXY = convCartCoord(row);
+      row.setFloat("X", updatedXY[0]);
+      row.setFloat("Y", updatedXY[1]);
+    }
+  }
   
   
   // -------------------------------------
@@ -586,48 +605,6 @@ public class StarsTable{
         }
       }
       return;
-    }
-  }
-  
-  
-  public float[] minMaxHC() {
-      float[] coord1 = new float[starsAttributes.getRowCount()];
-      float[] coord2 = new float[starsAttributes.getRowCount()];
-    
-      for (int i=0; i<starsAttributes.getRowCount(); i++){
-          coord1[i] = starsAttributes.getFloat(i, "HC1");
-          coord2[i] = starsAttributes.getFloat(i, "HC2");
-      }
-    
-      coord1 = sort(coord1);
-      coord2 = sort(coord2);
-      
-      float HC1max = coord1[coord1.length-1];
-      
-      /*
-      //no more needed
-      
-      int a = 1;
-      while (str(HC1max)=="NaN"){
-        a++;
-        HC1max = coord1[coord1.length-a];
-      }
-      */
-      
-      float HC1min = coord1[0];
-      float HC2max = coord2[coord2.length-1];
-      float HC2min = coord2[0];
-      float[] minMax = {HC1min,HC1max,HC2min,HC2max};
-      return minMax;
-  }
-  
-  
-  public void updateDatabase(){
-  for (int i=0; i<starsAttributes.getRowCount(); i++){
-      TableRow row = starsAttributes.getRow(i);
-      float[] updatedHC = convHorizCoord(row);
-      row.setFloat("HC1",updatedHC[0]);
-      row.setFloat("HC2",updatedHC[1]);
     }
   }
   
