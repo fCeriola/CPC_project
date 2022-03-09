@@ -12,7 +12,7 @@ public class StarSystem{
   //-------------------------------------------------
   // CONSTRUCTOR
   
-  public StarSystem(StarsTable starDatabase){
+  StarSystem(StarsTable starDatabase){
     this.stars = new ArrayList<Star>();
     //we pass the reference to the database to this constructor and we create a new reference to it
     //it basically means having a new pointer
@@ -25,34 +25,25 @@ public class StarSystem{
   // PRIVATE METHODS
   
   private void fillSystem(){
-    //the idea is to create instances of star objects only if the star is visible from where we are
-    //we need to set limits on (x,y) cartesian plane in order to do that
-    //we will build a new method inside this class that will take information by gyrOsc and will decide
-    //wether the projection of each star falls or not inside the plane we want to show into the screen
     int numberOfStars = this.database.starsAttributes.getRowCount();
+    TableRow row;
     
     for (int i=0; i<numberOfStars; i++) {
-      TableRow row = this.database.starsAttributes.getRow(i);
-      //pseudocodice
-      //if (la stella ricade nel piano dello schermo) : crea l'istanza stella -> inseriscila nell'arraylist
-      if(projectionFallsInsidePlane(row))
-        this.stars.add(new Star(row));
-      else
-        continue;
+      row = this.database.starsAttributes.getRow(i);
+      this.stars.add(new Star(row));
     }
   }
   
-  
-  private boolean projectionFallsInsidePlane(TableRow row) {
+  private boolean starFallsIntoScreen(Star star) {
     boolean answer = false;
     
-    float alt = row.getFloat("HC2");
-    float x = row.getFloat("X");
-    float y = row.getFloat("Y");
+    float AL = star.AL;
+    float X = star.xCoord;
+    float Y = star.yCoord;
     
-    if (alt > 0 && x > 0 && x < width && y > 0 && y < height)
+    if (AL > 0 && X > 0 && X < width && Y > 0 && Y < height)
       answer = true;
-    
+      
     return answer;
   }
   
@@ -63,7 +54,8 @@ public class StarSystem{
     Star star;
     for (int i = this.stars.size()-1; i>=0; i--){
       star = this.stars.get(i);
-      star.plot();
+      if (starFallsIntoScreen(star))
+        star.plot();
     }
   }
   
@@ -71,10 +63,20 @@ public class StarSystem{
     //updating the starsTable object instance is enough since the
     //local database is just a reference to that one
     //but we need to empty the arraylist and rebuild it
-    for (int i = this.stars.size()-1; i>=0; i--)
-      stars.remove(i);
+    TableRow row;
+    Star star;
+    float AZ;
+    float AL;
     
-    this.fillSystem();
+    for (int i = this.stars.size()-1; i>=0; i--) {
+      star = this.stars.get(i);
+      row = database.starsAttributes.getRow(star.index-1);
+      
+      AZ = row.getFloat("AZ");
+      AL = row.getFloat("AL");
+      
+      star.update(AZ, AL);   
+    }
   }
   
 }

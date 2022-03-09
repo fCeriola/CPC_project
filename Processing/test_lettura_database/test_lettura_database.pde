@@ -1,4 +1,4 @@
-StarsTable database;
+StarsTable database; //<>//
 Star star;
 StarSystem starSystem;
 PrintWriter output;
@@ -26,7 +26,7 @@ void setup() {
   
   starSystem.plot();
   
-} //<>//
+}
 
 
 
@@ -43,13 +43,20 @@ void draw() {
   }
   */
   //----------------------------------------------
-  
+
   
   background(0);
-
-  database.update();
-  starSystem.update();
-  starSystem.plot();
   
+  database.timePassedFromStarApp = timePassingCalc(database.timePassedFromStarApp);
+  
+  Runnable updateDatabase = new Update(database, starSystem, "starsTable", true);
+  Thread updateDB = new Thread(updateDatabase);
+  updateDB.start();
+  
+  Runnable updateSystem = new Update(database, starSystem, "starSystem", true);
+  Thread updateSys = new Thread(updateSystem);
+  updateSys.start();
+  
+  starSystem.plot(); 
   
 }

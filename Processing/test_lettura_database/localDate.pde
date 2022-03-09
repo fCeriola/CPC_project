@@ -1,9 +1,13 @@
 import java.util.Calendar;
 
-public Calendar currentMoment;
+private Calendar currentMoment;
+private float timeLapse = 1;
 
-public float localHourFraction(Calendar currentMoment) {
+
+public float localHourFraction() {
   //returns the local hour value read from computer converted in a single decimal value
+  //it's called only once in the app, when the starsTable object is instantiated inside the setup
+  currentMoment = Calendar.getInstance();
   int hour = currentMoment.get(Calendar.HOUR_OF_DAY);
   int minute = currentMoment.get(Calendar.MINUTE);
   int second = currentMoment.get(Calendar.SECOND);
@@ -16,7 +20,19 @@ public float localHourFraction(Calendar currentMoment) {
   return localHour;
 }
 
-public float daysSinceJ2000() {
+public float timePassingCalc(float valueToIncrease) {
+  //returns a value to be added to the computed localHourFraction given to
+  //starsTable object instance as it is created
+  //use this function as a counter that controls time evolution instead of continuously grabbing
+  //the current hour/minute/second from the computer
+  //the value of timeLapse controls the speed
+  float increament = timeLapse * 1/frameRate;
+  valueToIncrease += increament / (60*60);
+  
+  return valueToIncrease;
+}
+
+public float daysSinceJ2000(float hour) {
   //returns the number of days between 1st January 2000 and today
   //takes into account passed hours from the beginning of today's day
   currentMoment = Calendar.getInstance();
@@ -104,7 +120,7 @@ public float daysSinceJ2000() {
   }
   
   float fromJ2000 = year-2000;
-  float daysSince = -1.5 + 365*fromJ2000 + floor(year/4) + day + localHourFraction(currentMoment)/24;
+  float daysSince = -1.5 + 365*fromJ2000 + floor(year/4) + day + hour/24;
   
   return daysSince;  
 }

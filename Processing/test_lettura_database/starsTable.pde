@@ -1,4 +1,4 @@
-//class containing all the coordinates and parameters of the stars
+//class containing all the coordinates and parameters of the stars //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 //reads from file with reference J2000 in equatorial coordinates
 
 public class StarsTable{
@@ -6,6 +6,9 @@ public class StarsTable{
   // ATTRIBUTES
   
   private Table starsAttributes; //containes data
+  private float appStartHourFraction;
+  private float timePassedFromStarApp;
+  private int starIndex;
   //extremes used to map values from indexes to usable numbers
   //these are initialized inside the contructor with values searched directly from the database
   private float maxVM;
@@ -20,102 +23,104 @@ public class StarsTable{
   private float userLongitude = 12.496366;
   
   //DEBUG VARIABLE
-  private int starIndex;
-  private int starsNeglected;
+  //private int starsNeglected;
   
   
   //CONSTRUCTOR
-  public StarsTable() {
+  StarsTable() {
     
     //load file
     String[] lines = loadStrings("bsc5.dat");
     
-    starsAttributes = new Table();
+    this.appStartHourFraction = localHourFraction();
+    this.timePassedFromStarApp = 0;
     
-    starsAttributes.addColumn("index");
+    this.starsAttributes = new Table();
+    
+    this.starsAttributes.addColumn("index");
     
     //Right Asception
     //angle with respect to the meridian passing through the "First Point of Aries"
     //measured along the place of the equator
     //h [0;24) -> hours; m [0;60) -> minutes; s [0;60) -> seconds
-    starsAttributes.addColumn("RAh");
-    starsAttributes.addColumn("RAm");
-    starsAttributes.addColumn("RAs");
+    this.starsAttributes.addColumn("RAh");
+    this.starsAttributes.addColumn("RAm");
+    this.starsAttributes.addColumn("RAs");
     
     //Declination
     //angle with respect to the celestial equator
     //measured along the meridian passing through the star
     //d (-90;+90) -> degrees; m [0;60) -> arcminutes; s [0;60) -> arcseconds
-    starsAttributes.addColumn("DECd");
-    starsAttributes.addColumn("DECm");
-    starsAttributes.addColumn("DECs");
+    this.starsAttributes.addColumn("DECd");
+    this.starsAttributes.addColumn("DECm");
+    this.starsAttributes.addColumn("DECs");
     
     //Right Ascension and Declination converted in single float values [degrees]
-    starsAttributes.addColumn("RA");
-    starsAttributes.addColumn("DEC");
+    this.starsAttributes.addColumn("RA");
+    this.starsAttributes.addColumn("DEC");
     
     //Visual Magnitude
     //index representing brightness and distance
     //the higher the value, the lower the brightness
-    starsAttributes.addColumn("VM");
-    maxVM = 7.96;
-    minVM = -1.46;
+    this.starsAttributes.addColumn("VM");
+    this.maxVM = 7.96;
+    this.minVM = -1.46;
     
     //B-V
     //difference in magnitude between blue index and visual index
     //index representing the color
     //lower value -> blue, higher value -> red
-    starsAttributes.addColumn("B-V");
-    maxBV = 2.35;
-    minBV = -0.28;
+    this.starsAttributes.addColumn("B-V");
+    this.maxBV = 2.35;
+    this.minBV = -0.28;
     
     //U-B
     //difference in magnitude between ultraviolet index and blue index
     //index representing the temperature
     //the higher the value, the lower the temperature
-    starsAttributes.addColumn("U-B");
-    maxUB = 2.48;
-    minUB = -1.11;
+    this.starsAttributes.addColumn("U-B");
+    this.maxUB = 2.48;
+    this.minUB = -1.11;
     
     //Class
     //character representing the class of the star
     //it indicates the temperature interval into which the star resides
-    starsAttributes.addColumn("class");
+    this.starsAttributes.addColumn("class");
     
     //SubClass
     //integer value representing the subclass of the star
     //it indicates the temperature percentage into the temperature interval given by the class
-    starsAttributes.addColumn("subclass");
+    this.starsAttributes.addColumn("subclass");
     
     //Horizontal Coordinates
     //converted horizontal coordinates in deg through the 
     //private method convHorizCoord(int index)
-    starsAttributes.addColumn("HC1");
-    starsAttributes.addColumn("HC2");
+    this.starsAttributes.addColumn("AZ");
+    this.starsAttributes.addColumn("AL");
     
     //Cartesian Coordinates
     //converted cartesian coordinates through the private 
     //method convCartCoord
-    starsAttributes.addColumn("X");
-    starsAttributes.addColumn("Y");
+    this.starsAttributes.addColumn("X");
+    this.starsAttributes.addColumn("Y");
     
     //Apparent Magnitude
-    //converted values (0-100) for the magnitude with the  //<>//
+    //converted values (0-100) for the magnitude with the 
     //private method convMagnitude(int index)
-    starsAttributes.addColumn("AM"); //<>//
+    this.starsAttributes.addColumn("AM");
      
     //T Temperature
     //converted values (0-100) for the temperature with the 
     //private method convTemperature(int index)
-    starsAttributes.addColumn("T"); //<>//
+    this.starsAttributes.addColumn("T");
     
-    //<>//
+   
     for (int i=0; i<lines.length; i++) {
       
-      //grab the single read line
+      //grab one line
       String line = lines[i];
       
-      starIndex = i+1;
+      this.starIndex++;
       
       //substring(beginIndex(inclusive), endIndex(exclusive))
       float RAh = float(line.substring(75,77));
@@ -141,7 +146,7 @@ public class StarsTable{
       
       
       //add new row to table for the each star
-      if (isAStar(values)){
+      if (this.isAStar(values)){
         TableRow newRow = starsAttributes.addRow();
         newRow.setInt("index", starIndex);
       
@@ -168,17 +173,11 @@ public class StarsTable{
         float DEC = convDEC(newRow);
         newRow.setFloat("DEC", DEC);
         
-        float[] HC = convHorizCoord(newRow);
-        float HC1 = HC[0];
-        float HC2 = HC[1];
-        newRow.setFloat("HC1", HC1);
-        newRow.setFloat("HC2", HC2);
-        
-        float [] XY = convCartCoord(newRow);
-        float X = XY[0];
-        float Y = XY[1];
-        newRow.setFloat("X", X);
-        newRow.setFloat("Y", Y);
+        float[] HC = fromEquaToHoriz(newRow);
+        float AZ = HC[0];
+        float AL = HC[1];
+        newRow.setFloat("AZ", AZ);
+        newRow.setFloat("AL", AL);
         
         float T = convTemperature(newRow);
         newRow.setFloat("T", T);
@@ -187,10 +186,11 @@ public class StarsTable{
         newRow.setFloat("AM", AM);
         
       } else {
-        //println("Neglected star at index " + starIndex); //debug
-      } //<>//
-     //<>//
-    } //<>//
+        starIndex--;
+        //println("Neglected star at index " + i+1); //debug
+      }
+    
+    }
     //println("Number of neglected lines: " + starsNeglected); //debug
     
   }
@@ -231,14 +231,14 @@ public class StarsTable{
     return DEC;
   }
   
-  private float[] convHorizCoord(TableRow row) {
+  private float[] fromEquaToHoriz(TableRow row) {
     //converts equatorial coordinates into horizontal coordinates
     
     float RA = convRA(row);
     float DEC = convDEC(row);
     
-    float daysToday = daysSinceJ2000();
-    float currentHour = localHourFraction(currentMoment);
+    float currentHour = this.appStartHourFraction + this.timePassedFromStarApp;
+    float daysToday = daysSinceJ2000(currentHour);
     
     //find local siderial time with given formula
     float LST = (100.46 + 0.985647 * daysToday + userLongitude + 15 * currentHour) % 360;
@@ -265,26 +265,6 @@ public class StarsTable{
     float[] horizCoord = {starAzimuth, degrees(starAltitude)};
     
     return horizCoord;
-  }
-  
-  private float[] convCartCoord(TableRow row){
-    //converts horizontal coordinates to cartesian coordinates
-    float HC1 = row.getFloat("HC1");
-    float HC2 = row.getFloat("HC2");
-    
-    //cos(altitude) projects the star onto the plane (x,y)
-    //north is at azimuth = 0 and lies on y axis from bottom left corner to top left corner
-    float x = sin(HC1)*cos(HC2);
-    float y = cos(HC1)*cos(HC2);
-    
-    // THIS WILL BE DELETED ONCE WE SET THE CONSTRAINT ON THE PLANE OF PROJECTION OF THE STARS
-    //x = map(x, -1, 1, -7*width+width, 7*width);
-    //y = map(y, -1, 1, -7*height+height, 7*height);
-    x = map(x, -1, 1, 0, width);
-    y = map(y, -1, 1, height, 0);
-
-    float [] XY = {x, y};
-    return XY;
   }
   
   private float convApparentMagnitude(TableRow row) {
@@ -341,10 +321,10 @@ public class StarsTable{
     
     float T = map(sSubClass, 0, 9, Tmin, Tmax);
     return T;
-  } //<>//
+  }
   
   private float convBV(TableRow row) {
-    //converts VM index value into a scale 0-100  //<>//
+    //converts VM index value into a scale 0-100 
     float BV = row.getFloat("B-V");
     
     // CHECK FOR EXTREMES
@@ -353,16 +333,16 @@ public class StarsTable{
     return BV;
   }
   
-  private float convUB(TableRow row) { //<>//
+  private float convUB(TableRow row) {
     //converts VM index value into a scale 0-100 
-    float UB = row.getFloat("U-B"); //<>//
+    float UB = row.getFloat("U-B");
     
     // CHECK FOR EXTREMES
     UB = map(UB, minUB, maxUB, 0, 100);
     
     return UB;
   }
-   //<>//
+  
   
   //----------------------------------------------------
   //EXISTENCE CHECK
@@ -382,8 +362,11 @@ public class StarsTable{
       if (str(values[i]) == "NaN")
         answer = false;
     }
-    if (answer == false)
-      starsNeglected++;
+    
+    //debug
+    //if (answer == false)
+      //starsNeglected++;
+      
     return answer;
   }
   
@@ -391,54 +374,14 @@ public class StarsTable{
   
   //PUBLIC METHODS
   //=====================================================
-    
-  
-  /*
-  
-  public float[] minMaxHC() {
-      float[] coord1 = new float[starsAttributes.getRowCount()];
-      float[] coord2 = new float[starsAttributes.getRowCount()];
-    
-      for (int i=0; i<starsAttributes.getRowCount(); i++){
-          coord1[i] = starsAttributes.getFloat(i, "HC1");
-          coord2[i] = starsAttributes.getFloat(i, "HC2");
-      }
-    
-      coord1 = sort(coord1);
-      coord2 = sort(coord2);
-      
-      float HC1max = coord1[coord1.length-1];
-      
-      
-      //no more needed
-      
-      //int a = 1;
-      //while (str(HC1max)=="NaN"){
-      //  a++;
-      //  HC1max = coord1[coord1.length-a];
-      //}
-      
-      
-      float HC1min = coord1[0];
-      float HC2max = coord2[coord2.length-1];
-      float HC2min = coord2[0];
-      float[] minMax = {HC1min,HC1max,HC2min,HC2max};
-      return minMax;
-  }
-  
-  */
   
   public void update(){
   for (int i=0; i<starsAttributes.getRowCount(); i++){
       TableRow row = starsAttributes.getRow(i);
       
-      float[] updatedHC = convHorizCoord(row);
-      row.setFloat("HC1", updatedHC[0]);
-      row.setFloat("HC2", updatedHC[1]);
-      
-      float[] updatedXY = convCartCoord(row);
-      row.setFloat("X", updatedXY[0]);
-      row.setFloat("Y", updatedXY[1]);
+      float[] updatedHC = fromEquaToHoriz(row);
+      row.setFloat("AZ", updatedHC[0]);
+      row.setFloat("AL", updatedHC[1]);
     }
   }
   

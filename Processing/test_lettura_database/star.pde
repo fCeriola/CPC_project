@@ -4,6 +4,9 @@
 public class Star{
   
   // ATTRIBUTES
+  private int index;
+  private float AZ;
+  private float AL;
   private float xCoord;
   private float yCoord;
   private float temperature;
@@ -19,15 +22,17 @@ public class Star{
   //---------------------------------------
   // CONSTRUCTOR
   
-  public Star(TableRow row) {
+  Star(TableRow row) {
     //takes a row of the database table as argument and grabs all the information needed
     colorMode(RGB, 255);
     redStar = color(255,156,60,255);
     blueStar = color(143,182,255,73);
     whiteStar = color(240,240,253,255);
     
-    this.xCoord = row.getFloat("X");
-    this.yCoord = row.getFloat("Y");
+    this.index = row.getInt("index");
+    this.AZ = row.getFloat("AZ");
+    this.AL = row.getFloat("AL");
+    this.fromHorizToCart(this.AZ, this.AL);
     this.temperature = row.getFloat("T");
     this.apparentMagnitude = row.getFloat("AM");
     this.convColor(this.temperature, this.apparentMagnitude);
@@ -60,6 +65,22 @@ public class Star{
     this.colore = colore;
   }
   
+  private void fromHorizToCart(float AZ, float AL){
+    //converts horizontal coordinates to cartesian coordinates
+    float AZ_rad = radians(AZ);
+    float AL_rad = radians(AL);
+    
+    //cos(altitude) projects the star onto the plane (x,y)
+    //north is at azimuth = 0 and lies on y axis from bottom left corner to top left corner
+    float X = sin(AZ_rad)*cos(AL_rad);
+    float Y = cos(AZ_rad)*cos(AL_rad);
+    
+    // THIS MUST BE ADJUSTED
+    float beta = 0;
+    this.xCoord = map(X, -1, 1, -beta, beta+width);
+    this.yCoord = map(Y, -1, 1, beta+height, -beta);
+  }
+  
   //---------------------------------------
   // PUBLIC METHODS
   
@@ -71,13 +92,22 @@ public class Star{
     
     beginShape();
     noStroke();
+    
     fill(cRed, cGreen, cBlue, alpha/6);
     ellipse(this.xCoord, this.yCoord, this.radius*4.5, this.radius/3);
     fill(cRed, cGreen, cBlue, alpha/3);
     ellipse(this.xCoord, this.yCoord, this.radius/2, this.radius*3);
-    fill(cRed, cGreen, cBlue, alpha);
+    
+    fill(cRed, cGreen, cBlue, alpha);    
     ellipse(this.xCoord, this.yCoord, this.radius, this.radius);
+    
     endShape();
+  }
+  
+  public void update(float AZ, float AL) {
+    this.AZ = AZ;
+    this.AL = AL;
+    this.fromHorizToCart(this.AZ, this.AL);
   }
   
 }
