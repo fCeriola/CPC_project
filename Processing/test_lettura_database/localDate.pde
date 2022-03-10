@@ -1,7 +1,7 @@
 import java.util.Calendar;
 
 private Calendar currentMoment;
-private float timeLapse = 1;
+private float timeLapse = 120;
 
 
 public float localHourFraction() {
