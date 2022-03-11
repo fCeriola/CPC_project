@@ -1,52 +1,90 @@
-class ParticleSystem{
-  ArrayList<Particle> particles;
-  PVector origin;
+// a Celestial object may be a nebula or may be a comet depending on the type given
+// as argument to the constructor. the particles behaviour depends on the type, but the behaviour
+// itself is controlled by the Particle class
+
+public class Celestial{
+  
+  // ATTRIBUTES
+  
+  String type;
+  ArrayList<Particle> trail;
+  int particleNumber;
+  PVector position;
+  float velocity;
   PVector direction;
-  boolean show;
+  color colore;
   
-  ParticleSystem(PVector origin, PVector direction){
-    this.particles = new ArrayList<Particle>();
-    this.origin = origin.copy();
+  // ===================================================
+  // CONSTRUCTOR
+  
+  public Celestial(String type, PVector origin, PVector direction, color colore){
+    this.type = type;
+    this.trail = new ArrayList<Particle>();
+    this.position = origin.copy();
     this.direction = direction.copy();
-    this.show = false;
+    this.colore = colore;
+    
+    if (this.type == "nebula") {
+      this.particleNumber = 1000;
+      this.velocity = 0.4;
+    }
+    else if (this.type == "comet") {
+      this.particleNumber = 10;
+      this.velocity = 4;
+    }
+    
+    for(int i=0; i<particleNumber; i++){
+      this.addParticle();
+    }
+    
   }
   
-  void addParticle(){
-    float angle = this.direction.heading();
-    angle += PI % (2*PI);
-    float maxAngle = angle + PI/5;
-    float minAngle = angle - PI/5;
-    angle = random(minAngle, maxAngle);
-    float x = cos(angle);
-    float y = sin(angle);
-    PVector force = new PVector(x,y);
-    this.particles.add(new Particle(this.origin, 7, random(0,255), force));
+  // ===================================================
+  // PRIVATE METHODS
+  
+  private void addParticle(){
+    this.trail.add(new Particle(this.type, this.position, this.direction, this.colore));
   }
   
-  void plot(){
+  // ===================================================
+  // PUBLIC METHODS
+  
+  public void plot(){
+    
+    fill(this.colore);
+    
+    if (this.type == "nebula") {
+      ellipse(this.position.x, this.position.y, 7, 7);
+    }
+    
+    if(this.type == "comet") {
+      float angle = this.direction.heading();
+      pushMatrix();
+      beginShape();
+      translate(this.position.x, this.position.y);
+      rotate(angle);
+      ellipse(0, 0, 7, 5);
+      endShape();
+      popMatrix();
+    }
+    
     Particle p;
-    for(int i=this.particles.size()-1; i>=0; i--){
-      p = this.particles.get(i);
+    for (int i=this.trail.size()-1; i>=0; i--) {
+      p = this.trail.get(i);
       p.applyForce();
       p.update();
       p.plot();
-      p.lifespan-=0.5;
+      p.lifespan -= 0.5;
       if(p.isDead()){
-         particles.remove(i);
+         trail.remove(i);
          this.addParticle();
       }
     }
   }
   
-  void update() {
-    if (this.direction.x>0)
-      this.origin.x++;
-    else
-      this.origin.x--;
-    if (this.direction.y>0)
-      this.origin.y++;
-    else
-      this.origin.y--;
+  public void update() {
+    PVector movement = this.direction.copy();
+    movement.mult(this.velocity);
+    this.position.add(movement);
   }
-
 }
