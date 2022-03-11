@@ -25,14 +25,15 @@ public class StarsTable{
   //DEBUG VARIABLE
   //private int starsNeglected;
   
-  
+  // ======================================================
   //CONSTRUCTOR
-  StarsTable() {
+  
+  public StarsTable() {
     
     //load file
     String[] lines = loadStrings("bsc5.dat");
     
-    this.appStartHourFraction = localHourFraction();
+    this.appStartHourFraction = timeControl.localHourFraction();
     this.timePassedFromStarApp = 0;
     
     this.starsAttributes = new Table();
@@ -196,9 +197,8 @@ public class StarsTable{
   }
   
   
-  
+  // ======================================================
   //PRIVATE METHODS
-  //=====================================================
   
   //-----------------------------------------------------
   //CONVERSIONS
@@ -238,7 +238,7 @@ public class StarsTable{
     float DEC = convDEC(row);
     
     float currentHour = this.appStartHourFraction + this.timePassedFromStarApp;
-    float daysToday = daysSinceJ2000(currentHour);
+    float daysToday = timeControl.daysSinceJ2000(currentHour);
     
     //find local siderial time with given formula
     float LST = (100.46 + 0.985647 * daysToday + userLongitude + 15 * currentHour) % 360;
@@ -371,9 +371,8 @@ public class StarsTable{
   }
   
   
-  
+  // ======================================================
   //PUBLIC METHODS
-  //=====================================================
   
   public void update(){
   for (int i=0; i<starsAttributes.getRowCount(); i++){

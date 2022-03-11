@@ -1,8 +1,12 @@
 StarsTable database; //<>//
 Star star;
 StarSystem starSystem;
+Time timeControl;
 PrintWriter output;
 float[] extremes;
+float timeLapseValue;
+//float numero = 0;
+
 
 void setup() {
   
@@ -10,6 +14,8 @@ void setup() {
   frameRate(60);
   background(0);
   
+  timeLapseValue = 1;
+  timeControl = new Time(timeLapseValue);
   database = new StarsTable();
   
   //---------------------------------------
@@ -29,7 +35,6 @@ void setup() {
 }
 
 
-
 void draw() {
   
   //----------------------------------------------
@@ -47,7 +52,7 @@ void draw() {
   
   background(0);
   
-  database.timePassedFromStarApp = timePassingCalc(database.timePassedFromStarApp);
+  database.timePassedFromStarApp = timeControl.timePassingCalc(database.timePassedFromStarApp);
   
   Runnable updateDatabase = new Update(database, starSystem, "starsTable", true);
   Thread updateDB = new Thread(updateDatabase);
@@ -57,6 +62,11 @@ void draw() {
   Thread updateSys = new Thread(updateSystem);
   updateSys.start();
   
-  starSystem.plot(); 
+  starSystem.plot();
+  
+  /*
+  fill(255, 0, 0);
+  rect(numero++, numero++, 30,30);
+  */
   
 }

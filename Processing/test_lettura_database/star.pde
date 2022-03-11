@@ -13,16 +13,17 @@ public class Star{
   private float apparentMagnitude;
   private color colore;
   private float radius;
+  //private float angle;
   
   //extreme colors
   private color redStar;
   private color blueStar;
   private color whiteStar;
   
-  //---------------------------------------
+  // ======================================================
   // CONSTRUCTOR
   
-  Star(TableRow row) {
+  public Star(TableRow row) {
     //takes a row of the database table as argument and grabs all the information needed
     colorMode(RGB, 255);
     redStar = color(255,156,60,255);
@@ -36,10 +37,11 @@ public class Star{
     this.temperature = row.getFloat("T");
     this.apparentMagnitude = row.getFloat("AM");
     this.convColor(this.temperature, this.apparentMagnitude);
-    this.radius = map(alpha(colore), 0, 255, 1, 5);
+    this.radius = map(alpha(colore), 0, 255, 0.2, 5);
+    //this.angle = random(0,2*PI);
   }
   
-  //---------------------------------------
+  // ======================================================
   // PRIVATE METHODS
   
   private void convColor(float temperature, float apparentMagnitude) {
@@ -76,12 +78,12 @@ public class Star{
     float Y = cos(AZ_rad)*cos(AL_rad);
     
     // THIS MUST BE ADJUSTED
-    float beta = 0;
+    float beta = 400;
     this.xCoord = map(X, -1, 1, -beta, beta+width);
     this.yCoord = map(Y, -1, 1, beta+height, -beta);
   }
   
-  //---------------------------------------
+  // ======================================================
   // PUBLIC METHODS
   
   public void plot() {
@@ -89,6 +91,26 @@ public class Star{
     float cGreen = green(this.colore);
     float cBlue = blue(this.colore);
     float alpha = alpha(this.colore);
+    
+    /*
+    pushMatrix();
+    beginShape();
+    noStroke();
+    translate(this.xCoord, this.yCoord);
+    rotate(this.angle);
+    
+    fill(cRed, cGreen, cBlue, alpha/6);
+    ellipse(1, 0, this.radius*4.5, this.radius/3);
+    fill(cRed, cGreen, cBlue, alpha/3);
+    ellipse(0, -1, this.radius/2, this.radius*3);
+    
+    fill(cRed, cGreen, cBlue, alpha);    
+    ellipse(0, 0, this.radius, this.radius);
+    
+    endShape();
+    popMatrix();
+    */
+    
     
     beginShape();
     noStroke();
@@ -102,6 +124,7 @@ public class Star{
     ellipse(this.xCoord, this.yCoord, this.radius, this.radius);
     
     endShape();
+    
   }
   
   public void update(float AZ, float AL) {

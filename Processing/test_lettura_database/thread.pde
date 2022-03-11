@@ -8,7 +8,7 @@ public class Update implements Runnable {
   String whatToUpdate;
   boolean lock;
   
-  Update(StarsTable starsTable, StarSystem starSystem, String whatToUpdate, boolean lock) {
+  public Update(StarsTable starsTable, StarSystem starSystem, String whatToUpdate, boolean lock) {
     this.starsTable = starsTable;
     this.starSystem = starSystem;
     this.whatToUpdate = whatToUpdate;

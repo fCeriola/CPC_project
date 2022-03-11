@@ -8,11 +8,10 @@ public class StarSystem{
   private ArrayList<Star> stars;
   private StarsTable database;
   
-  
-  //-------------------------------------------------
+  // ======================================================
   // CONSTRUCTOR
   
-  StarSystem(StarsTable starDatabase){
+  public StarSystem(StarsTable starDatabase){
     this.stars = new ArrayList<Star>();
     //we pass the reference to the database to this constructor and we create a new reference to it
     //it basically means having a new pointer
@@ -20,8 +19,7 @@ public class StarSystem{
     this.fillSystem();
   }
   
-  
-  //-------------------------------------------------
+  // ======================================================
   // PRIVATE METHODS
   
   private void fillSystem(){
@@ -47,7 +45,7 @@ public class StarSystem{
     return answer;
   }
   
-  //--------------------------------------------------
+  // ======================================================
   // PUBLIC METHODS
   
   public void plot(){
