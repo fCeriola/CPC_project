@@ -1,11 +1,11 @@
-public class Particle{
+public class Point{
   
   int posx;
   int posy;
   float diam;
   
   
-  Particle(int posx, int posy, float diam){
+  Point(int posx, int posy, float diam){
     this.posx = posx;
     this.posy = posy;
     this.diam = diam;

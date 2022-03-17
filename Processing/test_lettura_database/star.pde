@@ -13,7 +13,7 @@ public class Star{
   private float apparentMagnitude;
   private color colore;
   private float radius;
-  //private float angle;
+  private float angle;
   
   //extreme colors
   private color redStar;
@@ -38,7 +38,7 @@ public class Star{
     this.apparentMagnitude = row.getFloat("AM");
     this.convColor(this.temperature, this.apparentMagnitude);
     this.radius = map(alpha(colore), 0, 255, 0.2, 5);
-    //this.angle = random(0,2*PI);
+    this.angle = random(0,2*PI);
   }
   
   // ======================================================
@@ -78,7 +78,7 @@ public class Star{
     float Y = cos(AZ_rad)*cos(AL_rad);
     
     // THIS MUST BE ADJUSTED
-    float beta = 400;
+    float beta = 100;
     this.xCoord = map(X, -1, 1, -beta, beta+width);
     this.yCoord = map(Y, -1, 1, beta+height, -beta);
   }
@@ -92,7 +92,7 @@ public class Star{
     float cBlue = blue(this.colore);
     float alpha = alpha(this.colore);
     
-    /*
+    
     pushMatrix();
     beginShape();
     noStroke();
@@ -109,21 +109,21 @@ public class Star{
     
     endShape();
     popMatrix();
-    */
     
     
-    beginShape();
-    noStroke();
     
-    fill(cRed, cGreen, cBlue, alpha/6);
-    ellipse(this.xCoord, this.yCoord, this.radius*4.5, this.radius/3);
-    fill(cRed, cGreen, cBlue, alpha/3);
-    ellipse(this.xCoord, this.yCoord, this.radius/2, this.radius*3);
+    //beginShape();
+    //noStroke();
     
-    fill(cRed, cGreen, cBlue, alpha);    
-    ellipse(this.xCoord, this.yCoord, this.radius, this.radius);
+    //fill(cRed, cGreen, cBlue, alpha/6);
+    //ellipse(this.xCoord, this.yCoord, this.radius*4.5, this.radius/3);
+    //fill(cRed, cGreen, cBlue, alpha/3);
+    //ellipse(this.xCoord, this.yCoord, this.radius/2, this.radius*3);
     
-    endShape();
+    //fill(cRed, cGreen, cBlue, alpha);    
+    //ellipse(this.xCoord, this.yCoord, this.radius, this.radius);
+    
+    //endShape();
     
   }
   

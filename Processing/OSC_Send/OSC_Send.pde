@@ -7,7 +7,7 @@ NetAddress ip;
 int fps;
 int sizex;
 int sizey;
-Particle par;
+Point par;
 
 void setup()
 {
@@ -26,18 +26,26 @@ void setup()
 void draw()
 {
   background(255, 255, 0);
-  Particle myPar = new Particle(mouseX,mouseY,20.0);
+  Point myPar = new Point(mouseX,mouseY,23.0);
   //circularTraj(myPar, 200.0, 0.0);
   
   OscMessage x = new OscMessage("/position/X");
   OscMessage y = new OscMessage("/position/Y");
   
-  x.add(mouseX/float(sizex));
-  y.add(mouseY/float(sizey));
+  x.add(myPar.posx/float(width));
+  y.add(myPar.posy/float(height));
 
   ableton.send(x, ip);
   ableton.send(y, ip);
-}
+  
+  
+} 
+
+//void mousePressed(){
+//    OscMessage scene = new OscMessage("/launch/scene");
+//    scene.add(1.0);
+//    ableton.send(scene, ip);
+//  }
 
 //void circularTraj(Particle par,float radius, float angle){
 //      par.getPosx() = radius*cos(angle);

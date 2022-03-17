@@ -39,7 +39,7 @@ public class StarSystem{
     float X = star.xCoord;
     float Y = star.yCoord;
     
-    if (AL > 0 && X > 0 && X < width && Y > 0 && Y < height)
+    if (AL > 20 && X > 0 && X < width && Y > 0 && Y < height)
       answer = true;
       
     return answer;

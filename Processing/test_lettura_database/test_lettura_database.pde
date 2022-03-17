@@ -14,7 +14,7 @@ void setup() {
   frameRate(60);
   background(0);
   
-  timeLapseValue = 1;
+  timeLapseValue = 120;
   timeControl = new Time(timeLapseValue);
   database = new StarsTable();
   
