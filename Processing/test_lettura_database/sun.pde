@@ -22,17 +22,18 @@ public class Sun {
     this.smooth = 0.1;
     this.sunInt = color(250, 56, 18);
     this.sunExt = color(250, 161, 18);
-    this.rayExt = color(250, 225, 18);
+    this.rayExt = color(250, 225, 200);
   }
   
   // PRIVATE METHODS
   
   // PUBLIC METHODS
   public void plot(float[] spectrum) {
-    translate(mouseX, mouseY);
+    translate(xCoord, yCoord);
     noStroke();
     pushMatrix();
-    rotate(frameCount/100.0);
+    rotate(frameCount/50.0);
+    
     
     for (int i = 0; i< bands; i++) {
       bandAmp[i] = (spectrum[i]);
@@ -56,8 +57,10 @@ public class Sun {
       fill(c, (10-j)*10+100);
       ellipse(0,0, 15*j, 15*j);
     }
-    
-    
-    popMatrix();
+   popMatrix();   
   }
+  
+ //public void reflex(PImage citylight){
+ //  city.tint();
+ //}
 }

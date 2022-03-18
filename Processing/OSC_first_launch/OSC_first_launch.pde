@@ -1,14 +1,23 @@
 import oscP5.*;
 import netP5.*;
+import processing.sound.*; 
+
 
 OscP5 ableton;
 NetAddress ip;
+
+AudioIn in;
 
 
 void setup(){
   
   ableton = new OscP5(this, 8000);
   ip = new NetAddress("127.0.0.1", 8000);
+  
+  Sound s = new Sound(this);
+  println(Sound.list());
+  s.inputDevice(9);
+  AudioIn in = new AudioIn(this, 4);
   
   background(0);
   size(800,400);
