@@ -1,11 +1,25 @@
-StarsTable database; //<>//
+import processing.sound.*; //<>//
+
+//objects instances
+Sun sun;
+StarsTable database;
 Star star;
 StarSystem starSystem;
 Time timeControl;
-PrintWriter output;
-float[] extremes;
+
+//time control
 float timeLapseValue;
-//float numero = 0;
+
+//audio analysis
+AudioIn in;
+FFT fft;
+int bands = 128;
+BandPass bpfilter;
+Amplitude signalAmp;
+float[] spectrum = new float[bands];
+
+//debug
+PrintWriter output; 
 
 
 void setup() {
@@ -14,9 +28,27 @@ void setup() {
   frameRate(60);
   background(0);
   
+  this.in = new AudioIn(this,0);
+  in.start();
+  fft = new FFT(this, bands);
+  fft.input(in);
+  signalAmp = new Amplitude(this);
+  signalAmp.input(in);
+  
+  bpfilter = new BandPass(this);
+  bpfilter.process(in);
+  bpfilter.freq(10000);
+  bpfilter.bw(20000);
+  
   timeLapseValue = 120;
   timeControl = new Time(timeLapseValue);
   database = new StarsTable();
+  
+  sun = new Sun(mouseX, mouseY);
+
+  starSystem = new StarSystem(database);
+  
+  
   
   //---------------------------------------
   // DEBUG
@@ -28,29 +60,20 @@ void setup() {
   */
   //---------------------------------------
   
-  starSystem = new StarSystem(database);
-  
-  starSystem.plot();
-  
 }
 
 
 void draw() {
   
-  //----------------------------------------------
-  //DEBUG
-  /*
-  String[] columns = {"HC1", "HC2", "X", "Y"};
   
-  for (int i=0;i<database.starsAttributes.getRowCount();i++) {
-    TableRow row = database.starsAttributes.getRow(i);
-    database.debug(row, columns, false); 
-  }
-  */
-  //----------------------------------------------
 
+  fft.analyze(spectrum);
   
-  background(0);
+  float n = map(signalAmp.analyze(), 0, 0.5, 0, 255);
+  background(n);
+  
+  
+  //background(0);
   
   database.timePassedFromStarApp = timeControl.timePassingCalc(database.timePassedFromStarApp);
   
@@ -64,9 +87,20 @@ void draw() {
   
   starSystem.plot();
   
+  sun.plot(spectrum);
+  
+  
+  
+  //----------------------------------------------
+  //DEBUG
   /*
-  fill(255, 0, 0);
-  rect(numero++, numero++, 30,30);
+  String[] columns = {"HC1", "HC2", "X", "Y"};
+  
+  for (int i=0;i<database.starsAttributes.getRowCount();i++) {
+    TableRow row = database.starsAttributes.getRow(i);
+    database.debug(row, columns, false); 
+  }
   */
+  //----------------------------------------------
   
 }
