@@ -44,12 +44,12 @@ void mousePressed(){
   //1
   if (c == color(102,178,255)){
     OscMessage A = new OscMessage("/position/X");
-    A.add(float(mouseX/width));
+    A.add(1.0);
     ableton.send(A,ip);}
   //2
   if (c == color(102,255,255)){
     OscMessage y = new OscMessage("/position/Y");
-    y.add(float(mouseY/height));
+    y.add(1.0);
     ableton.send(y,ip);}
   //3
   if (c == color(102,255,178)){

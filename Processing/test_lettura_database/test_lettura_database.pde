@@ -10,7 +10,7 @@ float timeLapseValue;
 
 void setup() {
   
-  size(1512,850);
+  fullScreen();
   frameRate(60);
   background(0);
   

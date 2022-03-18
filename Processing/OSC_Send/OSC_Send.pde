@@ -41,11 +41,11 @@ void draw()
   
 } 
 
-//void mousePressed(){
-//    OscMessage scene = new OscMessage("/launch/scene");
-//    scene.add(1.0);
-//    ableton.send(scene, ip);
-//  }
+void mousePressed(){
+    OscMessage scene = new OscMessage("/launch/scene");
+    scene.add(0);
+    ableton.send(scene, ip);
+  }
 
 //void circularTraj(Particle par,float radius, float angle){
 //      par.getPosx() = radius*cos(angle);
