@@ -29,8 +29,9 @@ PImage citylight;
 color orange = color(250, 225, 200);
 color azure = (#A6D7E8);
 
-//debug
-PrintWriter output; 
+//Pollution
+Pollution pollution;
+
 
 
 void setup() {
@@ -38,7 +39,8 @@ void setup() {
   ableton = new OscP5(this, 8000);
   ip = new NetAddress("127.0.0.1", 8000);
   
-  fullScreen();
+  //fullScreen();
+  size(1500,800);
   frameRate(60);
   background(0);
   
@@ -46,8 +48,8 @@ void setup() {
   citylight = loadImage("citylight3.png");
   
   Sound s = new Sound(this);
-  s.inputDevice(9);
-  this. in = new AudioIn(this, 4);
+  s.inputDevice(5);
+  this. in = new AudioIn(this, 0);
   
   in.start();
   fft = new FFT(this, bands);
@@ -70,32 +72,19 @@ void setup() {
 
   starSystem = new StarSystem(database);
   
-  
-  
-  //---------------------------------------
-  // DEBUG
-  /*
-  output = createWriter("debug_out.txt");
-  for (int i=0;i<database.starsAttributes.getRowCount();i++){
-    output.println(database.starsAttributes.getInt(i,"index")+" -  HC1: "+database.starsAttributes.getFloat(i,"HC1")+" -  HC2: "+database.starsAttributes.getFloat(i,"HC1")+" -   X: "+database.starsAttributes.getFloat(i,"X")+" -   Y: "+database.starsAttributes.getFloat(i,"Y"));
-  }
-  */
-  //---------------------------------------
+  pollution = new Pollution();
   
 }
 
 
 void draw() {
   
-  
+  pollution.update("night", 0, 0);
 
   fft.analyze(spectrum);
   
-  float n = map(signalAmp.analyze(), 0, 0.5, 0, 255);
+  float n = map(signalAmp.analyze(), 0, 1, 0, 255);
   background(0);
-  
-  
-  //background(0);
   
   database.timePassedFromStarApp = timeControl.timePassingCalc(database.timePassedFromStarApp);
   
@@ -108,23 +97,46 @@ void draw() {
   updateSys.start();
   starSystem.plot();
   
+  
+  loadPixels();
+  
+  color c;
+  
+  float percentage = dist(sun.xCoord, 0, width/2, 0);
+  percentage = map(percentage, 0, width/2, 1, 0);
+  
+  for(int i = 0; i<width; i++) {
+    for(int j = 0; j<height; j++) {
+      c = lerpColor(pollution.matrix[i][j], pixels[i+j*width], 0.03);
+      pixels[i+j*width] = c;
+    }
+  }
+  
+  updatePixels();
+  
+  
   sky.plot(n/2);
   
   pushMatrix();
   //sun.xCoord=cos(frameCount/220.0)*width/2.0+width/2;
   //sun.yCoord=sin(frameCount/220.0)*height/2.0+height/2;
-  sun.xCoord=frameCount*2.0-600;
+  //sun.xCoord=frameCount*2.0-600;
+  sun.xCoord = 0;
   sun.yCoord=height/2;
   
   sun.plot(spectrum);
   popMatrix();
+  
+  
   city.resize(width,height);
   citylight.resize(width,height);
   noTint();
   image(city,0,0);
+  
   tint(255,n*4.0);
   image(citylight,0,0);
   noTint();
+  
   
   sky.updateCoord(sun.xCoord, sun.yCoord);
   
@@ -136,16 +148,5 @@ void draw() {
   
   
   
-  //----------------------------------------------
-  //DEBUG
-  /*
-  String[] columns = {"HC1", "HC2", "X", "Y"};
-  
-  for (int i=0;i<database.starsAttributes.getRowCount();i++) {
-    TableRow row = database.starsAttributes.getRow(i);
-    database.debug(row, columns, false); 
-  }
-  */
-  //----------------------------------------------
   
 }
