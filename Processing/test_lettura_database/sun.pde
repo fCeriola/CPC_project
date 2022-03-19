@@ -1,11 +1,8 @@
-
-
 public class Sun {
   
   // ARGUMENTS
   private float xCoord;
   private float yCoord;
-  private float[] spectrum = new float[bands];
   private float[] bandAmp = new float[bands];
   private float[] prevBandAmp = new float[bands];
   private float smooth;
@@ -14,7 +11,7 @@ public class Sun {
   private color sunExt;
   private color rayExt;
   
-  
+  // ======================================================
   // CONSTRUCTOR
   public Sun(float xCoord, float yCoord) {
     this.xCoord = xCoord;
@@ -25,8 +22,10 @@ public class Sun {
     this.rayExt = color(250, 225, 200);
   }
   
+  // ======================================================
   // PRIVATE METHODS
   
+  // ======================================================
   // PUBLIC METHODS
   public void plot(float[] spectrum) {
     translate(xCoord, yCoord);
@@ -46,7 +45,6 @@ public class Sun {
       fill(c,(10-j)*10+100);
       beginShape();
       for(int i = 1; i<bands-1; i++) {
-        
         vertex((250*j*i*log(bandAmp[i]+1)+80)*cos(2*i*PI/bands), (250*j*i*log(bandAmp[i]+1)+80)*sin(2*i*PI/bands));
       }
       endShape(CLOSE);

@@ -87,11 +87,11 @@ public class Star{
   // PUBLIC METHODS
   
   public void plot() {
+    
     float cRed = red(this.colore);
     float cGreen = green(this.colore);
     float cBlue = blue(this.colore);
     float alpha = alpha(this.colore);
-    
     
     pushMatrix();
     beginShape();

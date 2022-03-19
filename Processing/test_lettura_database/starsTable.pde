@@ -1,4 +1,4 @@
-//class containing all the coordinates and parameters of the stars //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+//class containing all the coordinates and parameters of the stars //<>//
 //reads from file with reference J2000 in equatorial coordinates
 
 public class StarsTable{

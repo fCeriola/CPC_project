@@ -1,22 +1,31 @@
 public class Sky{
   
-  color col1;
-  color col2;
-  float x;
-  float y;
-  float smooth;
-  int nStrati = 50;
-  float[] prevAmp = new float[nStrati];
+  // ATTRIBUTES 
+  
+  private color col1;
+  private color col2;
+  private float x;
+  private float y;
+  private float smooth;
+  private int nStrati = 50;
+  private float[] prevAmp = new float[nStrati];
 
-
-  Sky(float x, float y,color col1, color col2){
+  // ======================================================
+  // CONSTRUCTOR
+  
+  public Sky(float x, float y,color col1, color col2){
     this.x = x;
     this.y = y;
     this.col1 = col1;
     this.col2 = col2;
     this.smooth = 0.2; 
-    //this.nStrati = 50;
   }
+  
+  // ======================================================
+  // PRIVATE MATHODS
+  
+  // ======================================================
+  // PUBLIC METHODS
   
   public void plot(float amp){
     float amplitude;
@@ -30,10 +39,9 @@ public class Sky{
     }
   }
   
-  public void updateCoord(float xCoord, float yCoord){
+  public void update(float xCoord, float yCoord){
     this.x = xCoord;
     this.y = yCoord;
   }
-  
- 
+   
 }
