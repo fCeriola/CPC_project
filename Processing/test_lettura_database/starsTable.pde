@@ -7,7 +7,7 @@ public class StarsTable{
   
   private Table starsAttributes; //containes data
   private float appStartHourFraction;
-  private float timePassedFromStarApp;
+  private float timePassedFromAppStart;
   private int starIndex;
   //extremes used to map values from indexes to usable numbers
   //these are initialized inside the contructor with values searched directly from the database
@@ -34,7 +34,7 @@ public class StarsTable{
     String[] lines = loadStrings("bsc5.dat");
     
     this.appStartHourFraction = timeControl.localHourFraction();
-    this.timePassedFromStarApp = 0;
+    this.timePassedFromAppStart = 0;
     
     this.starsAttributes = new Table();
     
@@ -237,7 +237,7 @@ public class StarsTable{
     float RA = convRA(row);
     float DEC = convDEC(row);
     
-    float currentHour = this.appStartHourFraction + this.timePassedFromStarApp;
+    float currentHour = this.appStartHourFraction + this.timePassedFromAppStart;
     float daysToday = timeControl.daysSinceJ2000(currentHour);
     
     //find local siderial time with given formula

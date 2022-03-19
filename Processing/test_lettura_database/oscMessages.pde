@@ -36,6 +36,4 @@ public void starMode(float xCoord, float yCoord, OscP5 ableton, NetAddress ip){
     modeVal.add(0.85);
     ableton.send(modeVal, ip);
   }
-  
-  
 }

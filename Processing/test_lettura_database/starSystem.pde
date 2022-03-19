@@ -58,9 +58,7 @@ public class StarSystem{
   }
   
   public void update() {
-    //updating the starsTable object instance is enough since the
-    //local database is just a reference to that one
-    //but we need to empty the arraylist and rebuild it
+    
     TableRow row;
     Star star;
     float AZ;

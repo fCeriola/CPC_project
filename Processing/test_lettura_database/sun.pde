@@ -17,6 +17,7 @@ public class Sun {
     this.xCoord = xCoord;
     this.yCoord = yCoord;
     this.smooth = 0.1;
+    
     this.sunInt = color(250, 56, 18);
     this.sunExt = color(250, 161, 18);
     this.rayExt = color(250, 225, 200);
@@ -28,11 +29,12 @@ public class Sun {
   // ======================================================
   // PUBLIC METHODS
   public void plot(float[] spectrum) {
-    translate(xCoord, yCoord);
-    noStroke();
-    pushMatrix();
-    rotate(frameCount/50.0);
     
+    noStroke();
+    
+    pushMatrix();
+    translate(xCoord, yCoord);    
+    rotate(frameCount/50);
     
     for (int i = 0; i< bands; i++) {
       bandAmp[i] = (spectrum[i]);
@@ -49,16 +51,26 @@ public class Sun {
       }
       endShape(CLOSE);
     }
-   
+    
     for (int j = 10; j>=0; j--) {
       color c = lerpColor(sunInt, sunExt, float(j)/10);
       fill(c, (10-j)*10+100);
       ellipse(0,0, 15*j, 15*j);
     }
+    
    popMatrix();   
+   
   }
   
- //public void reflex(PImage citylight){
- //  city.tint();
- //}
+  public void update() {
+    //sun.xCoord=cos(frameCount/220.0)*width/2.0+width/2;
+    //sun.yCoord=sin(frameCount/220.0)*height/2.0+height/2;
+    sun.xCoord = frameCount*2.0-600;
+    sun.yCoord = height/2;
+  }
+  
+  //public void reflex(PImage citylight){
+  //  city.tint();
+  //}
+  
 }

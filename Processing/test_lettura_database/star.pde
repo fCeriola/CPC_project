@@ -26,9 +26,9 @@ public class Star{
   public Star(TableRow row) {
     //takes a row of the database table as argument and grabs all the information needed
     colorMode(RGB, 255);
-    redStar = color(255,156,60,255);
-    blueStar = color(143,182,255,73);
-    whiteStar = color(240,240,253,255);
+    redStar = color(255,156,60);
+    blueStar = color(143,182,255);
+    whiteStar = color(240,240,253);
     
     this.index = row.getInt("index");
     this.AZ = row.getFloat("AZ");
@@ -36,19 +36,19 @@ public class Star{
     this.fromHorizToCart(this.AZ, this.AL);
     this.temperature = row.getFloat("T");
     this.apparentMagnitude = row.getFloat("AM");
-    this.convColor(this.temperature, this.apparentMagnitude);
-    this.radius = map(alpha(colore), 0, 255, 0.2, 5);
+    this.convColor(this.temperature);
+    this.radius = map(this.apparentMagnitude, 0, 255, 0.2, 5);
     this.angle = random(0,2*PI);
   }
   
   // ======================================================
   // PRIVATE METHODS
   
-  private void convColor(float temperature, float apparentMagnitude) {
+  private void convColor(float temperature) {
     //from temperature computes the color based on star classification chart
     
-    color colore = color(0,0,0);
-    float percentage = 0;
+    color colore;
+    float percentage;
     
     if (temperature > 6750) {
       percentage = map(temperature, 6750, 50000, 0, 1);
@@ -57,12 +57,6 @@ public class Star{
       percentage = map(temperature, 2000, 6750, 0, 1);
       colore = lerpColor(redStar, whiteStar, percentage);
     }
-    
-    float cRed = red(colore);
-    float cGreen = green(colore);
-    float cBlue = blue(colore);
-    
-    colore = color(cRed, cGreen, cBlue, apparentMagnitude);
     
     this.colore = colore;
   }
@@ -80,7 +74,7 @@ public class Star{
     // THIS MUST BE ADJUSTED
     float beta = 100;
     this.xCoord = map(X, -1, 1, -beta, beta+width);
-    this.yCoord = map(Y, -1, 1, beta+height, -beta);
+    this.yCoord = map(Y, -1, 1, -beta, beta+height);
   }
   
   // ======================================================
@@ -88,42 +82,22 @@ public class Star{
   
   public void plot() {
     
-    float cRed = red(this.colore);
-    float cGreen = green(this.colore);
-    float cBlue = blue(this.colore);
-    float alpha = alpha(this.colore);
-    
     pushMatrix();
     beginShape();
     noStroke();
     translate(this.xCoord, this.yCoord);
     rotate(this.angle);
     
-    fill(cRed, cGreen, cBlue, alpha/6);
+    fill(this.colore, apparentMagnitude/6);
     ellipse(1, 0, this.radius*4.5, this.radius/3);
-    fill(cRed, cGreen, cBlue, alpha/3);
+    fill(this.colore, apparentMagnitude/3);
     ellipse(0, -1, this.radius/2, this.radius*3);
     
-    fill(cRed, cGreen, cBlue, alpha);    
+    fill(this.colore, apparentMagnitude);    
     ellipse(0, 0, this.radius, this.radius);
     
     endShape();
     popMatrix();
-    
-    
-    
-    //beginShape();
-    //noStroke();
-    
-    //fill(cRed, cGreen, cBlue, alpha/6);
-    //ellipse(this.xCoord, this.yCoord, this.radius*4.5, this.radius/3);
-    //fill(cRed, cGreen, cBlue, alpha/3);
-    //ellipse(this.xCoord, this.yCoord, this.radius/2, this.radius*3);
-    
-    //fill(cRed, cGreen, cBlue, alpha);    
-    //ellipse(this.xCoord, this.yCoord, this.radius, this.radius);
-    
-    //endShape();
     
   }
   

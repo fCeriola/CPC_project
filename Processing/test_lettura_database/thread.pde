@@ -41,7 +41,7 @@ public class Update implements Runnable {
           this.starSystem.update();
         }
         else if (this.whatToUpdate == "pollution") {
-          this.pollution.update("night");
+          this.pollution.update();
         }
       } finally {
         if (lock)

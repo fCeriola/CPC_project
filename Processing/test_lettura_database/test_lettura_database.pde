@@ -3,57 +3,57 @@ import oscP5.*;
 import netP5.*;
 
 //Objects instances
-Sky sky;
-Sun sun;
 StarsTable database;
 Star star;
 StarSystem starSystem;
-Time timeControl;
-OscP5 ableton;
-NetAddress ip;
+Pollution pollution;
+Sky sky;
+Sun sun;
+
+//Images and Colors
+PImage city;
+PImage cityLights;
 
 //Time control
+Time timeControl;
 float timeLapseValue;
 
 //Audio analysis
 AudioIn in;
 FFT fft;
-int bands = 128;
+int bands;
 BandPass bpfilter;
 Amplitude signalAmp;
-float[] spectrum = new float[bands];
+float[] spectrum;
 
-//Images and Colors
-PImage city;
-PImage citylight;
-color orange = color(250, 225, 200);
-color azure = (#A6D7E8);
-
-//Pollution
-Pollution pollution;
+//Osc
+OscP5 ableton;
+NetAddress ip;
 
 //Threads
+Runnable updateDatabase;
 Thread updateDB;
+Runnable updateSystem;
 Thread updateSys;
+Runnable updatePollution;
 Thread updatePoll;
 
 
 void setup() {
   
+  fullScreen();
+  //size(1500,800);
+  frameRate(60);
+  
   ableton = new OscP5(this, 8000);
   ip = new NetAddress("127.0.0.1", 8000);
-  
-  //fullScreen();
-  size(1500,800);
-  frameRate(60);
-  background(0);
-  
-  city = loadImage("city.png");
-  citylight = loadImage("citylight3.png");
   
   Sound s = new Sound(this);
   s.inputDevice(5);
   this. in = new AudioIn(this, 0);
+  
+  bands = 128;
+  spectrum = new float[bands];
   
   in.start();
   fft = new FFT(this, bands);
@@ -68,15 +68,19 @@ void setup() {
   
   timeLapseValue = 120;
   timeControl = new Time(timeLapseValue);
+  
   database = new StarsTable();
   
-  sky = new Sky(width/2,height/2,orange,azure);
-  
-  sun = new Sun(0, 0);
-
   starSystem = new StarSystem(database);
   
   pollution = new Pollution();
+  
+  sky = new Sky();
+  
+  sun = new Sun(0, 0);
+  
+  city = loadImage("city.png");
+  cityLights = loadImage("citylight3.png");
   
 }
 
@@ -88,7 +92,7 @@ void draw() {
   float n = map(signalAmp.analyze(), 0, 1, 0, 255);
   background(0);
   
-  database.timePassedFromStarApp = timeControl.timePassingCalc(database.timePassedFromStarApp);
+  database.timePassedFromAppStart = timeControl.timePassingCalc(database.timePassedFromAppStart);
   
   Runnable updateDatabase = new Update(database, starSystem, pollution, "starsTable", true);
   updateDB = new Thread(updateDatabase);
@@ -104,38 +108,31 @@ void draw() {
   
   starSystem.plot();
   
-  pollution.plot(mouseX, mouseY, 50);
-  
+  pollution.plot(mouseX, mouseY, 50); //give pointer position and radius as arguments
   /*
-  sky.plot(n/2);
-  
-  pushMatrix();
-  //sun.xCoord=cos(frameCount/220.0)*width/2.0+width/2;
-  //sun.yCoord=sin(frameCount/220.0)*height/2.0+height/2;
-  sun.xCoord=frameCount*2.0-600;
-  sun.yCoord=height/2;
-  
-  sun.plot(spectrum);
-  popMatrix();
-  
-  */
-  city.resize(width,height);
-  citylight.resize(width,height);
-  noTint();
-  image(city,0,0);
-  
-  tint(255,n*4.0);
-  image(citylight,0,0);
-  noTint();
+  sun.update();
   
   sky.update(sun.xCoord, sun.yCoord);
+  sky.plot(n/2);
+  
+  sun.plot(spectrum);  
+  */
+  city.resize(width,height);
+  cityLights.resize(width,height);
+  noTint();
+  image(city, 0, 0);
+  
+  tint(255, n*4.0);
+  image(cityLights, 0, 0);
+  noTint();
   
   //OSC Messages
   sunVolFreq(sun.xCoord, ableton, ip);
   starMode(mouseX, mouseY, ableton, ip);
+  
 }
 
 
 void countingStars(color colore) {
-  println(red(colore), green(colore), blue(colore));
+  //println(red(colore), green(colore), blue(colore));
 }
