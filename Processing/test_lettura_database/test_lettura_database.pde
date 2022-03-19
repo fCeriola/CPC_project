@@ -1,4 +1,6 @@
 import processing.sound.*;  //<>//
+import oscP5.*;
+import netP5.*;
 
 //objects instances
 Sky sky;
@@ -7,6 +9,8 @@ StarsTable database;
 Star star;
 StarSystem starSystem;
 Time timeControl;
+OscP5 ableton;
+NetAddress ip;
 
 //time control
 float timeLapseValue;
@@ -30,6 +34,9 @@ PrintWriter output;
 
 
 void setup() {
+  
+  ableton = new OscP5(this, 8000);
+  ip = new NetAddress("127.0.0.1", 8000);
   
   fullScreen();
   frameRate(60);
@@ -106,7 +113,7 @@ void draw() {
   pushMatrix();
   //sun.xCoord=cos(frameCount/220.0)*width/2.0+width/2;
   //sun.yCoord=sin(frameCount/220.0)*height/2.0+height/2;
-  sun.xCoord=frameCount*2.0;
+  sun.xCoord=frameCount*2.0-600;
   sun.yCoord=height/2;
   
   sun.plot(spectrum);
@@ -121,6 +128,10 @@ void draw() {
   
   sky.updateCoord(sun.xCoord, sun.yCoord);
   
+  
+  //OSC Messages
+  sunVolFreq(sun.xCoord, ableton, ip);
+  starMode(mouseX, mouseY, ableton, ip);
 
   
   

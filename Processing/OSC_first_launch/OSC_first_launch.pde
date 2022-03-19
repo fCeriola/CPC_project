@@ -14,6 +14,7 @@ void setup(){
   ableton = new OscP5(this, 8000);
   ip = new NetAddress("127.0.0.1", 8000);
   
+  //check audio devices
   Sound s = new Sound(this);
   println(Sound.list());
   s.inputDevice(9);
@@ -52,20 +53,22 @@ void mousePressed(){
   color c = checkcolor();
   //1
   if (c == color(102,178,255)){
-    OscMessage A = new OscMessage("/position/X");
+    OscMessage A = new OscMessage("/stars/rate");
     A.add(1.0);
     ableton.send(A,ip);}
   //2
   if (c == color(102,255,255)){
-    OscMessage y = new OscMessage("/position/Y");
-    y.add(1.0);
-    ableton.send(y,ip);}
+    OscMessage B = new OscMessage("/stars/mode");
+    B.add(1.0);
+    ableton.send(B,ip);}
   //3
   if (c == color(102,255,178)){
-  }
+    OscMessage C = new OscMessage("/sun/volume");
+    C.add(1.0);
+    ableton.send(C,ip);}
   //4
   if (c == color(102,255,102)){
-  }
+   }
   //5
   if (c == color(178,255,102)){
   }

@@ -29,8 +29,8 @@ void draw()
   Point myPar = new Point(mouseX,mouseY,23.0);
   //circularTraj(myPar, 200.0, 0.0);
   
-  OscMessage x = new OscMessage("/position/X");
-  OscMessage y = new OscMessage("/position/Y");
+  OscMessage x = new OscMessage("/stars/mode");
+  OscMessage y = new OscMessage("/stars/rate");
   
   x.add(myPar.posx/float(width));
   y.add(myPar.posy/float(height));

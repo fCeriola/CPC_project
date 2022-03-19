@@ -47,7 +47,7 @@ public class Sun {
       beginShape();
       for(int i = 1; i<bands-1; i++) {
         
-        vertex((200*j*i*log(bandAmp[i]+1)+80)*cos(2*i*PI/bands), (200*j*i*log(bandAmp[i]+1)+80)*sin(2*i*PI/bands));
+        vertex((250*j*i*log(bandAmp[i]+1)+80)*cos(2*i*PI/bands), (250*j*i*log(bandAmp[i]+1)+80)*sin(2*i*PI/bands));
       }
       endShape(CLOSE);
     }
