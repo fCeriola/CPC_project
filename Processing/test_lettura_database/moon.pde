@@ -2,12 +2,12 @@ public class Moon {
   
   private float xCoord;
   private float yCoord;
-  private float increment = 0.01;
+  private float increment = 0.05;
   private float rad = 50.0;
   
-  public Moon(){
-    this.xCoord = mouseX;
-    this.yCoord = mouseY;
+  public Moon(float xCoord, float yCoord){
+    this.xCoord = xCoord;
+    this.yCoord = yCoord;
     this.increment = increment;
     this.rad = rad;
   }
@@ -28,12 +28,12 @@ public class Moon {
   // For every x,y coordinate in a 2D space, calculate a noise value and produce a brightness value
   for (float i = 0.0; i < rad; i=i+0.5) {
     xoff += increment;   // Increment xoff 
-    float yoff = frameCount/100.0;   // For every xoff, start yoff at 0
+    float yoff = frameCount/50.0;   // For every xoff, start yoff at 0
     for (float j = 0.0; j < TWO_PI; j=j+0.01) {
       yoff += increment; // Increment yoff
       
       // Calculate noise and scale by 255
-      float bright = noise(xoff,yoff)*255;
+      float bright = map(noise(xoff,yoff)*255, 0, 255, 120, 255);
 
       // Try using this line instead
       //float bright = random(0,255);

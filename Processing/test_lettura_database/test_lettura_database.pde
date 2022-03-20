@@ -9,6 +9,7 @@ StarSystem starSystem;
 Pollution pollution;
 Sky sky;
 Sun sun;
+Moon moon;
 
 //Images and Colors
 PImage city;
@@ -79,6 +80,8 @@ void setup() {
   
   sun = new Sun(0, 0);
   
+  moon = new Moon(width/4, height/4);
+  
   city = loadImage("city.png");
   cityLights = loadImage("citylight3.png");
   
@@ -107,6 +110,8 @@ void draw() {
   updatePoll.start();
   
   starSystem.plot();
+  moon.plot();
+  
   
   pollution.plot(mouseX, mouseY, 50); //give pointer position and radius as arguments
   /*
