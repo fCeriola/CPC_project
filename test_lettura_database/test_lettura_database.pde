@@ -146,17 +146,20 @@ void draw() {
   
 }
 
-  void oscEvent(OscMessage theOscMessage){
+void oscEvent(OscMessage theOscMessage){
+  // use the button in the mobile app to set the zero
+  
   println("MESSAGE: " + theOscMessage.addrPattern() + "\nTAG: " + theOscMessage.typetag() + "\nVALUES.NUMBER: " + theOscMessage.arguments().length);
   Object[] testValues = theOscMessage.arguments();
-  x = x + (float)testValues[0];
+  
+  x = x - (float)testValues[2];
   if (x>= (width - 50)) {
     x = width - 50;
   } else if (x<=0) {
     x= 0.0;
   }
   
-  y = y + (float)testValues[1];
+  y = y - ((float)testValues[0]);
   if (y>=(height - 50)) {
     y = height - 50;
   } else if (y<=0) {
