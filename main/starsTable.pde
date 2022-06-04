@@ -5,25 +5,17 @@ public class StarsTable{
   
   // ATTRIBUTES
   
-  private Table starsAttributes; //containes data
-  private float appStartHourFraction;
-  private float timePassedFromAppStart;
-  private int starIndex;
-  //extremes used to map values from indexes to usable numbers
-  //these are initialized inside the contructor with values searched directly from the database
-  private float maxVM;
-  private float minVM;
-  private float maxBV;
-  private float minBV;
-  private float maxUB;
-  private float minUB;
+  private Table starsAttributes; //contains data
+  private float appStartHourFraction; //time corresponding to app launch as a fraction of 24 hours
+  private float timePassedFromAppStart; //stores the amount of time passed from app launch
+  private int starIndex; //enumerate stars
+  
+  public float userLatitude;
+  public float userLongitude;
   
   //ROME coordinates (for testing)
   //public float userLatitude = 41.902782;
   //public float userLongitude = 12.496366;
-  
-    public float userLatitude;
-  public float userLongitude;
   
   //DEBUG VARIABLE
   //private int starsNeglected;
@@ -33,73 +25,36 @@ public class StarsTable{
   
   public StarsTable(float latitude, float longitude) {
     
-    
+    //sets coordinates from the gps
     this.userLatitude = latitude;
     this.userLongitude = longitude;
-    
     
     //load file
     String[] lines = loadStrings("bsc5.dat");
     
+    //initialize time reference variables
     this.appStartHourFraction = timeControl.localHourFraction();
     this.timePassedFromAppStart = 0;
     
+    //create the table to be filled with stars data
     this.starsAttributes = new Table();
+    
+    //add columns to the table
     
     this.starsAttributes.addColumn("index");
     
     //Right Asception
     //angle with respect to the meridian passing through the "First Point of Aries"
     //measured along the place of the equator
-    //h [0;24) -> hours; m [0;60) -> minutes; s [0;60) -> seconds
-    this.starsAttributes.addColumn("RAh");
-    this.starsAttributes.addColumn("RAm");
-    this.starsAttributes.addColumn("RAs");
-    
+    //RAh [0;24) -> hours; RAm [0;60) -> minutes; RAs [0;60) -> seconds
+    //it will be converted to single float value RA [degrees]
+    this.starsAttributes.addColumn("RA");
     //Declination
     //angle with respect to the celestial equator
     //measured along the meridian passing through the star
-    //d (-90;+90) -> degrees; m [0;60) -> arcminutes; s [0;60) -> arcseconds
-    this.starsAttributes.addColumn("DECd");
-    this.starsAttributes.addColumn("DECm");
-    this.starsAttributes.addColumn("DECs");
-    
-    //Right Ascension and Declination converted in single float values [degrees]
-    this.starsAttributes.addColumn("RA");
+    //DECd (-90;+90) -> degrees; DECm [0;60) -> arcminutes; DECs [0;60) -> arcseconds
+    //it will be converted to single float value DEC [degrees]
     this.starsAttributes.addColumn("DEC");
-    
-    //Visual Magnitude
-    //index representing brightness and distance
-    //the higher the value, the lower the brightness
-    this.starsAttributes.addColumn("VM");
-    this.maxVM = 7.96;
-    this.minVM = -1.46;
-    
-    //B-V
-    //difference in magnitude between blue index and visual index
-    //index representing the color
-    //lower value -> blue, higher value -> red
-    this.starsAttributes.addColumn("B-V");
-    this.maxBV = 2.35;
-    this.minBV = -0.28;
-    
-    //U-B
-    //difference in magnitude between ultraviolet index and blue index
-    //index representing the temperature
-    //the higher the value, the lower the temperature
-    this.starsAttributes.addColumn("U-B");
-    this.maxUB = 2.48;
-    this.minUB = -1.11;
-    
-    //Class
-    //character representing the class of the star
-    //it indicates the temperature interval into which the star resides
-    this.starsAttributes.addColumn("class");
-    
-    //SubClass
-    //integer value representing the subclass of the star
-    //it indicates the temperature percentage into the temperature interval given by the class
-    this.starsAttributes.addColumn("subclass");
     
     //Horizontal Coordinates
     //converted horizontal coordinates in deg through the 
@@ -114,11 +69,22 @@ public class StarsTable{
     this.starsAttributes.addColumn("Y");
     
     //Apparent Magnitude
-    //converted values (0-100) for the magnitude with the 
+    //from visual magnitude (index representing brightness and distance)
+    //we obtain a mapped value in the range (0-100) with the
     //private method convMagnitude(int index)
     this.starsAttributes.addColumn("AM");
+    
+    //Class
+    //character representing the class of the star
+    //it indicates the temperature interval into which the star resides
+    this.starsAttributes.addColumn("class");
+    
+    //SubClass
+    //integer value representing the subclass of the star
+    //it indicates the temperature percentage into the temperature interval given by the class
+    this.starsAttributes.addColumn("subclass");
      
-    //T Temperature
+    //Temperature
     //converted values (0-100) for the temperature with the 
     //private method convTemperature(int index)
     this.starsAttributes.addColumn("T");
@@ -132,6 +98,7 @@ public class StarsTable{
       this.starIndex++;
       
       //substring(beginIndex(inclusive), endIndex(exclusive))
+      
       float RAh = float(line.substring(75,77));
       float RAm = float(line.substring(77,79));
       float RAs = float(line.substring(79,83));
@@ -140,10 +107,7 @@ public class StarsTable{
       float DECm = float(line.substring(86,88));
       float DECs = float(line.substring(88,90));
       
-      float VM = float(line.substring(102,107));
-      
-      float BV = float(line.substring(109,114));
-      float UB = float(line.substring(115,120));     
+      float VM = float(line.substring(102,107));    
       
       //class is given by a number, so take the char from the line,
       //convert to int in order to save on table and it will be
@@ -157,29 +121,14 @@ public class StarsTable{
       //add new row to table for the each star
       if (this.isAStar(values)){
         TableRow newRow = starsAttributes.addRow();
-        newRow.setInt("index", starIndex);
-      
-        newRow.setFloat("RAh", RAh);
-        newRow.setFloat("RAm", RAm);
-        newRow.setFloat("RAs", RAs);
-        
-        newRow.setFloat("DECd", DECd);
-        newRow.setFloat("DECm", DECm);
-        newRow.setFloat("DECs", DECs);
-        
-        newRow.setFloat("VM", VM);
-        
-        newRow.setFloat("B-V", BV);
-        newRow.setFloat("U-B", UB);
-        
-        
+        newRow.setInt("index", starIndex);     
         
         newRow.setInt("class", sClass);
         newRow.setFloat("subclass", sSubClass);
         
-        float RA = convRA(newRow);
+        float RA = convRA(RAh, RAm, RAs);
         newRow.setFloat("RA", RA);
-        float DEC = convDEC(newRow);
+        float DEC = convDEC(DECd, DECm, DECs);
         newRow.setFloat("DEC", DEC);
         
         float[] HC = fromEquaToHoriz(newRow);
@@ -191,7 +140,7 @@ public class StarsTable{
         float T = convTemperature(newRow);
         newRow.setFloat("T", T);
         
-        float AM = convApparentMagnitude(newRow);
+        float AM = convApparentMagnitude(VM);
         newRow.setFloat("AM", AM);
         
       } else {
@@ -211,30 +160,24 @@ public class StarsTable{
   //-----------------------------------------------------
   //CONVERSIONS
   
-  private float convRA(TableRow row) {
+  private float convRA(float RAh, float RAm, float RAs) {
     //converts right ascension from hour-minute-second to a single value in degrees
-    float hour = row.getFloat("RAh");
-    float min = row.getFloat("RAm");
-    float sec = row.getFloat("RAs");
     
-    float secFraction = sec/60;
-    float minFraction = min/60 + secFraction;
-    float hourTot = hour + minFraction;
+    float secFraction = RAs/60;
+    float minFraction = RAm/60 + secFraction;
+    float hourTot = RAh + minFraction;
     
     float RA = hourTot * 15;  // 24 hour -> 360/24 = 15 degrees each
     
     return RA;
   }
   
-  private float convDEC(TableRow row) {
+  private float convDEC(float DECd, float DECm, float DECs) {
     //converts declination degree-arcminute-arcseconds to a single value in degrees
-    float deg = row.getFloat("DECd");
-    float min = row.getFloat("DECm");
-    float sec = row.getFloat("DECs");
     
-    float secFraction = sec/60;
-    float minFraction = min/60 + secFraction;
-    float DEC = deg + minFraction;
+    float secFraction = DECs/60;
+    float minFraction = DECm/60 + secFraction;
+    float DEC = DECd + minFraction;
     
     return DEC;
   }
@@ -242,8 +185,8 @@ public class StarsTable{
   private float[] fromEquaToHoriz(TableRow row) {
     //converts equatorial coordinates into horizontal coordinates
     
-    float RA = convRA(row);
-    float DEC = convDEC(row);
+    float RA = row.getFloat("RA");
+    float DEC = row.getFloat("DEC");
     
     float currentHour = this.appStartHourFraction + this.timePassedFromAppStart;
     float daysToday = timeControl.daysSinceJ2000(currentHour);
@@ -275,11 +218,13 @@ public class StarsTable{
     return horizCoord;
   }
   
-  private float convApparentMagnitude(TableRow row) {
+  private float convApparentMagnitude(float VM) {
     //converts VM index value into a scale 0-100 
-    float VM = row.getFloat("VM");
     
-    // CHECK FOR EXTREMES
+    //extremes found from database inspection
+    float maxVM = 7.96;
+    float minVM = -1.46;
+    
     float AM = map(VM, minVM, maxVM, 0, 255);
     
     return AM;
@@ -331,26 +276,6 @@ public class StarsTable{
     return T;
   }
   
-  private float convBV(TableRow row) {
-    //converts VM index value into a scale 0-100 
-    float BV = row.getFloat("B-V");
-    
-    // CHECK FOR EXTREMES
-    BV = map(BV, minBV, maxBV, 0, 100);
-    
-    return BV;
-  }
-  
-  private float convUB(TableRow row) {
-    //converts VM index value into a scale 0-100 
-    float UB = row.getFloat("U-B");
-    
-    // CHECK FOR EXTREMES
-    UB = map(UB, minUB, maxUB, 0, 100);
-    
-    return UB;
-  }
-  
   
   //----------------------------------------------------
   //EXISTENCE CHECK
@@ -383,7 +308,7 @@ public class StarsTable{
   //PUBLIC METHODS
   
   public void update(){
-  for (int i=0; i<starsAttributes.getRowCount(); i++){
+    for (int i=0; i<starsAttributes.getRowCount(); i++){
       TableRow row = starsAttributes.getRow(i);
       
       float[] updatedHC = fromEquaToHoriz(row);
@@ -396,7 +321,7 @@ public class StarsTable{
 
   
   
-  // -------------------------------------
+  // ------------------------------------------------------
   //DEBUG
   
   public void debug(TableRow row, boolean printAllStars, boolean onlyUsefullValues) {

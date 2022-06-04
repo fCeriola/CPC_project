@@ -19,5 +19,5 @@ public void sunEvent(float n){
  }
  if (sun.xCoord>width){
    day = false;
- } 
+ }
 }

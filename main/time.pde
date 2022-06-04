@@ -41,9 +41,9 @@ public class Time {
     //the current hour/minute/second from the computer
     //the value of timeLapse controls the speed
     float increament = timeLapse * 1/frameRate;
-    valueToIncrease += increament / (60*60);
+    float increasedValue = valueToIncrease + increament / (60*60);
     
-    return valueToIncrease;
+    return increasedValue;
   }
   
   public float daysSinceJ2000(float hour) {

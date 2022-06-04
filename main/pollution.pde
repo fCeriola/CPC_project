@@ -1,6 +1,6 @@
-import processing.sound.*; 
-import oscP5.*;
-import netP5.*;
+//import processing.sound.*; 
+//import oscP5.*;
+//import netP5.*;
 
 public class Pollution {
   
@@ -9,9 +9,6 @@ public class Pollution {
   private float xyIncrement;
   private float zoff;
   private float zIncrement;
-  
-  private float x;
-  private float y;
  
   private color[][] matrix;
   private color extColor1;
@@ -65,6 +62,11 @@ public class Pollution {
   public void plot(float xPuntatore, float yPuntatore, float pointerRadius) {
     
     color colore;
+    float red = 0;
+    float blue = 0;
+    int nRedPixels = 0;
+    int nBluePixels = 0;
+    int nTotPixels = 0;
     
     loadPixels();
     
@@ -75,10 +77,22 @@ public class Pollution {
           colore = lerpColor(pollution.matrix[i][j], pixels[i+j*width], 0.1);
           pixels[i+j*width] = colore;
         }
-        else
-          countingStars(pixels[i+j*width]);
+        else {
+          if (pixels[i+j*width] != color(5, 3, 30)) {
+            red = red(pixels[i+j*width]);
+            blue = blue(pixels[i+j*width]);
+            if (red > blue)
+              nRedPixels += 1;
+            else
+              nBluePixels += 1;
+          }
+          nTotPixels += 1;
+        }
       }
     }
+    countingStars(nTotPixels, nRedPixels, nBluePixels);
+    
     updatePixels();
   }
+  
 }

@@ -18,7 +18,7 @@ public class Sky{
     this.y = 0;
     this.col1 = color(250, 225, 200);
     this.col2 = color(166, 215, 232);
-    this.smooth = 0.2; 
+    this.smooth = 0.2;
     this.nStrati = 50;
     this.prevOpacity = new float[nStrati];
   }
