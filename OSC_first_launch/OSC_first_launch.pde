@@ -8,6 +8,8 @@ NetAddress ip;
 
 AudioIn in;
 
+boolean check = true;
+
 
 void setup(){
   
@@ -74,6 +76,17 @@ void mousePressed(){
    }
   //5
   if (c == color(178,255,102)){
+    if (check==true){
+        OscMessage scene = new OscMessage("/launch/scene");
+        scene.add(0);
+        ableton.send(scene, ip);
+        check = false;
+    }else{
+      OscMessage scene = new OscMessage("/launch/scene");
+        scene.add(1);
+        ableton.send(scene, ip);
+        check = true;
+    }
   }
   //6
   if (c == color(255,255,102)){

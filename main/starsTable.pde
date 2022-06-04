@@ -19,8 +19,11 @@ public class StarsTable{
   private float minUB;
   
   //ROME coordinates (for testing)
-  public float userLatitude = 41.902782;
-  public float userLongitude = 12.496366;
+  //public float userLatitude = 41.902782;
+  //public float userLongitude = 12.496366;
+  
+    public float userLatitude;
+  public float userLongitude;
   
   //DEBUG VARIABLE
   //private int starsNeglected;
@@ -28,7 +31,12 @@ public class StarsTable{
   // ======================================================
   //CONSTRUCTOR
   
-  public StarsTable() {
+  public StarsTable(float latitude, float longitude) {
+    
+    
+    this.userLatitude = latitude;
+    this.userLongitude = longitude;
+    
     
     //load file
     String[] lines = loadStrings("bsc5.dat");

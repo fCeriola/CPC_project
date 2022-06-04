@@ -53,7 +53,6 @@ private float longitude;
 void setup() {
   
   fullScreen();
-  //size(1500,800);
   frameRate(60);
   
   ableton = new OscP5(this, 8000);
@@ -64,8 +63,6 @@ void setup() {
   y = height/2;
   testX = width/2;
   testY = height/2;
-  latitude = 0;
-  longitude = 0;
   
   Sound s = new Sound(this);
   s.inputDevice(5);
@@ -80,15 +77,11 @@ void setup() {
   signalAmp = new Amplitude(this);
   signalAmp.input(in);
   
-  //bpfilter = new BandPass(this);
-  //bpfilter.process(in);
-  //bpfilter.freq(10000);
-  //bpfilter.bw(20000);
   
   timeLapseValue = 120;
   timeControl = new Time(timeLapseValue);
-  
-  database = new StarsTable();
+ 
+  database = new StarsTable(latitude, longitude);
   
   starSystem = new StarSystem(database);
   
@@ -108,7 +101,7 @@ void setup() {
 }
 
 
-void draw() {
+void draw() {  
 
   fft.analyze(spectrum);
   
@@ -168,29 +161,9 @@ void draw() {
   
 }
 
-//void oscEvent(OscMessage theOscMessage){
-//  // use the button in the mobile app to set the zero
-  
-//  println("MESSAGE: " + theOscMessage.addrPattern() + "\nTAG: " + theOscMessage.typetag() + "\nVALUES.NUMBER: " + theOscMessage.arguments().length);
-//  Object[] testValues = theOscMessage.arguments();
-  
-//  x = x - (float)testValues[2];
-//  if (x>= (width - 50)) {
-//    x = width - 50;
-//  } else if (x<=0) {
-//    x= 0.0;
-//  }
-  
-//  y = y - ((float)testValues[0]);
-//  if (y>=(height - 50)) {
-//    y = height - 50;
-//  } else if (y<=0) {
-//    y = 0.0;
-//  }
-//}
 
 void oscEvent(OscMessage theOscMessage){
-  println("MESSAGE: " + theOscMessage.addrPattern() + "\nTAG: " + theOscMessage.typetag() + "\nVALUES.NUMBER: " + theOscMessage.arguments().length);
+  //println("MESSAGE: " + theOscMessage.addrPattern() + "\nTAG: " + theOscMessage.typetag() + "\nVALUES.NUMBER: " + theOscMessage.arguments().length);
   if(theOscMessage.checkAddrPattern("/gyrosc/gyro")==true){
     Object[] testValues = theOscMessage.arguments();
     x = x + (float)testValues[0];
@@ -223,13 +196,6 @@ void oscEvent(OscMessage theOscMessage){
     }
   }
   
-  if(theOscMessage.checkAddrPattern("/gyrosc/gps")==true){
-    Object[] gpsValues = theOscMessage.arguments();
-    latitude = (float)gpsValues[0];
-    longitude =(float)gpsValues[1];
-    println("latitude : " + gpsValues[0]);
-    println("longitude : " + gpsValues[1]);
-  }
 }
 
 
@@ -237,7 +203,7 @@ public float returnLatitude(OscMessage theOscMessage){
   if(theOscMessage.checkAddrPattern("/gyrosc/gps")==true){
     Object[] gpsValues = theOscMessage.arguments();
     latitude = (float)gpsValues[0];
-    println("latitude :" + latitude);
+    //println("latitude :" + latitude);
   }
   return latitude;
 }
@@ -246,7 +212,7 @@ public float returnLatitude(OscMessage theOscMessage){
   if(theOscMessage.checkAddrPattern("/gyrosc/gps")==true){
     Object[] gpsValues = theOscMessage.arguments();
     longitude = (float)gpsValues[1];
-    println("longitude :" + longitude);
+    //println("longitude :" + longitude);
   }
   return longitude;
 }
