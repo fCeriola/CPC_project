@@ -34,11 +34,56 @@ The moon class is a representation of the moon, made by using some perlin noise.
 The algorithm used is the classic Perlin Noise in 2D algorithm...
 
 # Sun 
-The sun are concentric ellypsis, made using processing.sound library;
+The sun are concentric ellypsis, where the color gradient is obtained by using lerpColor method, and it is made using processing.sound library;
 Rays are depicted as FFT of incoming audio from Ableton, where amplitude bands are represented on the sun circumference. 
 
 # Stars
-The stars part is the most complicated of the application, and is the main core 
+The stars part is the most complicated of the application, and is the main core of the installation. 
+There are three main tables involving the implementation of the stars: star, starsTable, starSystem.
+
+# star
+The class star containes information about the single star.
+In the constructor of the class we take a row from the Stars database and get out from it the values that we need: 
+In the ConvColor method, we take the temperature values from the table and compute the color based on the temperature. 
+Then in the fromHorizToCart method we convert the horizontal coordinates obtained from the db into cartesian ones. 
+
+# starsTable
+starsTable is the main component part of all three stars tables, basically we operate taking parameters and coordinates of the stars, read from a J2000
+reference in equatorial coordinates. 
+...
+
+# starSystem 
+starSystem class manages the single star object, and containes an ArrayList of stars. 
+In the constructor of the component we pass the reference to the database to the constructor itself, creating basically a new reference, so a new pointer. 
+There are two methods, fillSystem, used to take stars from the database and put them into the arraylist; this information is constantly updated by the update method and starsFallIntoScreen, that is used to discriminate what stars are to include in the maximum height and width set for the application screen. 
+Finally, stars are plotted with the plot method. 
+
+# Sky 
+The sky part creates the scenario of the installation, and it is divided in two main parts: sky and pollution. 
+
+# sky
+Sky is made by concentric circles, where the color gradient is made using lerpColor method. 
+The opacity is instead obtained using the amplitude of the incoming signal.
+
+# pollution
+Pollution is made by using a perlin noise changed with time 
+...
+
+# OSC communication 
+The communication part is divided into two main parts, the communication with Ableton Live and the communication with GyrOSC
+
+# GyrOSC
+The communication with GyrOSC takes place in the main, with the method oscEvent.
+We take three parameters from GyrOSC that are the gyroscope, the accelerometer and the GPS. 
+Every parameter has an associated OSCAddress that is taken by Processing and from which we take the relevant attributes of each parameter. 
+For the gyroscope parameters used are beccheggio and rollio, for the accelerometer is the quantity of acceleration in the x and y axis and for the GPS are the coordinates of the position where GyrOSC is activated. 
+These parameters are taken by calling arguments() method.
+For our application we needed to split all three parameters, and that has been made by calling the CheckAddrPattern method, so that we could manage the values coming from the gyroscope, accelerometer and GPS separately.
+
+# Ableton Live
+
+
+
  
  
 
