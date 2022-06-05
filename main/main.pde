@@ -89,7 +89,7 @@ void setup() {
   signalAmp.input(in);
   
   // time flow controller setup
-  timeLapseValue = 10;
+  timeLapseValue = 120;
   timeControl = new Time(timeLapseValue);
  
  
@@ -103,9 +103,9 @@ void setup() {
   
   sky = new Sky();
   
-  sun = new Sun(0, 0);
+  sun = new Sun(width+200, height/2);
   
-  moon = new Moon(0, 0);
+  moon = new Moon(width+100, height/3);
   
   city = loadImage("city.png");
   cityLights = loadImage("citylight3.png");
@@ -148,22 +148,20 @@ void draw() {
   
   //must be in an event
  
-  //moonEvent();
-  moon.plot();
-  moon.update();
+  moonEvent();
+  //moon.plot();
+  //moon.update();
   //----
   
   pollution.plot(xPointer, yPointer, pointerRadius);
   
   //must be in an event
   
-  //sunEvent(n);
-  sun.update();
-  sky.update(sun.xCoord, sun.yCoord);
-  if (sun.altitude > 0) {
-    sky.plot(n/2);
-    sun.plot(spectrum);  
-  }
+  sunEvent(n);
+  //sun.update();
+  //sky.update(sun.xCoord, sun.yCoord);
+  //sky.plot(n/2);
+  //sun.plot(spectrum);  
   
   //-----
    
@@ -189,13 +187,13 @@ void oscEvent(OscMessage theOscMessage){
   //println("MESSAGE: " + theOscMessage.addrPattern() + "\nTAG: " + theOscMessage.typetag() + "\nVALUES.NUMBER: " + theOscMessage.arguments().length);
   if(theOscMessage.checkAddrPattern("/gyrosc/gyro")==true){
     Object[] testValues = theOscMessage.arguments();
-    xPointer = xPointer + (float)testValues[0];
+    xPointer = xPointer - (float)testValues[2];
     if (xPointer >= (width - pointerRadius)) {
       xPointer = width - pointerRadius;
     } else if (xPointer <= 0) {
       xPointer = 0.0;
     }
-    yPointer = yPointer + (float)testValues[1];
+    yPointer = yPointer - (float)testValues[0];
     if (yPointer >= (height - pointerRadius)) {
       yPointer = height - pointerRadius;
     } else if (yPointer <= 0) {

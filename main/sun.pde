@@ -71,69 +71,8 @@ public class Sun {
   }
   
   public void update() {
-    
-    // find right ascension and declination (equatorial coordinates)
-    
-    float currentHour = this.appStartHourFraction + this.timePassedFromAppStart;
-    float daysToday = timeControl.daysSinceJ2000(currentHour);
-    
-    float L = 280.46646 + 0.985674 * daysToday; //mean longitude
-    float g = 357.52911 + 0.9856003* daysToday; //mean anomaly
-    while (L >= 360)
-      L -= 360;
-    while (g >= 360)
-      g -= 360;
-    L = radians(L);
-    g = radians(g);
-    float lambda = L + 1.915*sin(g) + 0.020*sin(2*g); //ecliptic longitude
-    float epsilon = 23.439 - 0.0000004*daysToday; //obliquity of the elliptic
-    epsilon = radians(epsilon);
-    
-    float RA = atan(cos(epsilon)*tan(lambda));
-    float DEC = asin(sin(epsilon)*sin(lambda));
-    
-    
-    // find latitude and azimuth (horizontal coordinates)
-    float LST = (100.46 + 0.985647 * daysToday + longitude + 15 * currentHour) % 360;
-    
-    float HA = LST - RA;
-    
-    float userLatitude = radians(latitude);
-    
-    float sunAltitude = asin(sin(DEC)*sin(userLatitude) + cos(DEC)*cos(userLatitude)*cos(HA));
-    float A = (sin(DEC) - sin(sunAltitude)*sin(userLatitude)) / (cos(sunAltitude)*cos(userLatitude));
-    A = constrain(A, -1, 1);
-    A = acos(A);
-
-    float sunAzimuth = 0;
-    if (sin(HA) >= 0)
-      sunAzimuth = 360 - degrees(A);
-    else
-      sunAzimuth = degrees(A);
-    
-    float AZ_rad = radians(sunAzimuth);
-    float AL_rad = radians(sunAltitude);
-    this.altitude = AL_rad;
-    
-    // find x and y (cartesian coordinates)
-    
-    //cos(altitude) projects the star onto the plane (x,y)
-    //north is at azimuth = 0 and lies on y axis from bottom left corner to top left corner
-    float X = sin(AZ_rad)*cos(AL_rad);
-    float Y = cos(AZ_rad)*cos(AL_rad);
-    
-    // THIS MUST BE ADJUSTED
-    float beta = 100;
-    this.xCoord = map(X, -1, 1, -beta, beta+width);
-    this.yCoord = map(Y, -1, 1, -beta, beta+height);
-    
-    
-    /*
-    //sun.xCoord=cos(frameCount/220.0)*width/2.0+width/2;
-    //sun.yCoord=sin(frameCount/220.0)*height/2.0+height/2;
-    sun.xCoord = frameCount*2.0-600;
-    sun.yCoord = height/2;
-    */
+    this.xCoord -= frameRate*5.0;
+    this.yCoord = height/2 + 2.5*pow((width/2 - (abs(this.xCoord-width/2))), 0.7);
   }
   
   //public void reflex(PImage citylight){

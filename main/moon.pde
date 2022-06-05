@@ -62,8 +62,8 @@ public class Moon {
   public void update() {
     //sun.xCoord=cos(frameCount/220.0)*width/2.0+width/2;
     //sun.yCoord=sin(frameCount/220.0)*height/2.0+height/2;
-    moon.xCoord = frameCount*2;
-    moon.yCoord = height/2;
+    this.xCoord -= frameRate*5.0;
+    this.yCoord = 2*height/3 + 1.5*pow((width/2 - (abs(this.xCoord-width/2))), 0.7);
   }
   
   
