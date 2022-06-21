@@ -45,8 +45,8 @@ public void accFilter(float testX, OscP5 ableton, NetAddress ip){
   ableton.send(filterVal, ip);
 }
 
-public void sceneChange(OscP5 ableton, NetAddress ip){
+public void sceneChange(OscP5 ableton, NetAddress ip, float n){
   OscMessage scene = new OscMessage("/launch/scene");
-  scene.add(1.0);
+  scene.add(n);
   ableton.send(scene, ip);
 }

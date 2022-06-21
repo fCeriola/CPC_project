@@ -114,7 +114,7 @@ void setup() {
   
 }
 
-
+/*---------------DRAW-------------------*/
 void draw() {
   
   // nightblue background
@@ -171,9 +171,8 @@ void draw() {
   noTint();
   image(city, 0, 0);
   
-  tint(255, n*4.0);
-  image(cityLights, 0, 0);
-  noTint();
+  cityEvent(n);
+
   
   //OSC Messages
   sunVolFreq(sun.xCoord, ableton, ip);
@@ -181,8 +180,9 @@ void draw() {
   accFilter(testX, ableton,ip);
   
 }
+/*-------------------------------------------*/
 
-
+/*--------- OSC FROM GYROSC --------------- */
 void oscEvent(OscMessage theOscMessage){
   //println("MESSAGE: " + theOscMessage.addrPattern() + "\nTAG: " + theOscMessage.typetag() + "\nVALUES.NUMBER: " + theOscMessage.arguments().length);
   if(theOscMessage.checkAddrPattern("/gyrosc/gyro")==true){
@@ -218,13 +218,15 @@ void oscEvent(OscMessage theOscMessage){
   }
   
 }
+/*--------------------------------------------*/
 
+/*---------- GPS COORDS FROM GYROSC ----------*/
 public float returnLatitude(OscMessage theOscMessage){
   if(theOscMessage.checkAddrPattern("/gyrosc/gps")==true){
     Object[] gpsValues = theOscMessage.arguments();
     latitude = (float)gpsValues[0];
     //println("latitude :" + latitude);
-  }
+  } 
   return latitude;
 }
 
