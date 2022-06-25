@@ -10,6 +10,11 @@ public class Pollution {
   private color extColor1;
   private color extColor2;
   
+  private float maxMajority;
+  private float minMajority;
+  private float smooth;
+  private float step;
+  private float prevStep;
   
   // ======================================================
   // CONSTRUCTOR
@@ -25,28 +30,29 @@ public class Pollution {
     this.extColor1 = color(121, 114, 97);
     this.extColor2 = color(21, 17, 7, 10);
     
+    this.maxMajority = 0.02;
+    this.minMajority = 0.0;
+    this.smooth = 0.2;
+    this.step = 0.001;
+    this.prevStep = 0.001;
+    
   }
   
   // ======================================================
   // PRIVATE METHODS
   
-  private float[] countingStars(int tot, int red, int blue) {
+  private float[] countingStars(int totN, int nRed, int nBlue, int totRedBlue, int nWhite) {
     
     float totalStarDensity;
     float majority;
     
-    majority = (float)(blue - red) / (float)tot;
+    majority = (float)(nBlue - nRed) / (float)totRedBlue;
+    majority = map(majority, -1.0, 1.0, 0.0, 1.0);
     
-    majority = constrain(majority, -0.001, 0.5);
-    majority = map(majority, -0.001, 0.5, 0, PI);
-    majority = 0.5 * (-cos(majority) + 1);
-    
-    totalStarDensity = (float)(red + blue) / (float)tot;
-    
-    totalStarDensity = constrain(totalStarDensity, 0.01, 0.3);
-    totalStarDensity = map(totalStarDensity, 0.01, 0.3, 0, PI);
-    totalStarDensity = 0.5 * (-cos(totalStarDensity) + 1);
-    
+    totalStarDensity = (float)(nRed + nBlue + 0.2*nWhite) / (float)totN;
+    totalStarDensity = map(totalStarDensity, 0.01, 0.2, 0.0, 1.0);
+
+
     float[] rateColor = {totalStarDensity, majority};
     
     return rateColor;
@@ -83,8 +89,11 @@ public class Pollution {
     color colore;
     float red = 0;
     float blue = 0;
+    
     int nRedPixels = 0;
     int nBluePixels = 0;
+    int nWhitePixels = 0;
+    int totRedBlue = 0;
     int nTotPixels = 0;
     
     loadPixels();
@@ -100,17 +109,24 @@ public class Pollution {
           if (pixels[i+j*width] != backColor) {
             red = red(pixels[i+j*width]);
             blue = blue(pixels[i+j*width]);
-            if (red > blue)
-              nRedPixels += 1;
-            else
+            //println(red, blue);
+            if (red > blue) {
+              nRedPixels += 2;
+            }
+            else if (blue > red) {
               nBluePixels += 1;
+            }
+            else {
+              nWhitePixels += 1;
+            }
+            totRedBlue += 1;
           }
           nTotPixels += 1;
         }
       }
     }
     
-    float[] rateColor = countingStars(nTotPixels, nRedPixels, nBluePixels);
+    float[] rateColor = countingStars(nTotPixels, nRedPixels, nBluePixels, totRedBlue, nWhitePixels);
     
     starRate(rateColor[0], ableton, ip);
     starColor(rateColor[1], ableton, ip);

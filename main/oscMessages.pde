@@ -36,10 +36,11 @@ public void starMode(float xCoord, float yCoord, OscP5 ableton, NetAddress ip){
     modeVal.add(0.85);
     ableton.send(modeVal, ip);
   }
+  
 }
 
 public void accFilter(float testX, OscP5 ableton, NetAddress ip){
-  float val = map(testX, 0.0, 5.0, 0.0, 1.0);
+  float val = map(accXPointer+accYPointer, 0.0, 5.0, 0.0, 1.0);
   OscMessage filterVal = new OscMessage("/filter/x");
   filterVal.add(val);
   ableton.send(filterVal, ip);

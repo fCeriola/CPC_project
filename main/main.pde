@@ -46,6 +46,9 @@ private float xPointer;
 private float yPointer;
 private float accXPointer;
 private float accYPointer;
+private float prevAccX;
+private float prevAccY;
+private float smooth;
 private float latitude;
 private float longitude;
 
@@ -72,6 +75,7 @@ void setup() {
   yPointer = height/2;
   accXPointer = width/2;
   accYPointer = height/2;
+  smooth = 0.2;
   
   // get audio input signal
   Sound s = new Sound(this);
@@ -141,29 +145,17 @@ void draw() {
   updatePoll = new Thread(updatePollution);
   updatePoll.start();
   
-  // plot objects
+  /*----------------OBJECTS PLOT--------------*/
+  
   starSystem.plot();
   
-  //must be in an event
- 
+
   moonEvent();
-  //moon.plot();
-  //moon.update();
-  //----
-  
+
   pollution.plot(xPointer, yPointer, pointerRadius);
-  
-  //must be in an event
-  
-  sunEvent(n);
-  //sun.update();
-  //sky.update(sun.xCoord, sun.yCoord);
-  //sky.plot(n/2);
-  //sun.plot(spectrum);  
-  
-  //-----
    
-  
+  sunEvent(n);
+    
   city.resize(width,height);
   cityLights.resize(width,height);
   noTint();
@@ -199,23 +191,28 @@ void oscEvent(OscMessage theOscMessage){
     }
   }
   
-   if(theOscMessage.checkAddrPattern("/gyrosc/accel")==true){
+  if(theOscMessage.checkAddrPattern("/gyrosc/accel")==true){
     Object[] accelValues = theOscMessage.arguments();
     accXPointer = (float)accelValues[0];
+    accXPointer = smooth*accXPointer + (1-smooth)*prevAccX;
+    prevAccX = accXPointer;
     if (accXPointer >= (width - pointerRadius)) {
       accXPointer = width - pointerRadius;
     } else if (accXPointer <= 0) {
-      accXPointer = 0.0;
+      accXPointer = abs(accXPointer);
     }
     accYPointer = (float)accelValues[1];
+    accYPointer = smooth*accYPointer + (1-smooth)*prevAccY;
+    prevAccY = accYPointer;
     if (accYPointer >= (width - pointerRadius)) {
       accYPointer = width - pointerRadius;
     } else if (accYPointer <= 0) {
-      accYPointer = 0.0;
+      accYPointer = abs(accYPointer);
     }
   }
-  xPointer = mouseX;
-  yPointer = mouseY;
+  //println(accXPointer);
+  //xPointer = mouseX;
+  //yPointer = mouseY;
 }
 /*--------------------------------------------*/
 
@@ -236,4 +233,10 @@ public float returnLongitude(OscMessage theOscMessage){
     //println("longitude :" + longitude);
   }
   return longitude;
+}
+
+
+void exit(){
+  sceneChange(ableton, ip, 2);
+  super.exit();
 }
