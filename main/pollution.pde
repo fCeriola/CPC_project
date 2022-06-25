@@ -35,13 +35,17 @@ public class Pollution {
     float totalStarDensity;
     float majority;
     
-    majority = ( (float)blue - (float)red ) / (float)tot;
-      
-    majority = map(majority, -0.2, 0.2, 0.0, 1.0);
+    majority = (float)(blue - red) / (float)tot;
+    
+    majority = constrain(majority, -0.001, 0.5);
+    majority = map(majority, -0.001, 0.5, 0, PI);
+    majority = 0.5 * (-cos(majority) + 1);
     
     totalStarDensity = (float)(red + blue) / (float)tot;
     
-    totalStarDensity = map(totalStarDensity, 0.0, 0.3, 0.0, 1.0);
+    totalStarDensity = constrain(totalStarDensity, 0.01, 0.3);
+    totalStarDensity = map(totalStarDensity, 0.01, 0.3, 0, PI);
+    totalStarDensity = 0.5 * (-cos(totalStarDensity) + 1);
     
     float[] rateColor = {totalStarDensity, majority};
     
@@ -93,7 +97,7 @@ public class Pollution {
           pixels[i+j*width] = colore;
         }
         else {
-          if (pixels[i+j*width] != color(5, 3, 30)) {
+          if (pixels[i+j*width] != backColor) {
             red = red(pixels[i+j*width]);
             blue = blue(pixels[i+j*width]);
             if (red > blue)
@@ -105,6 +109,7 @@ public class Pollution {
         }
       }
     }
+    
     float[] rateColor = countingStars(nTotPixels, nRedPixels, nBluePixels);
     
     starRate(rateColor[0], ableton, ip);

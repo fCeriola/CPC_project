@@ -87,10 +87,13 @@ public class Star{
     translate(this.xCoord, this.yCoord);
     rotate(this.angle);
     
+    /*
     fill(this.colore, apparentMagnitude/6);
     ellipse(1, 0, this.radius*4.5, this.radius/3);
     fill(this.colore, apparentMagnitude/3);
     ellipse(0, -1, this.radius/2, this.radius*3);
+    */
+    
     
     fill(this.colore, apparentMagnitude);    
     ellipse(0, 0, this.radius, this.radius);

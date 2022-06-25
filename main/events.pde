@@ -1,4 +1,4 @@
-private boolean day = true;
+private boolean day = false;
 private boolean changeScene = true;
 
 public void moonEvent(){

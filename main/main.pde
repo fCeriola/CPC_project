@@ -1,4 +1,4 @@
-import processing.sound.*; //<>//
+import processing.sound.*; //<>// //<>//
 import oscP5.*;
 import netP5.*;
 
@@ -49,6 +49,9 @@ private float accYPointer;
 private float latitude;
 private float longitude;
 
+//background color
+public color backColor;
+
 
 void setup() {
   
@@ -56,6 +59,7 @@ void setup() {
   //fullScreen();
   size(1500, 800);
   frameRate(60);
+  backColor = color(5, 3, 30);
   
   // connect processing to ableton
   ableton = new OscP5(this, 8000);
@@ -112,7 +116,7 @@ void setup() {
 void draw() {
   
   // nightblue background
-  background(5, 3, 30);
+  background(backColor);
 
   // audio analysis
   fft.analyze(spectrum);
@@ -210,7 +214,8 @@ void oscEvent(OscMessage theOscMessage){
       accYPointer = 0.0;
     }
   }
-  
+  xPointer = mouseX;
+  yPointer = mouseY;
 }
 /*--------------------------------------------*/
 
