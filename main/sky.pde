@@ -1,6 +1,6 @@
 public class Sky{
   
-  // ATTRIBUTES 
+  // ATTRIBUTES
   
   private color col1;
   private color col2;

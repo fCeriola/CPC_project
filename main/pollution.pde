@@ -34,6 +34,27 @@ public class Pollution {
   // ======================================================
   // PRIVATE METHODS
   
+  private float[] countingStars(int tot, int red, int blue) {
+    
+    float totalStarDensity;
+    float majority;
+    
+    majority = ( (float)blue - (float)red ) / (float)tot;
+      
+    majority = constrain(majority, -0.2, 0.2);
+    majority = map(majority, -0.2, 0.2, 0.0, 1.0);
+    
+    totalStarDensity = (float)(red + blue) / (float)tot;
+    
+    totalStarDensity = constrain(totalStarDensity, 0.0, 0.3);
+    totalStarDensity = map(totalStarDensity, 0.0, 0.3, 0.0, 1.0);
+    
+    float[] rateColor = {totalStarDensity, majority};
+    
+    return rateColor;
+    
+  }
+  
   // ======================================================
   // PUBLIC METHODS
   
@@ -90,7 +111,10 @@ public class Pollution {
         }
       }
     }
-    countingStars(nTotPixels, nRedPixels, nBluePixels);
+    float[] rateColor = countingStars(nTotPixels, nRedPixels, nBluePixels);
+    
+    starRate(rateColor[0], ableton, ip);
+    starColor(rateColor[1], ableton, ip);
     
     updatePixels();
   }

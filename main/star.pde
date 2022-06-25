@@ -25,7 +25,7 @@ public class Star{
   
   public Star(TableRow row) {
     //takes a row of the database table as argument and grabs all the information needed
-    colorMode(RGB, 255);
+    //colorMode(RGB, 255);
     redStar = color(255,156,60);
     blueStar = color(143,182,255);
     whiteStar = color(240,240,253);
@@ -71,7 +71,7 @@ public class Star{
     float X = sin(AZ_rad)*cos(AL_rad);
     float Y = cos(AZ_rad)*cos(AL_rad);
     
-    // THIS MUST BE ADJUSTED
+    //zoom in / zoom out
     float beta = 100;
     this.xCoord = map(X, -1, 1, -beta, beta+width);
     this.yCoord = map(Y, -1, 1, -beta, beta+height);

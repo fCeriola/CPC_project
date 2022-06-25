@@ -44,15 +44,10 @@ OscP5 oscP5;
 private float pointerRadius;
 private float xPointer;
 private float yPointer;
-private float testX;
-private float testY;
+private float accXPointer;
+private float accYPointer;
 private float latitude;
 private float longitude;
-
-//Data from pointer
-String insidePointerStarMajority;
-float insidePointerStarDensity;
-
 
 
 void setup() {
@@ -70,8 +65,8 @@ void setup() {
   pointerRadius = 50;
   xPointer = width/2;
   yPointer = height/2;
-  testX = width/2;
-  testY = height/2;
+  accXPointer = width/2;
+  accYPointer = height/2;
   
   // get audio input signal
   Sound s = new Sound(this);
@@ -177,7 +172,7 @@ void draw() {
   //OSC Messages
   sunVolFreq(sun.xCoord, ableton, ip);
   starMode(xPointer, yPointer, ableton, ip);
-  accFilter(testX, ableton,ip);
+  accFilter(accXPointer, ableton,ip);
   
 }
 /*-------------------------------------------*/
@@ -203,17 +198,17 @@ void oscEvent(OscMessage theOscMessage){
   
    if(theOscMessage.checkAddrPattern("/gyrosc/accel")==true){
     Object[] accelValues = theOscMessage.arguments();
-    testX = (float)accelValues[0];
-    if (testX >= (width - pointerRadius)) {
-      testX = width - pointerRadius;
-    } else if (testX <= 0) {
-      testX = 0.0;
+    accXPointer = (float)accelValues[0];
+    if (accXPointer >= (width - pointerRadius)) {
+      accXPointer = width - pointerRadius;
+    } else if (accXPointer <= 0) {
+      accXPointer = 0.0;
     }
-    testY = (float)accelValues[1];
-    if (testY >= (width - pointerRadius)) {
-      testY = width - pointerRadius;
-    } else if (testY <= 0) {
-      testY = 0.0;
+    accYPointer = (float)accelValues[1];
+    if (accYPointer >= (width - pointerRadius)) {
+      accYPointer = width - pointerRadius;
+    } else if (accYPointer <= 0) {
+      accYPointer = 0.0;
     }
   }
   
@@ -237,18 +232,4 @@ public float returnLongitude(OscMessage theOscMessage){
     //println("longitude :" + longitude);
   }
   return longitude;
-}
-
-
-public void countingStars(int tot, int red, int blue) {
-  
-  if (red > blue)
-    insidePointerStarMajority = "red";
-  else if (red < blue)
-    insidePointerStarMajority = "blue";
-  else
-    insidePointerStarMajority = "tie";
-    
-  insidePointerStarDensity = (float)(red + blue) / (float)tot;
-  
 }

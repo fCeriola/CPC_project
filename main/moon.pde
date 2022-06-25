@@ -2,14 +2,14 @@ public class Moon {
   
   private float xCoord;
   private float yCoord;
-  private float increment = 0.05;
-  private float rad = 50.0;
+  private float increment;
+  private float rad;
   
   public Moon(float xCoord, float yCoord){
     this.xCoord = xCoord;
     this.yCoord = yCoord;
-    //this.increment = increment;
-    //this.rad = rad;
+    this.increment = 0.05;
+    this.rad = 50.0;
   }
   
   public void plot(){
@@ -43,7 +43,8 @@ public class Moon {
           x=0;
           y=0;
           pixels[x+y*width] = color(bright);
-        }else{
+        }
+        else {
           pixels[x+y*width] = color(bright);
         }
         

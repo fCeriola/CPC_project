@@ -16,20 +16,20 @@ public void moonEvent(){
 }
 
 public void sunEvent(float n){ 
- if (day==true){
-     if(sun.xCoord == width + 200){
+  if (day==true){
+    if(sun.xCoord == width + 200){
        sceneChange(ableton, ip, 2.0);
        println("sending scene 2.0");
-     }
-    sun.update();
-    sky.update(sun.xCoord, sun.yCoord);
-    sky.plot(n/2);
-    sun.plot(spectrum);
- }
- if (sun.xCoord < -300){
-   day = false;
-   sun.xCoord = width + 200;
- }
+    }
+  sun.update();
+  sky.update(sun.xCoord, sun.yCoord);
+  sky.plot(n/2);
+  sun.plot(spectrum);
+  }
+  if (sun.xCoord < -300){
+    day = false;
+    sun.xCoord = width + 200;
+  }
 }
 
 public void cityEvent(float n){
