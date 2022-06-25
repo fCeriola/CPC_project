@@ -50,3 +50,16 @@ public void sceneChange(OscP5 ableton, NetAddress ip, float n){
   scene.add(n);
   ableton.send(scene, ip);
 }
+
+
+public void starRate(float rate, OscP5 ableton, NetAddress ip){
+  OscMessage rateVal = new OscMessage("/stars/rate");
+  rateVal.add(rate);
+  ableton.send(rateVal, ip);
+}
+
+public void starColor(float tone, OscP5 ableton, NetAddress ip){
+  OscMessage colVal = new OscMessage("/stars/tone");
+  colVal.add(tone);
+  ableton.send(colVal, ip);
+}
