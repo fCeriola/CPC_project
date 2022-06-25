@@ -71,7 +71,7 @@ public class Sun {
   }
   
   public void update() {
-    this.xCoord -= frameRate*5.0;
+    this.xCoord -= frameRate*3.0;
     this.yCoord = height/2 + 2.5*pow((width/2 - (abs(this.xCoord-width/2))), 0.7);
   }
   

@@ -1,4 +1,4 @@
-import processing.sound.*;  //<>//
+import processing.sound.*;  //<>// //<>//
 import oscP5.*;
 import netP5.*;
 
@@ -53,7 +53,8 @@ private float longitude;
 void setup() {
   
   // main window setup
-  fullScreen();
+  //fullScreen();
+  size(1500, 800);
   frameRate(60);
   
   // connect processing to ableton

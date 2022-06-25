@@ -41,12 +41,10 @@ public class Pollution {
     
     majority = ( (float)blue - (float)red ) / (float)tot;
       
-    majority = constrain(majority, -0.2, 0.2);
     majority = map(majority, -0.2, 0.2, 0.0, 1.0);
     
     totalStarDensity = (float)(red + blue) / (float)tot;
     
-    totalStarDensity = constrain(totalStarDensity, 0.0, 0.3);
     totalStarDensity = map(totalStarDensity, 0.0, 0.3, 0.0, 1.0);
     
     float[] rateColor = {totalStarDensity, majority};

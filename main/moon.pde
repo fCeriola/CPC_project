@@ -3,13 +3,13 @@ public class Moon {
   private float xCoord;
   private float yCoord;
   private float increment;
-  private float rad;
+  private float radius;
   
   public Moon(float xCoord, float yCoord){
     this.xCoord = xCoord;
     this.yCoord = yCoord;
     this.increment = 0.05;
-    this.rad = 50.0;
+    this.radius = 50.0;
   }
   
   public void plot(){
@@ -25,7 +25,7 @@ public class Moon {
     loadPixels();
     float xoff = -frameCount/100.0; // Start xoff at 0
     // For every x,y coordinate in a 2D space, calculate a noise value and produce a brightness value
-    for (float i = 0.0; i < rad; i=i+0.5) {
+    for (float i = 0.0; i < radius; i=i+0.5) {
       xoff += increment;   // Increment xoff 
       float yoff = frameCount/50.0;   // For every xoff, start yoff at 0
       for (float j = 0.0; j < TWO_PI; j=j+0.01) {
@@ -55,15 +55,8 @@ public class Moon {
   }
   
   
-  //void updateCoord(float x, float y){
-  //  xCoord = x;
-  //  yCoord = y;
-  //}
-  
   public void update() {
-    //sun.xCoord=cos(frameCount/220.0)*width/2.0+width/2;
-    //sun.yCoord=sin(frameCount/220.0)*height/2.0+height/2;
-    this.xCoord -= frameRate*5.0;
+    this.xCoord -= frameRate;
     this.yCoord = 2*height/3 + 1.5*pow((width/2 - (abs(this.xCoord-width/2))), 0.7);
   }
   
