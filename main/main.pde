@@ -1,4 +1,4 @@
-import processing.sound.*;  //<>// //<>//
+import processing.sound.*; //<>//
 import oscP5.*;
 import netP5.*;
 
@@ -105,8 +105,6 @@ void setup() {
   
   city = loadImage("city.png");
   cityLights = loadImage("citylight3.png");
-  
-  day = false;
   
 }
 

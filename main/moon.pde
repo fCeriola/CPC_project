@@ -20,12 +20,12 @@ public class Moon {
       fill(c, (10-j)*10+100);
       ellipse(xCoord,yCoord, 20*j, 20*j);
     }
-   
+    
     //Perlin Noise2D Moon
     loadPixels();
     float xoff = -frameCount/100.0; // Start xoff at 0
     // For every x,y coordinate in a 2D space, calculate a noise value and produce a brightness value
-    for (float i = 0.0; i < radius; i=i+0.5) {
+    for (float i = 0.0; i < this.radius; i=i+0.5) {
       xoff += increment;   // Increment xoff 
       float yoff = frameCount/50.0;   // For every xoff, start yoff at 0
       for (float j = 0.0; j < TWO_PI; j=j+0.01) {
@@ -47,7 +47,6 @@ public class Moon {
         else {
           pixels[x+y*width] = color(bright);
         }
-        
       }
     }
     
@@ -56,10 +55,9 @@ public class Moon {
   
   
   public void update() {
-    this.xCoord -= frameRate;
-    this.yCoord = 2*height/3 + 1.5*pow((width/2 - (abs(this.xCoord-width/2))), 0.7);
+    this.xCoord -= 0.5*frameRate;
+    //sinusoid:   y offset   amplitude      screen width as half wavelength     x offset
+    this.yCoord = height/4 + (height/2)*sin(PI*(0.9*width-xCoord)/(0.9*width) + PI/10);
   }
-  
-  
   
 }

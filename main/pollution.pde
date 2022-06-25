@@ -1,7 +1,3 @@
-//import processing.sound.*; 
-//import oscP5.*;
-//import netP5.*;
-
 public class Pollution {
   
   // ATTRIBUTES

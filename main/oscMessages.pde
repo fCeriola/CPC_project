@@ -1,5 +1,5 @@
-import oscP5.*;
-import netP5.*;
+//import oscP5.*;
+//import netP5.*;
 
 public void sunVolFreq(float xSunCoord, OscP5 ableton, NetAddress ip){
   if (xSunCoord<=width/2){
@@ -50,7 +50,6 @@ public void sceneChange(OscP5 ableton, NetAddress ip, float n){
   scene.add(n);
   ableton.send(scene, ip);
 }
-
 
 public void starRate(float rate, OscP5 ableton, NetAddress ip){
   OscMessage rateVal = new OscMessage("/stars/rate");

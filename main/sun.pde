@@ -13,6 +13,7 @@ public class Sun {
   private color sunInt;
   private color sunExt;
   private color rayExt;
+  private int radius;
   
   // ======================================================
   // CONSTRUCTOR
@@ -20,6 +21,7 @@ public class Sun {
     this.altitude = -1;
     this.xCoord = xCoord;
     this.yCoord = yCoord;
+    this.radius = 75;
     this.smooth = 0.1;
     
     //initialize time reference variables
@@ -63,16 +65,17 @@ public class Sun {
     for (int j = 10; j>=0; j--) {
       color c = lerpColor(sunInt, sunExt, float(j)/10);
       fill(c, (10-j)*10+100);
-      ellipse(0,0, 15*j, 15*j);
+      ellipse(0,0, 2*this.radius/10*j, 2*this.radius/10*j);
     }
     
-    popMatrix();   
+    popMatrix();
    
   }
   
   public void update() {
-    this.xCoord -= frameRate*3.0;
-    this.yCoord = height/2 + 2.5*pow((width/2 - (abs(this.xCoord-width/2))), 0.7);
+    this.xCoord -= frameRate;
+    //sinusoid:   y offset   amplitude      screen width as half wavelength     x offset
+    this.yCoord = height/3 + (height/3)*sin(PI*(1.1*width-xCoord)/(1.1*width) - PI/12);
   }
   
   //public void reflex(PImage citylight){

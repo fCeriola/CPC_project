@@ -25,7 +25,6 @@ public class Star{
   
   public Star(TableRow row) {
     //takes a row of the database table as argument and grabs all the information needed
-    //colorMode(RGB, 255);
     redStar = color(255,156,60);
     blueStar = color(143,182,255);
     whiteStar = color(240,240,253);
