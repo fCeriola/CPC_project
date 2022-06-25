@@ -4,8 +4,7 @@ private boolean changeScene = true;
 public void moonEvent(){
   if (day==false){
     if(changeScene == true){
-      sceneChange(ableton, ip, 1.0);
-      println("sending scene 1.0");
+      sceneChange(ableton, ip, 0);
       changeScene = false;
     }
     moon.plot();
@@ -21,18 +20,17 @@ public void moonEvent(){
 public void sunEvent(float n){ 
   if (day==true){
     if(changeScene == true){
-      sceneChange(ableton, ip, 2.0);
-      println("sending scene 2.0");
+      sceneChange(ableton, ip, 1);
       changeScene = false;
     }
     sky.update(sun.xCoord, sun.yCoord);
     sky.plot(n/2);
     sun.update();
     sun.plot(spectrum);
-    if (sun.xCoord < -3*sun.radius){
+    if (sun.xCoord < -4*sun.radius){
       day = false;
       changeScene = true;
-      sun.xCoord = width + 3*sun.radius;
+      sun.xCoord = width + 4*sun.radius;
     }
   }
 }

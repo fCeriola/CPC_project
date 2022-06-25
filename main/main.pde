@@ -71,7 +71,7 @@ void setup() {
   
   // get audio input signal
   Sound s = new Sound(this);
-  s.inputDevice(5);
+  s.inputDevice(19);
   this. in = new AudioIn(this, 0);
   
   // define audio analysis parameter
