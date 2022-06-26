@@ -254,7 +254,11 @@ https://baixarapk.gratis/en/app/418751595/gyrosc (Android)
 
 https://www.ableton.com/en/packs/connection-kit/
 
-6- Black Hole Driver, an audio driver that allows to create internal digital routing from Ableton to Processing and from Ableton to an external main out at the same time.
+6- Device for the scene launch built in M4L (download from this github). This device must be copied in the following path (macOs): 
+
+/Users/.../Music/Ableton/User Library/Presets/Audio Effects/Max Audio Effect
+
+7- Black Hole Driver, an audio driver that allows to create internal digital routing from Ableton to Processing and from Ableton to an external main out at the same time.
 
 https://github.com/ExistentialAudio/BlackHole
 
