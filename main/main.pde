@@ -59,8 +59,8 @@ public color backColor;
 void setup() {
   
   // main window setup
-  //fullScreen();
-  size(1500, 800);
+  fullScreen();
+  //size(1500, 800);
   frameRate(60);
   backColor = color(5, 3, 30);
   
@@ -167,7 +167,8 @@ void draw() {
   //OSC Messages
   sunVolFreq(sun.xCoord, ableton, ip);
   starMode(xPointer, yPointer, ableton, ip);
-  accFilter(accXPointer, ableton,ip);
+  accFilter(accXPointer, accYPointer, ableton,ip);
+  
   
 }
 /*-------------------------------------------*/

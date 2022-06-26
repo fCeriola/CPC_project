@@ -10,11 +10,6 @@ public class Pollution {
   private color extColor1;
   private color extColor2;
   
-  private float maxMajority;
-  private float minMajority;
-  private float smooth;
-  private float step;
-  private float prevStep;
   
   // ======================================================
   // CONSTRUCTOR
@@ -29,12 +24,6 @@ public class Pollution {
     this.matrix = new color[width][height];
     this.extColor1 = color(121, 114, 97);
     this.extColor2 = color(21, 17, 7, 10);
-    
-    this.maxMajority = 0.02;
-    this.minMajority = 0.0;
-    this.smooth = 0.2;
-    this.step = 0.001;
-    this.prevStep = 0.001;
     
   }
   
@@ -51,7 +40,6 @@ public class Pollution {
     
     totalStarDensity = (float)(nRed + nBlue + 0.2*nWhite) / (float)totN;
     totalStarDensity = map(totalStarDensity, 0.01, 0.2, 0.0, 1.0);
-
 
     float[] rateColor = {totalStarDensity, majority};
     
@@ -109,7 +97,6 @@ public class Pollution {
           if (pixels[i+j*width] != backColor) {
             red = red(pixels[i+j*width]);
             blue = blue(pixels[i+j*width]);
-            //println(red, blue);
             if (red > blue) {
               nRedPixels += 2;
             }

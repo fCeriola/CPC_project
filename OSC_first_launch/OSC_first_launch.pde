@@ -14,12 +14,12 @@ boolean check = true;
 void setup(){
   
   ableton = new OscP5(this, 8000);
-  ip = new NetAddress("127.0.0.1", 8000);
+  ip = new NetAddress("127.0.0.1", 8000 );
   
   //check audio devices
   Sound s = new Sound(this);
   println(Sound.list());
-  s.inputDevice(9);
+  s.inputDevice(19);
   AudioIn in = new AudioIn(this, 4);
   
   background(0);
@@ -70,26 +70,29 @@ void mousePressed(){
     ableton.send(C,ip);}
   //4
   if (c == color(102,255,102)){
-    OscMessage val = new OscMessage("/filter/x");
-    val.add(1.0);
-    ableton.send(val, ip);
+    OscMessage D = new OscMessage("/filter/x");
+    D.add(1.0);
+    ableton.send(D, ip);
    }
   //5
   if (c == color(178,255,102)){
     if (check==true){
-        OscMessage scene = new OscMessage("/launch/scene");
-        scene.add(0);
-        ableton.send(scene, ip);
+        OscMessage Ea = new OscMessage("/launch/scene");
+        Ea.add(0);
+        ableton.send(Ea, ip);
         check = false;
     }else{
-      OscMessage scene = new OscMessage("/launch/scene");
-        scene.add(1);
-        ableton.send(scene, ip);
+      OscMessage Eb = new OscMessage("/launch/scene");
+        Eb.add(1);
+        ableton.send(Eb, ip);
         check = true;
     }
   }
   //6
   if (c == color(255,255,102)){
+     OscMessage F = new OscMessage("/stars/tone");
+    F.add(1.0);
+    ableton.send(F, ip);
    }
   //7
   if (c == color(255,178,102)){

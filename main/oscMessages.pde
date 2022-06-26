@@ -1,6 +1,3 @@
-//import oscP5.*;
-//import netP5.*;
-
 public void sunVolFreq(float xSunCoord, OscP5 ableton, NetAddress ip){
   if (xSunCoord<=width/2){
     float val = map(xSunCoord, -600, width/2, 0.0, 1.0);
@@ -20,26 +17,30 @@ public void starMode(float xCoord, float yCoord, OscP5 ableton, NetAddress ip){
     OscMessage modeVal = new OscMessage("/stars/mode");
     modeVal.add(0.12);
     ableton.send(modeVal, ip);
+    println("quadrante uno");
   }
   if(xCoord>width/2 && yCoord<height/2){
     OscMessage modeVal = new OscMessage("/stars/mode");
     modeVal.add(0.35);
     ableton.send(modeVal, ip);
+    println("quadrante due");
   }
   if(xCoord>width/2 && yCoord>height/2){
     OscMessage modeVal = new OscMessage("/stars/mode");
     modeVal.add(0.65);
     ableton.send(modeVal, ip);
+    println("quadrante tre");
   }
   if(xCoord<width/2 && yCoord>height/2){
     OscMessage modeVal = new OscMessage("/stars/mode");
     modeVal.add(0.85);
     ableton.send(modeVal, ip);
+    println("quadrante quattro");
   }
   
 }
 
-public void accFilter(float testX, OscP5 ableton, NetAddress ip){
+public void accFilter(float accXPointer, float accYPointer, OscP5 ableton, NetAddress ip){
   float val = map(accXPointer+accYPointer, 0.0, 5.0, 0.0, 1.0);
   OscMessage filterVal = new OscMessage("/filter/x");
   filterVal.add(val);
