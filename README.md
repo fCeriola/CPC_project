@@ -160,6 +160,11 @@ https://baixarapk.gratis/en/app/418751595/gyrosc (Android)
 5- Connection Kit, downloaded directly as a Ableton feature.
 https://www.ableton.com/en/packs/connection-kit/
 
+6- Black Hole Driver, an audio driver that allows to create internal digital routing from Ableton to Processing and from Ableton to an external main out at the same time.
+https://github.com/ExistentialAudio/BlackHole
+
+
+
 
 
 
