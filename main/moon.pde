@@ -55,7 +55,7 @@ public class Moon {
   
   
   public void update() {
-    this.xCoord -= direction*0.1*frameRate;
+    this.xCoord -= direction*0.1*frameRate;//*timeLapseValue/120.0;
     //sinusoid:   y offset   amplitude      screen width as half wavelength     x offset
     this.yCoord = height/4 + (height/2)*sin(PI*(0.9*width-xCoord)/(0.9*width) + PI/10);
   }

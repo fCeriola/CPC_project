@@ -96,7 +96,7 @@ void setup() {
   
   // get audio input signal
   Sound s = new Sound(this);
-  //s.inputDevice(19);
+  s.inputDevice(19);
   this. in = new AudioIn(this, 0);
   
   // define audio analysis parameter
@@ -128,9 +128,14 @@ void setup() {
   
   sky = new Sky();
   
-  sun = new Sun(2*width, height/2);
-  
-  moon = new Moon(2*width, height/3);
+  if (direction > 0) {
+    sun = new Sun(width + 200, height/2);
+    moon = new Moon(width + 100, height/3);
+  }
+  else if (direction < 0) {
+    sun = new Sun(-200, height/2);
+    moon = new Moon(-100, height/3);
+  }
   
   city = loadImage("city.png");
   cityLights = loadImage("citylight3.png");
@@ -202,28 +207,17 @@ void oscEvent(OscMessage theOscMessage){
     xPointer = width/2 + width/2 * cos(xPointer);
     xPointer = pointerSmooth * xPointer + (1 - pointerSmooth) * prevXPointer;
     prevXPointer = xPointer;
-    //if (xPointer >= (width - pointerRadius)) {
-    //  xPointer = width - pointerRadius;
-    //} else if (xPointer <= 0) {
-    //  xPointer = 0.0;
-    //}
     yPointer = (float)testValues[0];
     yPointer = constrain(yPointer, -maxAngleY, maxAngleY);
     yPointer = map(yPointer, -maxAngleY, maxAngleY, 0, PI);
     yPointer = height/2 + height/2 * cos(yPointer);
     yPointer = pointerSmooth * yPointer + (1 - pointerSmooth) * prevYPointer;
     prevYPointer = yPointer;
-    //if (yPointer >= (height - pointerRadius)) {
-    //  yPointer = height - pointerRadius;
-    //} else if (yPointer <= 0) {
-    //  yPointer = 0.0;
-    //}
-    
   }
   
   if(theOscMessage.checkAddrPattern("/gyrosc/accel")==true){
     Object[] accelValues = theOscMessage.arguments();
-    accXPointer = (float)accelValues[0];
+    accXPointer = (float)accelValues[0]*1.5;
     accXPointer = accSmooth*accXPointer + (1-accSmooth)*prevAccX;
     prevAccX = accXPointer;
     if (accXPointer >= (width - pointerRadius)) {
@@ -231,7 +225,7 @@ void oscEvent(OscMessage theOscMessage){
     } else if (accXPointer <= 0) {
       accXPointer = abs(accXPointer);
     }
-    accYPointer = (float)accelValues[1];
+    accYPointer = (float)accelValues[1]*1.5;
     accYPointer = accSmooth*accYPointer + (1-accSmooth)*prevAccY;
     prevAccY = accYPointer;
     if (accYPointer >= (width - pointerRadius)) {
@@ -240,9 +234,6 @@ void oscEvent(OscMessage theOscMessage){
       accYPointer = abs(accYPointer);
     }
   }
-  //println(accXPointer);
-  //xPointer = mouseX;
-  //yPointer = mouseY;
 }
 /*--------------------------------------------*/
 

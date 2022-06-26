@@ -66,7 +66,7 @@ public class Sun {
   
   public void update() {
     
-    this.xCoord -= direction*0.5*frameRate;
+    this.xCoord -= direction*0.5*timeLapseValue/120.0*frameRate;
     //sinusoid:   y offset   amplitude      screen width as half wavelength     x offset
     this.yCoord = height/3 + (height/3)*sin(PI*(1.1*width-xCoord)/(1.1*width) - PI/12);
   }
