@@ -7,8 +7,8 @@
   - [2. Discovering the Project](#2-discovering-the-project)
   - [3.  Technical Explanation](#3--technical-explanation)
   - [4. The Experience](#4-the-experience)
-    - [4.1 Nighttime](#41-nighttime)
-    - [4.1 Daytime](#41-daytime)
+    - [4.1 Night-time](#41-night-time)
+    - [4.1 Day-time](#41-day-time)
   - [5. Inside the Scene](#5-inside-the-scene)
     - [5.1 Moon](#51-moon)
     - [5.2 Sun](#52-sun)
@@ -43,8 +43,8 @@ Project Presentation - Youtube Link
 ## 1. Introduction
 Our project is about light pollution.
 
-Light pollution contributes to climate change: it modifies in a negative way trees natural cycles, it distresses many bird species every year and it causes health problems to human beings exposed to artificial light during nighttime.
-Artificial light makes us blind to the real night sky, because, especially in big cities, light pollution covers the real natural beauty of everything above us.
+Light pollution contributes to climate change: it modifies in a negative way trees' natural cycles, it distresses many bird species every year and it causes health problems to human beings exposed to artificial light during nighttime.
+Artificial light makes us blind to the real night sky because, especially in big cities, light pollution covers the real natural beauty of everything around and above us.
 
 Imagine you could switch off all the artificial lights and discover what is behind this layer of pollution, with astonishment and surprise.
 
@@ -60,7 +60,7 @@ The design of the starry sky is produced inside the Processing environment, whil
 ## 3.  Technical Explanation
 We started from a giant database containing stars' coordinates and parameters in J2000 reference system, from which we calculated the position of the stars in a horizontal coordinate system with a time-shift formula. The calculation is based on the position of the user on the Earth and on the current time at which the application is launched, these two parameters set the center of the horizontal reference system onto which the stars are projected. As time flows the stars move respecting their actual trajectories.
 
-Once we set the scene we applied a veil of air and light pollution in front of the sky in order to hide the stars as they would be in a real scenario.
+Once we set the scene we applied a veil light pollution in front of the sky in order to hide the stars as they would be in a real scenario.
 
 When the application starts, the user is allowed to use a gyroscope to move the little lens on the screen, that makes the user able to discover the stars under the pollution layer.
 The gyroscope on the phone communicates with the application with OSC messages. The interaction between the graphical objects produces also OSC messages that are sent to Ableton in order to produce sound.
@@ -71,17 +71,16 @@ The following chapters are the detailed explanation of every tool and function u
 ## 4. The Experience
 The user starts with the phone or any mobile device in his/her hands, connected with the application using gyrOSC on the device.
 
-### 4.1 Nighttime
+### 4.1 Night-time
 The experience starts at nighttime with the lens in the center of the screen.
 In this phase stars are covered by the pollution layer. The user, by moving the lens, is able un unveil the stars from the pollution.
 
-With respect to the position of the lens there are four different modes: ...
-With respect also to the number of the stars the user is looking at, the sound generator will produce more frequent notes with different speed.
+With respect to the number of the stars the user is looking at, the sound generator will produce more frequent notes with different speed.
 Also, depending on the color, the sound will be more "crispy" or more "warm".
 With the interaction with the moon, the brightness rises and sound will be brighter too.
 ![launch clip](img/night.png)
 
-### 4.1 Daytime
+### 4.1 Day-time
 After a while, the sun rises.
 In daytime, the user's intervention becomes limited, due to the entrance of the sun.
 The sun enhances the sickness of the sky, and now the user is engulfed in a state of powerlessness, and can only live the experience, waiting for the night to come.
