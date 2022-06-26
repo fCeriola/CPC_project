@@ -27,6 +27,8 @@
     - [9.2 Channel Strip](#92-channel-strip)
       - [9.2.1 MIDI note generator](#921-midi-note-generator)
       - [9.2.2 STARS](#922-stars)
+      - [9.2.3 SUN](#923-sun)
+      - [9.2.4 Master Section](#924-master-section)
   - [10. User Guide](#10-user-guide)
 
 
@@ -141,7 +143,7 @@ For our application we needed to split all three parameters, and that has been m
 
 ### 8.2 Ableton Live
 In Ableton Live the Connection Kit is used (provided by Ableton website and implemented in Max for Live). It provides several devices that allows to communicate with OSC messages. In particular, the main tool is named OSC TouchOsc.amxd that is linked with correct OSC addresses in order to receive messages, then is mapped to parameters in the Live session. Moreover, given that the Connection Kit does not provide a device that change scenes through OSC, a proper tool has been built in M4L.
-
+![launch clip](img/launch%20clip.png)
 ## 9 Sound Generation
 All the audio processing is done in Ableton Live.
 ### 9.1 Scenes organization
@@ -170,12 +172,27 @@ In this track are present the tools for the generation of the notes. In order to
 
 
 #### 9.2.2 STARS
+This is a group containing the instruments that generate the sound from the star, that are:
+- FM Oscillator (made with Operator) for the Night time.
+- Piano for the Day time.
+- Bass Synth (made with Sampler) which filter control depends on the accelerometer on the user's device.
+  
+#### 9.2.3 SUN
+Here the group is responsable for the sound of the arising sun. The volume of this group is determined by the position of the sun. It consists in:
 
+- Bass Synth implemented in Wavetable.
+- A track containing the sonorization of the (real) electromagnetic waves of the Sun.
+- An Instrument track made with Simpler in Slice mode. This Instrument uses the Sun electromagnetic waves as a sample and chops it accordingly to the sensitivity parameter in the peak detection algorithm of the instrument. Then, this chops are played randomly.
 
-
+#### 9.2.4 Master Section
+In the master section are present all the OSC receiver (they are global) and a monitoring plug-in built in M4L in order to see on screen the incoming OSC messages. At the end of the chain is present a Limiter going in the output 1-2.
+The FFT channel is going in the 3-4 parallel output that is then processed by the Sound Analyzer in Processing. On the channel are present a Saturator plug-in, EQ Three and a Limiter so it is possible to enhance the overall frequencies, making the FFT visualization of the sun's rays more homogeneus.
 
 ## 10. User Guide
+This project has been built for MacOs (built on MacOS Monterey).
+
 The softwares used to create the interactive experience are the following ones: 
+
 1- Processing, that constitutes the core application used for the code development and the visual installation. 
 https://processing.org/
 
