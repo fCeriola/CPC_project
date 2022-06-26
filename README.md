@@ -31,7 +31,7 @@
       - [9.2.4 Master Section](#924-master-section)
   - [10. User Guide](#10-user-guide)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/0A59OXsJ5NI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Alt text](img/video.png)](https://www.youtube.com/watch?v=0A59OXsJ5NI)
 
 ## 1. Introduction
 Our project is about lights pollution. 
