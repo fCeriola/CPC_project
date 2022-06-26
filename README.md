@@ -3,28 +3,28 @@
 ===============
 
 - [*(Inferno XXXIV, 139)*](#inferno-xxxiv-139)
-	- [1. Introduction](#1-introduction)
-	- [2. Discovering the Project](#2-discovering-the-project)
-	- [3.  Technical Explanation](#3--technical-explanation)
-	- [4. The Experience](#4-the-experience)
-		- [4.1 Nighttime](#41-nighttime)
-		- [4.1 Daytime](#41-daytime)
-	- [5. Inside the Scene](#5-inside-the-scene)
-		- [5.1 Moon](#51-moon)
-		- [5.2 Sun](#52-sun)
-	- [6. Stars](#6-stars)
-		- [6.1 star](#61-star)
-		- [6.2 starsTable](#62-starstable)
-		- [6.3 starSystem](#63-starsystem)
-	- [7. Sky](#7-sky)
-		- [7.1 sky](#71-sky)
-		- [7.2 pollution](#72-pollution)
-	- [8. OSC Communication](#8-osc-communication)
-		- [8.1  GyrOSC](#81--gyrosc)
-		- [8.2 Ableton Live](#82-ableton-live)
-	- [9 Sound Generation](#9-sound-generation)
-		- [9.1 Scenes organization](#91-scenes-organization)
-	- [10. User Guide](#10-user-guide)
+  - [1. Introduction](#1-introduction)
+  - [2. Discovering the Project](#2-discovering-the-project)
+  - [3.  Technical Explanation](#3--technical-explanation)
+  - [4. The Experience](#4-the-experience)
+    - [4.1 Nighttime](#41-nighttime)
+    - [4.1 Daytime](#41-daytime)
+  - [5. Inside the Scene](#5-inside-the-scene)
+    - [5.1 Moon](#51-moon)
+    - [5.2 Sun](#52-sun)
+  - [6. Stars](#6-stars)
+    - [6.1 star](#61-star)
+    - [6.2 starsTable](#62-starstable)
+    - [6.3 starSystem](#63-starsystem)
+  - [7. Sky](#7-sky)
+    - [7.1 sky](#71-sky)
+    - [7.2 pollution](#72-pollution)
+  - [8. OSC Communication](#8-osc-communication)
+    - [8.1  GyrOSC](#81--gyrosc)
+    - [8.2 Ableton Live](#82-ableton-live)
+  - [9 Sound Generation](#9-sound-generation)
+    - [9.1 Scenes organization](#91-scenes-organization)
+  - [10. User Guide](#10-user-guide)
 
 
 
@@ -143,6 +143,22 @@ In Ableton Live the Connection Kit is used (provided by Ableton website and impl
 ### 9.1 Scenes organization
 
 ## 10. User Guide
+The softwares used to create the interactive experience are the following ones: 
+1- Processing, that constitutes the core application used for the code development and the visual installation 
+https://processing.org/
+
+2- Ableton Live 11 Suite(M4L included), for the sound generation and in general every sound related feature in the application
+https://www.ableton.com/en/live/
+
+3- GyrOSC, for the user interaction with the installation.
+https://apps.apple.com/us/app/gyrosc/id418751595 (Apple)
+https://baixarapk.gratis/en/app/418751595/gyrosc (Android)
+
+4- Connection Kit, downloaded directly as a Ableton feature.
+https://www.ableton.com/en/packs/connection-kit/
+
+
+
 
 
 
