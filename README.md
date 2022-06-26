@@ -66,6 +66,7 @@ When the application starts, the user is allowed to use a gyroscope to move the 
 The gyroscope on the phone communicates with the application with OSC messages. The interaction between the graphical objects produces also OSC messages that are sent to Ableton in order to produce sound.
 The following chapters are the detailed explanation of every tool and function used in the application.
 
+![routing](img/routing.png)
 
 ## 4. The Experience
 The user starts with the phone or any mobile device in his/her hands, connected with the application using gyrOSC on the device.
@@ -98,7 +99,7 @@ There are two classes referring to the moon and the sun, explained below.
 
 ### 5.1 Moon 
 The *Moon* class is a representation of the moon, made by using the perlin noise technique. 
-The algorithm used is the classic *Perlin Noise* in 2D algorithm...
+The algorithm used is the classic *Perlin Noise* in 2D algorithm. In particular, the noise is built in polar coordinates and the light radiation is simulated with a concentric *learpColor*.
 
 ### 5.2 Sun 
 The sun is made of concentric circles, where the color gradient is obtained by using *lerpColor* method and the dimension is calculated using *processing.sound* library:
@@ -208,20 +209,22 @@ In this track are present the tools for the generation of the notes. In order to
 - Velocity: randomize the velocity of the MIDI note
 - SCALE: this is a chain selector where, depending on the position of the pointer on the screen, the OSC message communicates the correspondant chain. Each chain is composed by a Scale effect that bring the random notes in a major scale. Due to the bass note that is playing a *pedale* the effect result in a modal organization of the sound.
 
+![random](img/random.png)
+
 
 #### 11.2.2 STARS
 This is a group containing the instruments that generate the sound from the star, that are:
 - FM Oscillator (made with Operator) for the Night time.
 - Piano for the Day time.
 - Bass Synth (made with Sampler) which filter control depends on the accelerometer on the user's device.
-  
+  ![starbass](img/starbass.png)
 #### 11.2.3 SUN
 Here the group is responsable for the sound of the arising sun. The volume of this group is determined by the position of the sun. It consists in:
 
 - Bass Synth implemented in Wavetable.
 - A track containing the sonorization of the (real) electromagnetic waves of the Sun.
 - An Instrument track made with Simpler in Slice mode. This Instrument uses the Sun electromagnetic waves as a sample and chops it accordingly to the sensitivity parameter in the peak detection algorithm of the instrument. Then, this chops are played randomly.
-
+![sunbass](img/sunbass.png) ![sunradiation](img/sunradiation.png) 
 #### 11.2.4 Master Section
 In the master section are present all the OSC receiver (they are global) and a monitoring plug-in built in M4L in order to see on screen the incoming OSC messages. At the end of the chain is present a Limiter going in the output 1-2.
 The FFT channel is going in the 3-4 parallel output that is then processed by the Sound Analyzer in Processing. On the channel are present a Saturator plug-in, EQ Three and a Limiter so it is possible to enhance the overall frequencies, making the FFT visualization of the sun's rays more homogeneus.
