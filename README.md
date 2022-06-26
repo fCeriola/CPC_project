@@ -24,6 +24,9 @@
     - [8.2 Ableton Live](#82-ableton-live)
   - [9 Sound Generation](#9-sound-generation)
     - [9.1 Scenes organization](#91-scenes-organization)
+    - [9.2 Channel Strip](#92-channel-strip)
+      - [9.2.1 MIDI note generator](#921-midi-note-generator)
+      - [9.2.2 STARS](#922-stars)
   - [10. User Guide](#10-user-guide)
 
 
@@ -140,7 +143,36 @@ For our application we needed to split all three parameters, and that has been m
 In Ableton Live the Connection Kit is used (provided by Ableton website and implemented in Max for Live). It provides several devices that allows to communicate with OSC messages. In particular, the main tool is named OSC TouchOsc.amxd that is linked with correct OSC addresses in order to receive messages, then is mapped to parameters in the Live session. Moreover, given that the Connection Kit does not provide a device that change scenes through OSC, a proper tool has been built in M4L.
 
 ## 9 Sound Generation
+All the audio processing is done in Ableton Live.
 ### 9.1 Scenes organization
+
+Night time and Day time corresponds to two different sounding scenarios, so two main scenes are used, as visible in the figure down below: 
+
+- Moon: activated during the Night time.
+- Sun: activated during the Day time.
+  
+
+![Ableton Live scenes view](img/scene.png)
+### 9.2 Channel Strip
+
+Several tracks are present, they are organized four sections:
+  - MIDI note generator: this tracks contain the random midi note generator that, according to parameters sent through OSC from Processing, generate a sequence of note.
+  - STARS: responsable for the instruments played by the interaction with the stars.
+  - SUN: responsable for the instruments that play accordingly to the position of the sun.
+  - Master section: master out of the system and the channel that send the audio to the an input in processing for the FFT representation of the sun.
+
+#### 9.2.1 MIDI note generator
+In this track are present the tools for the generation of the notes. In order to do that, a MIDI Effect Rack is built with the following Ableton effects:
+- Arpeggiator: from one single MIDI note (from the launched clip) generates note with random jump. The Rate parameters is controlled by OSC messages (number of stars). There are two of those that changes present with the scene launch: one is more randomic, the other is set to *Up* arpeggios.
+- Random: create the random sequence (only for the pitch) from the arpeggiator
+- Velocity: randomize the velocity of the MIDI note
+- SCALE: this is a chain selector where, depending on the position of the pointer on the screen, the OSC message communicates the correspondant chain. Each chain is composed by a Scale effect that bring the random notes in a major scale. Due to the bass note that is playing a *pedale* the effect result in a modal organization of the sound.
+
+
+#### 9.2.2 STARS
+
+
+
 
 ## 10. User Guide
 The softwares used to create the interactive experience are the following ones: 
