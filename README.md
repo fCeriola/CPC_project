@@ -267,6 +267,12 @@ In order to configure the BlackHole driver the user must open the Audio MIDI Set
 ![blackhole](img/blackhole.png)
 
 
+Special thanks to Dr. Lorenzo Pizzuti, cosmologist, musician and scientific communicator for his contribution and advice. 
+
+Reference link:
+https://www.oavda.it/
+
+
 
  
  
