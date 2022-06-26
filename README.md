@@ -144,17 +144,20 @@ In Ableton Live the Connection Kit is used (provided by Ableton website and impl
 
 ## 10. User Guide
 The softwares used to create the interactive experience are the following ones: 
-1- Processing, that constitutes the core application used for the code development and the visual installation 
+1- Processing, that constitutes the core application used for the code development and the visual installation. 
 https://processing.org/
 
-2- Ableton Live 11 Suite(M4L included), for the sound generation and in general every sound related feature in the application
+2- Sound Module, by Processing.
+https://processing.org/reference/libraries/sound/index.html
+
+3- Ableton Live 11 Suite(M4L included), for the sound generation and in general every sound related feature in the application.
 https://www.ableton.com/en/live/
 
-3- GyrOSC, for the user interaction with the installation.
+4- GyrOSC, for the user interaction with the installation.
 https://apps.apple.com/us/app/gyrosc/id418751595 (Apple)
 https://baixarapk.gratis/en/app/418751595/gyrosc (Android)
 
-4- Connection Kit, downloaded directly as a Ableton feature.
+5- Connection Kit, downloaded directly as a Ableton feature.
 https://www.ableton.com/en/packs/connection-kit/
 
 
