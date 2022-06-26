@@ -31,7 +31,7 @@
       - [9.2.4 Master Section](#924-master-section)
   - [10. User Guide](#10-user-guide)
 
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0A59OXsJ5NI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## 1. Introduction
 Our project is about lights pollution. 
@@ -65,12 +65,14 @@ With respect to the position of the lens there are four different modes: ...
 With respect also to the number of the stars the user is looking at, the sound generator will produce more frequent notes with different speed.
 Also, depending on the color, the sound will be more "crispy" or more "warm".
 With the interaction with the moon, the brightness rises and sound will be brighter too. 
+![launch clip](img/night.png)
 
 ### 4.1 Daytime
 After a while, the sun rises.
 In daytime, the users' intervention becomes limited, due to the entrance of the sun.
 The sun enhances the sickness of the sky, and now the user is engulfed in a state of powerlessness, and can only live the experience, waiting for the night to come.
 The sound is characterized by crackles and distorted bass lines, enhancing the state of anxiety in which the user is.  
+![launch clip](img/day.png)
 
 ## 5. Inside the Scene 
 As previously explained, there are two different scenarios, nighttime and daytime. 
@@ -139,7 +141,9 @@ Every parameter has an associated OSCAddress that is taken by Processing and fro
 For the gyroscope parameters used are beccheggio and rollio, for the acceleromet
 These parameters are taken by calling arguments() method.
 For our application we needed to split all three parameters, and that has been made by calling the CheckAddrPattern method, so that we could manage the values coming from the gyroscope, accelerometer and GPS separately.
-
+<p align = center>
+<img src="img/gyrosc.jpg" width="200" height="400"/>
+</p>
 
 ### 8.2 Ableton Live
 In Ableton Live the Connection Kit is used (provided by Ableton website and implemented in Max for Live). It provides several devices that allows to communicate with OSC messages. In particular, the main tool is named OSC TouchOsc.amxd that is linked with correct OSC addresses in order to receive messages, then is mapped to parameters in the Live session. Moreover, given that the Connection Kit does not provide a device that change scenes through OSC, a proper tool has been built in M4L.
