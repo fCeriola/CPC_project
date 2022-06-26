@@ -13,23 +13,27 @@
     - [5.1 Moon](#51-moon)
     - [5.2 Sun](#52-sun)
   - [6. Stars](#6-stars)
-    - [6.1 star](#61-star)
-    - [6.2 starsTable](#62-starstable)
-    - [6.3 starSystem](#63-starsystem)
+    - [6.1 StarsTable](#61-starstable)
+    - [6.2 StarsSystem](#62-starssystem)
+    - [6.3 Star](#63-star)
   - [7. Sky](#7-sky)
-    - [7.1 sky](#71-sky)
     - [7.2 pollution](#72-pollution)
-  - [8. OSC Communication](#8-osc-communication)
-    - [8.1  GyrOSC](#81--gyrosc)
-    - [8.2 Ableton Live](#82-ableton-live)
-  - [9 Sound Generation](#9-sound-generation)
-    - [9.1 Scenes organization](#91-scenes-organization)
-    - [9.2 Channel Strip](#92-channel-strip)
-      - [9.2.1 MIDI note generator](#921-midi-note-generator)
-      - [9.2.2 STARS](#922-stars)
-      - [9.2.3 SUN](#923-sun)
-      - [9.2.4 Master Section](#924-master-section)
-  - [10. User Guide](#10-user-guide)
+    - [7.1 sky](#71-sky)
+  - [8. Time](#8-time)
+    - [8.1 Time](#81-time)
+    - [8.2 events](#82-events)
+  - [9. Threads](#9-threads)
+  - [10. OSC Communication](#10-osc-communication)
+    - [10.1  GyrOSC](#101--gyrosc)
+    - [10.2 Ableton Live](#102-ableton-live)
+  - [11 Sound Generation](#11-sound-generation)
+    - [11.1 Scenes organization](#111-scenes-organization)
+    - [11.2 Channel Strip](#112-channel-strip)
+      - [11.2.1 MIDI note generator](#1121-midi-note-generator)
+      - [11.2.2 STARS](#1122-stars)
+      - [11.2.3 SUN](#1123-sun)
+      - [11.2.4 Master Section](#1124-master-section)
+  - [12. User Guide](#12-user-guide)
 
 
 
@@ -37,107 +41,131 @@ Project Presentation - Youtube Link
 [![Alt text](img/video.png)](https://www.youtube.com/watch?v=0A59OXsJ5NI)
 
 ## 1. Introduction
-Our project is about lights pollution. 
-Lights pollution contributes to climate change, modifies in a negative way trees natural cycles, kills birds every year and causes health problems, because 
-we are exposed to artificial light during nighttime. 
-Artificial light makes us blind to the real night sky, because, especially in big cities, lights pollution covers the real natural beauty of everything above us.
-Imagine now you can switch off all the artificial lights, and discover what is behind this layer of pollution, with astonishment and surprise. 
+Our project is about light pollution.
+
+Light pollution contributes to climate change: it modifies in a negative way trees natural cycles, it distresses many bird species every year and it causes health problems to human beings exposed to artificial light during nighttime.
+Artificial light makes us blind to the real night sky, because, especially in big cities, light pollution covers the real natural beauty of everything above us.
+
+Imagine you could switch off all the artificial lights and discover what is behind this layer of pollution, with astonishment and surprise.
 
 
-## 2. Discovering the Project 
+## 2. Discovering the Project
 - Physical Tools: 
-We give the user the possibility to use his/her phone as a sort of "flashlight", pointing on the screen and discovering what there is behind the pollution layer. 
+We give the user the possibility to address his/her phone as a sort of "flashlight": it can be used to project a cone of visibility on the screen discovering what is hidden behind the pollution layer.
 The installation will be displayed above the user to emulate night sky view.
-- Software Tools: 
-There is a interaction with OSC messages between the stars (Processing) and Ableton Live (11.1) to produce sound. 
+- Software Tools:
+The design of the starry sky is produced inside the Processing environment, while Ableton Live (11.1) is in charge of the sound generation. The two interacts between each other through OSC protocol.
 
-## 3.  Technical Explanation 
-We started from a giant database containing stars' coordinates and parameters in J2000, from which we calculated the actual position of the stars with a time-shift formula.
-After that, stars are displayed on the installation and they move with respect to a timer set when the application starts, calculating the actual data. 
+
+## 3.  Technical Explanation
+We started from a giant database containing stars' coordinates and parameters in J2000 reference system, from which we calculated the position of the stars in a horizontal coordinate system with a time-shift formula. The calculation is based on the position of the user on the Earth and on the current time at which the application is launched, these two parameters set the center of the horizontal reference system onto which the stars are projected. As time flows the stars move respecting their actual trajectories.
+
+Once we set the scene we applied a veil of air and light pollution in front of the sky in order to hide the stars as they would be in a real scenario.
+
 When the application starts, the user is allowed to use a gyroscope to move the little lens on the screen, that makes the user able to discover the stars under the pollution layer.
-The gyroscope on the phone communicates with the application with OSC messages. The interaction between the graphical objects produces also OSC messages that are sent to Ableton in order to produce sound. 
-The following chapters are the detailed explanation of every tool and function used in the application. 
+The gyroscope on the phone communicates with the application with OSC messages. The interaction between the graphical objects produces also OSC messages that are sent to Ableton in order to produce sound.
+The following chapters are the detailed explanation of every tool and function used in the application.
+
 
 ## 4. The Experience
 The user starts with the phone or any mobile device in his/her hands, connected with the application using gyrOSC on the device.
 
 ### 4.1 Nighttime
-The experience starts with the lens in the center of the screen, during nighttime.
-In this phase, stars are covered by the pollution layer, and with the user moving the lens stars become visible behind the lens. 
+The experience starts at nighttime with the lens in the center of the screen.
+In this phase stars are covered by the pollution layer. The user, by moving the lens, is able un unveil the stars from the pollution.
+
 With respect to the position of the lens there are four different modes: ...
 With respect also to the number of the stars the user is looking at, the sound generator will produce more frequent notes with different speed.
 Also, depending on the color, the sound will be more "crispy" or more "warm".
-With the interaction with the moon, the brightness rises and sound will be brighter too. 
+With the interaction with the moon, the brightness rises and sound will be brighter too.
 ![launch clip](img/night.png)
 
 ### 4.1 Daytime
 After a while, the sun rises.
-In daytime, the users' intervention becomes limited, due to the entrance of the sun.
+In daytime, the user's intervention becomes limited, due to the entrance of the sun.
 The sun enhances the sickness of the sky, and now the user is engulfed in a state of powerlessness, and can only live the experience, waiting for the night to come.
-The sound is characterized by crackles and distorted bass lines, enhancing the state of anxiety in which the user is.  
+The sound is characterized by crackles and distorted bass lines, enhancing the state of anxiety in which the user finds himself/herself.
 ![launch clip](img/day.png)
 
+
 ## 5. Inside the Scene 
-As previously explained, there are two different scenarios, nighttime and daytime. 
-The first is governed by the presence of the moon, and is more "discovering", due to the fact that the user has a complete visibility of the sky in the background.
-The second one by the presence of the sun, and it's counterposed to the more introversial and dark nighttime. 
+As previously explained, there are two different scenarios, nighttime and daytime.
+
+The first is governed by the presence of the moon, and it is more "discovering", due to the fact that the user is able to travel along the application without being disturbed by the sunlight.
+The second one by the presence of the sun, and it's counterposed to nighttime as being more introversial and dark. In this phase we want to express the feeling of anxiety one would feel by being deprived of the possibility of enjoying the unveiled night sky.
+
 There are two classes referring to the moon and the sun, explained below. 
 
-
 ### 5.1 Moon 
-The moon class is a representation of the moon, made by using some perlin noise. 
-The algorithm used is the classic Perlin Noise in 2D algorithm...
-
+The *Moon* class is a representation of the moon, made by using the perlin noise technique. 
+The algorithm used is the classic *Perlin Noise* in 2D algorithm...
 
 ### 5.2 Sun 
-The sun are concentric ellypsis, where the color gradient is obtained by using lerpColor method, and it is made using processing.sound library;
-Rays are depicted as FFT of incoming audio from Ableton, where amplitude bands are represented on the sun circumference. 
+The sun is made of concentric circles, where the color gradient is obtained by using *lerpColor* method and the dimension is calculated using *processing.sound* library:
+the rays are representative of the spectrum of its own sound, this is done by computing the FFT of incoming audio from Ableton, amplitude bands are then drawn along the sun circumference.
 
 
 ## 6. Stars
-The stars part is the most complicated of the application, and is the main core of the installation. 
-There are three main tables involving the implementation of the stars: star, starsTable, starSystem.
+The stars, together with the nightblue background, form the first layer of the scenario.
+In order to generate and to place them respecting their coordinates on the celestial sphere given by the database, the implementation presents three important classes: *Star*, *StarSystem* and *StarsTable*.
 
+### 6.1 StarsTable
+*StarsTable* is the class responsible for gathering information directly from the database. It contains a table with a row for each star that lists all the information about the star itself.
 
-### 6.1 star
-The class star containes information about the single star.
-In the constructor of the class we take a row from the Stars database and get out from it the values that we need: 
-In the ConvColor method, we take the temperature values from the table and compute the color based on the temperature. 
-Then in the fromHorizToCart method we convert the horizontal coordinates obtained from the db into cartesian ones. 
+The constructor is in charge of reading the database from an external file. The information gathered need to be processed in order to be used, in particular the database contains, as coordinates of the stars, right ascension and declination in the reference system J2000. These two coordinates need to be converted from the equatorial reference system to the horizontal reference system, so that the location of the user on the Earth sets the center of reference. To do so, three methods were implemented: *convRA* which from the right ascension defined in three terms by seconds, minutes and hours gives a single value in degrees; *convDEC* which from the declination defined in three terms by seconds, minutes and degreed gives a single value in degrees; *fromEquaToHoriz* that takes the two single-valued coordinates right ascension and declination and converts them into horizontal coordinates. The latter one contains a computation of the current time at which it is called with respect to the time at which is app was launched, this is done in order to keep track of the rotation if the Earth responsible for creating the stars' trajectiories. Other conversions concern the temperature of the stars and their apparent magnitude, which are needed both for the display and for the sound generation.
 
+### 6.2 StarsSystem
+*StarSystem* class manages the collection of all the stars listed in the *StarsTable* object, it contains an arraylist of *Star* objects and a local reference to the global instantiation of the *StarsTable* object, which is passed as pointer to the constructor of *StarsSystem* as argument.
+The method *fillSystem* is used to take stars from the database and put them into the arraylist, while *starFallsIntoScreen* is used to discriminate which stars have coordinates inside the maximum height and width of the application screen. Finally, the stars that are indeed contained inside the screen are plotted with the *plot* method.
 
-### 6.2 starsTable
-starsTable is the main component part of all three stars tables, basically we operate taking parameters and coordinates of the stars, read from a J2000
-reference in equatorial coordinates. 
-...
-
-
-### 6.3 starSystem 
-starSystem class manages the single star object, and containes an ArrayList of stars. 
-In the constructor of the component we pass the reference to the database to the constructor itself, creating basically a new reference, so a new pointer. 
-There are two methods, fillSystem, used to take stars from the database and put them into the arraylist; this information is constantly updated by the update method and starsFallIntoScreen, that is used to discriminate what stars are to include in the maximum height and width set for the application screen. 
-Finally, stars are plotted with the plot method. 
+### 6.3 Star
+The class Star defines the object representing a single star.
+Inside the constructor a row from the star table is given as argument and from there it takes all the information needed about the single star. Other variables are defined which are required as extremes of interpolation for the color of the star based on its temperature.
+The methods are: *convColor* which, indeed, takes as argument the temperature and interpolates the color; *fromHorizToCart* which grabs the coordinates of the star in the horizontal reference system (which are the angles of azymuth and altitude) and converts them into cartesian coordinates (x, y) directly used to set the position of the star onto the screen; *plot* which is the method that draws the single star based on the given/calculated parameters.
 
 
 ## 7. Sky 
-The sky part creates the scenario of the installation, and it is divided in two main parts: sky and pollution. 
-
-
-### 7.1 sky
-Sky is made by concentric circles, where the color gradient is made using lerpColor method. 
-The opacity is instead obtained using the amplitude of the incoming signal.
-
+The sky part forms the second and third layers, placed above the stars, covering them. It is divided in two main parts: the class pollution and the class sky. 
 
 ### 7.2 pollution
-Pollution is made by using a perlin noise changed with time 
-...
+*Pollution* is made by using the perlin noise technique in 3D: two coordinates are x position and y position of the pixel and the third one is time, so that it is rendered with a dynamic graphic.
+The constructor sets the parameters for the perlin noise generation.
+
+The *plot* method adds complexity to the algorith: we don't want the stars to be fully hidden by the pollution, we want them to be blurred by it, but since the perlin noise generation requires to work directly on the pixels matrix object the underlying starry sky would be simply overwritten. The method makes use, therefore, of the *lerpColor* function interpolating the color of the pixel belonging to the starry sky layer with the color of the pixel which should belong to the pollution only. *plot* is also responsible of generating the cone of visibility controlled by the user through GyrOSC: The perlin noise is generated only outside a circle centered on the coordinates of the pointer, so that inside that circle the starry sky layer is not covered.
+
+The second important method is called *countingStars*, which is used to process some parameters inside the previous method. The processed parameters will then be sent to ableton in OSC messages in order to modify the sound generation based on what lays inside the cone of visibility.
+
+### 7.1 sky
+The third and last layer is the closer to the user, so it covers both the stars and the pollution, but since its opacity is controlled by the sound amplitude and since we used *colorLerp* to render the pollution layer the overall behaviour is quite interesting.
+
+*Sky* is composed of concentric circles centered on the sun. The color gradient is made using *lerpColor* function so that the further we are from the sun the less invasive the sky layer is. The opacity is instead obtained using both the amplitude of the incoming signal and the distance of the sun from the center of the screen. Since the sound does not keep the sky at a constant opacity and since the opacity reaches high values only when the sun is near the center, there are periods of time (corresponding to dawn and sunset) in which the stars may still be seen. Inside these periods the interaction between the sky and the pollution layers generates graphical effects that underline, once again, the sickness of the sky due to light pollution.
 
 
-## 8. OSC Communication 
+## 8. Time
+The flow of time is an important feature for this application as it provides immersiveness to the user by creating the feeling of constant evolution of the environment around him/her.
+
+### 8.1 Time
+From the very beginning we want to make sure that on the projected screen we see the stars that actually lay above the user's head as the application is launched. Since the reference system J2000 is a time reference corresponding to the 1st of January of the year 2000 precisely at noon, we need to compute the time passed from that date to the current one at application launch.
+In order to do so we implemented the class *Time* that makes use of the *java.util.Calendar* library.
+
+The constructor sets and instantiation of the *Calendar* object.
+From this object, the *localHourFraction* method gathers information about the current hour, minute, second and millisecond inside the day and returns a single values float representing the time as a fraction of the 24 hours.
+The method *daysSinceJ2000* gathers other information from the *Calendar* object, which are the current year, month and day and it returns a value which is, together with the given argument, a float value representing the total fractional number of days passed from the J2000 reference.
+Finally, the method *timePassingCalc* applies a time step at each update of the coordinates of the stars. The step amount is controlled by a global variable called *timelapse* which let us control the flow velocity as we please.
+
+### 8.2 events
+The *events* module provides the functions needed to control the exchange between the sun and the moon, both on the graphic and on the sound. There is also a function that, during daytime, controls the presence of sunlight on the surrounding building, again controlled through the amplitude of the sound.
+
+
+## 9. Threads
+All the classes related to the sky layers need to be updated as time flows in order to create the dynamicity. Since these updates are computationally expensive and prevent the global function *draw* to work properly with respect to the framerate, we decided to place them inside threads. The method *run* is implemented in order to update only the class given as argument to the constructor of the thread. Given the need to coordinate the order of updates of stars coordinates, stars plot and pollution plot, the threads communicates through a semaphore.
+
+
+## 10. OSC Communication 
 The communication part is divided into two main parts, the communication with Ableton Live and the communication with GyrOSC
 
 
-### 8.1  GyrOSC
+### 10.1  GyrOSC
 The communication with GyrOSC takes place in the main, with the method oscEvent.
 We take three parameters from GyrOSC that are the gyroscope, the accelerometer and the GPS. 
 Every parameter has an associated OSCAddress that is taken by Processing and from which we take the relevant attributes of each parameter. 
@@ -148,12 +176,15 @@ For our application we needed to split all three parameters, and that has been m
 <img src="img/gyrosc.jpg" width="200" height="400"/>
 </p>
 
-### 8.2 Ableton Live
+### 10.2 Ableton Live
 In Ableton Live the Connection Kit is used (provided by Ableton website and implemented in Max for Live). It provides several devices that allows to communicate with OSC messages. In particular, the main tool is named OSC TouchOsc.amxd that is linked with correct OSC addresses in order to receive messages, then is mapped to parameters in the Live session. Moreover, given that the Connection Kit does not provide a device that change scenes through OSC, a proper tool has been built in M4L.
 ![launch clip](img/launch%20clip.png)
-## 9 Sound Generation
+
+
+## 11 Sound Generation
 All the audio processing is done in Ableton Live.
-### 9.1 Scenes organization
+
+### 11.1 Scenes organization
 
 Night time and Day time corresponds to two different sounding scenarios, so two main scenes are used, as visible in the figure down below: 
 
@@ -162,7 +193,7 @@ Night time and Day time corresponds to two different sounding scenarios, so two 
   
 
 ![Ableton Live scenes view](img/scene.png)
-### 9.2 Channel Strip
+### 11.2 Channel Strip
 
 Several tracks are present, they are organized four sections:
   - MIDI note generator: this tracks contain the random midi note generator that, according to parameters sent through OSC from Processing, generate a sequence of note.
@@ -170,7 +201,7 @@ Several tracks are present, they are organized four sections:
   - SUN: responsable for the instruments that play accordingly to the position of the sun.
   - Master section: master out of the system and the channel that send the audio to the an input in processing for the FFT representation of the sun.
 
-#### 9.2.1 MIDI note generator
+#### 11.2.1 MIDI note generator
 In this track are present the tools for the generation of the notes. In order to do that, a MIDI Effect Rack is built with the following Ableton effects:
 - Arpeggiator: from one single MIDI note (from the launched clip) generates note with random jump. The Rate parameters is controlled by OSC messages (number of stars). There are two of those that changes present with the scene launch: one is more randomic, the other is set to *Up* arpeggios.
 - Random: create the random sequence (only for the pitch) from the arpeggiator
@@ -178,24 +209,24 @@ In this track are present the tools for the generation of the notes. In order to
 - SCALE: this is a chain selector where, depending on the position of the pointer on the screen, the OSC message communicates the correspondant chain. Each chain is composed by a Scale effect that bring the random notes in a major scale. Due to the bass note that is playing a *pedale* the effect result in a modal organization of the sound.
 
 
-#### 9.2.2 STARS
+#### 11.2.2 STARS
 This is a group containing the instruments that generate the sound from the star, that are:
 - FM Oscillator (made with Operator) for the Night time.
 - Piano for the Day time.
 - Bass Synth (made with Sampler) which filter control depends on the accelerometer on the user's device.
   
-#### 9.2.3 SUN
+#### 11.2.3 SUN
 Here the group is responsable for the sound of the arising sun. The volume of this group is determined by the position of the sun. It consists in:
 
 - Bass Synth implemented in Wavetable.
 - A track containing the sonorization of the (real) electromagnetic waves of the Sun.
 - An Instrument track made with Simpler in Slice mode. This Instrument uses the Sun electromagnetic waves as a sample and chops it accordingly to the sensitivity parameter in the peak detection algorithm of the instrument. Then, this chops are played randomly.
 
-#### 9.2.4 Master Section
+#### 11.2.4 Master Section
 In the master section are present all the OSC receiver (they are global) and a monitoring plug-in built in M4L in order to see on screen the incoming OSC messages. At the end of the chain is present a Limiter going in the output 1-2.
 The FFT channel is going in the 3-4 parallel output that is then processed by the Sound Analyzer in Processing. On the channel are present a Saturator plug-in, EQ Three and a Limiter so it is possible to enhance the overall frequencies, making the FFT visualization of the sun's rays more homogeneus.
 
-## 10. User Guide
+## 12. User Guide
 This project has been built for MacOs (built on MacOS Monterey).
 
 The softwares used to create the interactive experience are the following ones: 

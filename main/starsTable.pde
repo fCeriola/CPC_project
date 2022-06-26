@@ -308,6 +308,8 @@ public class StarsTable{
   //PUBLIC METHODS
   
   public void update(){
+    this.timePassedFromAppStart = timeControl.timePassingCalc(this.timePassedFromAppStart);
+    
     for (int i=0; i<starsAttributes.getRowCount(); i++){
       TableRow row = starsAttributes.getRow(i);
       

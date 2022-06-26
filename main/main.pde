@@ -126,10 +126,6 @@ void draw() {
   fft.analyze(spectrum);
   float n = map(signalAmp.analyze(), 0, 1, 0, 255);
   
-  // keep track of the time starting from the initial launch of the application
-  database.timePassedFromAppStart = timeControl.timePassingCalc(database.timePassedFromAppStart);
-  sun.timePassedFromAppStart = database.timePassedFromAppStart;
-  
   // thread - stars coordinates update
   Runnable updateDatabase = new Update(database, starSystem, pollution, "starsTable", true);
   updateDB = new Thread(updateDatabase);

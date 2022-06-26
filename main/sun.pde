@@ -1,9 +1,6 @@
 public class Sun {
   
   // ARGUMENTS
-  private float appStartHourFraction;
-  private float timePassedFromAppStart;
-  private float altitude;
   private float xCoord;
   private float yCoord;
   private float[] bandAmp = new float[bands];
@@ -18,15 +15,10 @@ public class Sun {
   // ======================================================
   // CONSTRUCTOR
   public Sun(float xCoord, float yCoord) {
-    this.altitude = -1;
     this.xCoord = xCoord;
     this.yCoord = yCoord;
     this.radius = 75;
     this.smooth = 0.1;
-    
-    //initialize time reference variables
-    this.appStartHourFraction = timeControl.localHourFraction();
-    this.timePassedFromAppStart = 0;
     
     this.sunInt = color(250, 56, 18);
     this.sunExt = color(250, 161, 18);
@@ -73,6 +65,7 @@ public class Sun {
   }
   
   public void update() {
+    
     this.xCoord -= 0.5*frameRate;
     //sinusoid:   y offset   amplitude      screen width as half wavelength     x offset
     this.yCoord = height/3 + (height/3)*sin(PI*(1.1*width-xCoord)/(1.1*width) - PI/12);
