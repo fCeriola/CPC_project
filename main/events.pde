@@ -9,10 +9,19 @@ public void moonEvent(){
     }
     moon.plot();
     moon.update();
-    if(moon.xCoord < -2*moon.radius){
-      day = true;
-      changeScene = true;
-      moon.xCoord = width + 2*moon.radius;
+    if (direction > 0) {
+      if(moon.xCoord < -2*moon.radius){
+        day = true;
+        changeScene = true;
+        moon.xCoord = (width + 2*moon.radius);
+      }
+    }
+    else if (direction < 0) {
+      if(moon.xCoord > width + 2*moon.radius){
+        day = true;
+        changeScene = true;
+        moon.xCoord = - + 2*moon.radius;
+      }
     }
   }
 }
@@ -27,10 +36,19 @@ public void sunEvent(float n){
     sky.plot(n/2);
     sun.update();
     sun.plot(spectrum);
-    if (sun.xCoord < -4*sun.radius){
-      day = false;
-      changeScene = true;
-      sun.xCoord = width + 4*sun.radius;
+    if (direction > 0) {
+      if (sun.xCoord < -4*sun.radius){
+        day = false;
+        changeScene = true;
+        sun.xCoord = (width + 4*sun.radius);
+      }
+    }
+    else if (direction < 0) {
+      if (sun.xCoord > width + 4*sun.radius){
+        day = false;
+        changeScene = true;
+        sun.xCoord = -4*sun.radius;
+      }
     }
   }
 }

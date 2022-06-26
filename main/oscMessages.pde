@@ -17,25 +17,25 @@ public void starMode(float xCoord, float yCoord, OscP5 ableton, NetAddress ip){
     OscMessage modeVal = new OscMessage("/stars/mode");
     modeVal.add(0.12);
     ableton.send(modeVal, ip);
-    println("quadrante uno");
+    //println("quadrante uno");
   }
   if(xCoord>width/2 && yCoord<height/2){
     OscMessage modeVal = new OscMessage("/stars/mode");
     modeVal.add(0.35);
     ableton.send(modeVal, ip);
-    println("quadrante due");
+    //println("quadrante due");
   }
   if(xCoord>width/2 && yCoord>height/2){
     OscMessage modeVal = new OscMessage("/stars/mode");
     modeVal.add(0.65);
     ableton.send(modeVal, ip);
-    println("quadrante tre");
+    //println("quadrante tre");
   }
   if(xCoord<width/2 && yCoord>height/2){
     OscMessage modeVal = new OscMessage("/stars/mode");
     modeVal.add(0.85);
     ableton.send(modeVal, ip);
-    println("quadrante quattro");
+    //println("quadrante quattro");
   }
   
 }
