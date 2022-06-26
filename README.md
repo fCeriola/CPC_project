@@ -169,7 +169,7 @@ The communication part is divided into two main parts, the communication with Ab
 The communication with GyrOSC takes place in the main, with the method oscEvent.
 We take three parameters from GyrOSC that are the gyroscope, the accelerometer and the GPS. 
 Every parameter has an associated OSCAddress that is taken by Processing and from which we take the relevant attributes of each parameter. 
-For the gyroscope parameters used are beccheggio and rollio, for the acceleromet
+For the gyroscope parameters used are beccheggio and rollio, for the accelerometer parameters are the acceleration values in the x and y axis. GPS values are latitude and longitude.
 These parameters are taken by calling arguments() method.
 For our application we needed to split all three parameters, and that has been made by calling the CheckAddrPattern method, so that we could manage the values coming from the gyroscope, accelerometer and GPS separately.
 <p align = center>
@@ -232,28 +232,33 @@ This project has been built for MacOs (built on MacOS Monterey).
 The softwares used to create the interactive experience are the following ones: 
 
 1- Processing, that constitutes the core application used for the code development and the visual installation. 
+
 https://processing.org/
 
 2- Sound Module, by Processing.
+
 https://processing.org/reference/libraries/sound/index.html
 
 3- Ableton Live 11 Suite(M4L included), for the sound generation and in general every sound related feature in the application.
+
 https://www.ableton.com/en/live/
 
 4- GyrOSC, for the user interaction with the installation.
+
 https://apps.apple.com/us/app/gyrosc/id418751595 (Apple)
 https://baixarapk.gratis/en/app/418751595/gyrosc (Android)
 
 5- Connection Kit, downloaded directly as a Ableton feature.
+
 https://www.ableton.com/en/packs/connection-kit/
 
 6- Black Hole Driver, an audio driver that allows to create internal digital routing from Ableton to Processing and from Ableton to an external main out at the same time.
+
 https://github.com/ExistentialAudio/BlackHole
 
+In order to configure the BlackHole driver the user must open the Audio MIDI Setup and create a new combined device, then select firstly the main out and secondly the BlackHole driver.
 
-
-
-
+![blackhole](img/blackhole.png)
 
 
 
